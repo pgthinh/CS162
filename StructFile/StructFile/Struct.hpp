@@ -53,6 +53,10 @@ struct Student {
     Student* next_Student;
 };
 
-
+struct User{
+    string username;
+    string password;
+    string role;
+};
 
 #endif /* Struct_hpp */
