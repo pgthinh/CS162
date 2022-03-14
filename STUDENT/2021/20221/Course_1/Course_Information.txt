@@ -1,3 +1,9 @@
 ID:123
 Name:Computer Science
 Instructor:Dinh Ba Tien
+Number of credits:4
+Maximum student:45
+First day of week:MON
+First section of week:S1
+Second day of week:SAT
+Second session of week:S3

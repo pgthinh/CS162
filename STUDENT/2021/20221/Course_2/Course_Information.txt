@@ -1,0 +1,9 @@
+ID:789
+Name:Cslcuslus 1
+Instructor:Hoang The Anh
+Number of credits:4
+Maximum student:45
+First day of week:FRI
+First section of week:S1
+Second day of week:SAT
+Second session of week:S4
