@@ -18,6 +18,7 @@ struct Year {
     Year* next_Year;
 };
 struct Semester {
+    int Year;
     int TheOrderOfSemester; // 1,2,3
     Time StartDate;
     Time EndDate;
@@ -30,12 +31,16 @@ struct Course {
     string TeacherName;
     int NumberOfCredits;
     int MaxNumOfStudent;
-    int FirstDayOfWeek; // 1.Sun 2.Mon 3.Tue 4.Wed 5.Thu 6.Fri 7.Sat
-    int FirstSessionOfWeek; // 1.S1 2.S2 3.S3 4.S4
-    int SecondDayOfWeek; // 1.Sun 2.Mon 3.Tue 4.Wed 5.Thu 6.Fri 7.Sat ( > the first day)
-    int SecondSessionOfWeek; // 1.S1 2.S2 3.S3 4.S4 (> the first session)
-    Course* previous_Course; 
+    string FirstDayOfWeek; // 1.Sun 2.Mon 3.Tue 4.Wed 5.Thu 6.Fri 7.Sat
+    string FirstSessionOfWeek; // 1.S1 2.S2 3.S3 4.S4
+    string SecondDayOfWeek; // 1.Sun 2.Mon 3.Tue 4.Wed 5.Thu 6.Fri 7.Sat ( > the first day)
+    string SecondSessionOfWeek; // 1.S1 2.S2 3.S3 4.S4 (> the first session)
+    Course* previous_Course;
     Course* next_Course;
+    Course(string CourseID, string CourseName, string TeacherName, int NumberOfCredits, int MaxNumOfStudent, string FirstDayOfWeek, string FirstSessionOfWeek, string SecondDayOfWeek, string SecondSessionOfWeek) :
+    CourseID(CourseID), CourseName(CourseName), TeacherName(TeacherName), NumberOfCredits(NumberOfCredits), MaxNumOfStudent(MaxNumOfStudent), FirstDayOfWeek(FirstDayOfWeek), FirstSessionOfWeek(FirstSessionOfWeek), SecondDayOfWeek(SecondDayOfWeek), SecondSessionOfWeek(SecondSessionOfWeek)
+    {};
+    Course() {};
 };
 struct Class {
     string ClassId;
