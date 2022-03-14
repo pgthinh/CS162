@@ -51,6 +51,10 @@ struct Student {
     Time Dob;
     Student* previous_Student;
     Student* next_Student;
+
+    User(string ID, string Password, string Name, string Gender) :
+		ID(ID), Password(Password), Name(Name), Gender(Gender) {};
+	User() {};
 };
 
 struct User{
