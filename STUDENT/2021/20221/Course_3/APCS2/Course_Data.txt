@@ -1,0 +1,15 @@
+Student ID:067
+Total Mark:9.6
+Final Mark:9.5
+Midterm Mark:9.5
+Other Mark:10
+Student ID:057
+Total Mark:9.75
+Final Mark:9.5
+Midterm Mark:10
+Other Mark:10
+Student ID:953
+Total Mark:9.45
+Final Mark:9.5
+Midterm Mark:9
+Other Mark:10
