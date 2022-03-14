@@ -1,0 +1,4 @@
+ID:123
+Name:Computer Science
+Lecturer:Dinh Ba Tien
+Teacher Assisstant: Ho Tuan Thanh
