@@ -1,9 +1,4 @@
-//
-//  Struct.hpp
-//  StructFile
-//
-//  Created by Apple on 07/03/2022.
-//
+
 
 #ifndef Struct_hpp
 #define Struct_hpp
