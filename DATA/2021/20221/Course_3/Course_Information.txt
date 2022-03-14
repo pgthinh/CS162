@@ -1,5 +1,5 @@
 ID:456
-Name:Physcis 1
+Name:Physics 1
 Instructor:Van
 Number of credits:4
 Maximum student:40
