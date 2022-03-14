@@ -1,9 +1,0 @@
-Student ID:123
-User name:phuochung123
-Password:123456
-Student ID:456
-User name:thinhpham03
-Password:020103
-Student ID:138
-User name:vanhieu99
-Password:123456
