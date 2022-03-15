@@ -35,7 +35,7 @@ bool Find_ID(string CourseID, string student_id)
 		if (id == student_id) break;
 	}
 	fin.close();
-	if (id == student_id) return true;
+	if (id == student_id)  return true;
 	return false;
 }
 
