@@ -57,9 +57,13 @@ void addCourse() {
     string path = "DATA/" + to_string(year) + "/" + to_string(year) + "_" + to_string(term) + "/courses_list/" + to_string(year) + "_" + to_string(term) + "_" + course.CourseID;
     // create a folder (name: year_term_courseID)
     _mkdir(path.c_str());
-    // add Course's informations in txt file
-    path += "/Course_Information.txt";
     ofstream fout;
+    
+    path += "Course_Data.txt"
+    fout.open(path, ofstream::out);
+
+    fout.close();
+    path = "DATA/" + to_string(year) + "/" + to_string(year) + "_" + to_string(term) + "/courses_list/" + "Course_List.txt";
     fout.open(path, ofstream::out | ofstream::app);
     fout << course.CourseID << '\n';
     fout << course.CourseName << '\n';
@@ -68,10 +72,5 @@ void addCourse() {
     fout << course.MaxNumOfStudent << '\n';
     fout << course.FirstDayOfWeek << ' ' << course.FirstSessionOfWeek << '\n';
     fout << course.SecondDayOfWeek << ' ' << course.SecondSessionOfWeek << '\n';
-    fout.close();
-    // add course's id in Course_List txt
-    path = "DATA/" + to_string(year) + "/" + to_string(year) + "_" + to_string(term) + "/courses_list/" + "Course_List.txt";
-    fout.open(path, ofstream::out | ofstream::app);
-    fout << course.CourseID << '\n';
     fout.close();
 }
