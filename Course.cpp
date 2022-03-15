@@ -6,7 +6,7 @@ Semester getCurrentSemester() {
     int startday, startmonth, startyear;
     int endday, endmonth, endyear;
     
-    string path = "data/cache/currentSemester.txt";
+    string path = "DATA/cache/currentSemester.txt";
     ifstream fin(path);
     fin >> year;
     fin >> term;
