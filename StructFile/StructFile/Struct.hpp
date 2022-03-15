@@ -11,6 +11,7 @@ struct Time {
     int day;
     int month;
     int year;
+    Time(int day, int month, int year) : day(day), month(month), year(year) {};
 };
 struct Year {
     int NumberOfYear;
@@ -24,6 +25,7 @@ struct Semester {
     Time EndDate;
     Semester* previous_Semester;
     Semester* next_Semester;
+    Semester(int year, int term, Time start, Time end) : Year(year), TheOrderOfSemester(term), StartDate(start), EndDate(end) {};
 };
 struct Course {
     string CourseID;
@@ -56,16 +58,15 @@ struct Student {
     Time Dob;
     Student* previous_Student;
     Student* next_Student;
-
-    User(string ID, string Password, string Name, string Gender) :
-		ID(ID), Password(Password), Name(Name), Gender(Gender) {};
-	User() {};
+    Student(int No, string ID, string Password, string Name, string Gender, Time Dob) :
+		No(No), ID(ID), Password(Password), Name(Name), Gender(Gender), Dob(Dob) {};
 };
 
 struct User{
     string username;
     string password;
     string role;
+    User(string username, string password, string role) : username(username), password(password), role(role) {};
 };
 
 #endif /* Struct_hpp */

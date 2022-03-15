@@ -1,4 +1,4 @@
-ID:456
+ID:2021_1_PHY161
 Name:Physics 1
 Instructor:Van
 Number of credits:4

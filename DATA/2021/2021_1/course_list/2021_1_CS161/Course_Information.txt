@@ -1,4 +1,4 @@
-ID:123
+ID:2021_1_CS161
 Name:Computer Science
 Instructor:Dinh Ba Tien
 Number of credits:4
