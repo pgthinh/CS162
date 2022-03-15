@@ -1,6 +1,7 @@
 #include <iostream>
 #include <windows.h>
 #include <conio.h>
+#include <time.h>
 using namespace std;
 
 void SetBGColor(WORD color)
@@ -18,6 +19,20 @@ void SetBGColor(WORD color)
 	wAttributes |= color;
 
 	SetConsoleTextAttribute(hConsoleOutput, wAttributes);
+}
+
+void set_console_size()
+{
+    HANDLE hOut;
+    SMALL_RECT DisplayArea = { 0, 0, 0, 0 };
+    int x = 120 - 1;
+    int y = 30 - 1;
+
+    hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    DisplayArea.Right = x;
+    DisplayArea.Bottom = y;
+
+    SetConsoleWindowInfo(hOut, TRUE, &DisplayArea);
 }
 
 void clrscr(void)
@@ -49,3 +64,8 @@ void SetColor(WORD color)
 	SetConsoleTextAttribute(hConsoleOutput, wAttributes);
 }
 
+void delay(unsigned int mseconds)
+{
+    clock_t goal = mseconds + clock();
+    while (goal > clock());
+}

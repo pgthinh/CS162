@@ -1,9 +1,0 @@
-ID:456
-Name:Physics 1
-Instructor:Van
-Number of credits:4
-Maximum student:40
-First day of week:TUE
-First section of week:S2
-Second day of week:WES
-Second session of week:S3
