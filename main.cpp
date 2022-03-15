@@ -11,7 +11,7 @@ using namespace std;
 int main()
 {
     set_console_size();
-  //  Loading();
+    Loading();
     Login();
     return 0;
 }
