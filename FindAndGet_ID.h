@@ -1,11 +1,7 @@
 #ifndef FINDANDGET_ID_H
 #define FINDANDGET_ID_H
 
-
-#include "Student.h"
-#include "Course.h"
-#include "Year.h"
-#include "Semester.h"
+#include "struct.hpp"
 #include <fstream>
 #include <string>
 using namespace std;
