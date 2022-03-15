@@ -2,6 +2,9 @@
 #include "Login.h"
 #include <iostream>
 #include <string>
+#include <fstream>
+#include "supportfunction.h"
+#include "Menu.h"
 using namespace std;
 
 void readPassword(string& password, int x, int y) {
@@ -19,6 +22,60 @@ void readPassword(string& password, int x, int y) {
 			password += character;
 			cout << "*";
 		}
+}
+
+void getAccounts(User* &accounts){
+    User* pCur = accounts;
+	ifstream f;
+	string s;
+
+	f.open("Account_Data.txt");
+
+	while (!f.eof()){
+	    User *temp = new User;
+	    f >> s; temp->id = s;
+        f >> s; temp->username = s;
+        f >> s; temp->password = s;
+        f >> s; temp->role = s;
+        if (pCur) pCur->Next = temp;
+        else accounts = temp;
+        pCur = temp;
+      //  cout << temp1->id << " " << temp1->username << " " << temp1->role << endl;
+    }
+
+    f.close();
+}
+
+User login(string username, string password, User* accounts){
+    User* pCur = accounts;
+    while (pCur){
+        if (username == pCur->username && password == pCur->password){
+            User temp;
+            temp.username = username;
+            temp.password = password;
+            temp.id = pCur->id;
+            temp.role = pCur->role;
+            return temp;
+        }
+        pCur = pCur->Next;
+    }
+    User temp;
+    temp.password = "NONE"; temp.username = "NONE"; temp.role = "NONE";
+    return temp;
+}
+
+void setCurrentAccount(User account){
+    ofstream f;
+    f.open("CurrentAccount.txt");
+    f << account.id <<' ' << account.username << ' ' << account.password << ' ' << account.role;
+    f.close();
+}
+
+void getCurrentAccount(User account){
+    ifstream f;
+    f.open("CurrentAccount.txt");
+    f >> account.id >> account.username >> account.password >> account.role;
+    f.close();
 }
 
 void Login(){
@@ -42,16 +99,21 @@ void Login(){
 
     fflush(stdin);
     string username;
-    gotoxy(59, 27); cin >> username;
+    gotoxy(59, 25); cin >> username;
     string password;
-    readPassword(password, 59, 29);
+    readPassword(password, 59, 27);
 
-   /* User account = login(username, password);
+    User* accounts = NULL;
+    getAccounts(accounts);
+
+    User account = login(username, password, accounts);
     if (account.role == "NONE") {
         cout << "\n\n\t\t\t\t\t\tUnsuccessful login attempt";
         delay(1500);
+        clrscr();
+        Login();
     }else {
         setCurrentAccount(account);
-        if (account.role == "staff") staffMenu(); else studentMenu();
-    }*/
+        if (account.role == "Staff") staffMenu(); else studentMenu();
+    }
 }
