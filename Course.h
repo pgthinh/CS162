@@ -24,4 +24,4 @@ void setCourseInformation(Course &course);
 void addCourse();
 void getCourseList(int year, int semester, Course* &courseList);
 void updateCourse();
-
+void deleteCourse();
