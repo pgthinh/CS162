@@ -64,24 +64,70 @@ void addStudents(string className,Student*& students){
     }
 }
 void importStudents(string className,Student*& students){
+    Student* student_cur = students;
     string path = "csvFile/classes/" + className + ".csv";
     ifstream fin(path);
     string sub; getline(fin,sub);
-    while( fin >> students->No) {
+    while( fin >> student_cur->No) {
          fin.ignore();
-         getline(fin,students->id,',');
-         getline(fin,students->name,',');
-         getline(fin,students->gender,',');
-         fin >> students->dob.day; fin.ignore();
-         fin >> students->dob.month; fin.ignore();
-         fin >> students->dob.year; fin.ignore();
-         getline(fin,socialID,'\n');
+         getline(fin,student_cur->id,',');
+         getline(fin,student_cur->name,',');
+         getline(fin,student_cur->gender,',');
+         fin >> student_cur->dob.day; fin.ignore();
+         fin >> student_cur->dob.month; fin.ignore();
+         fin >> student_cur->dob.year; fin.ignore();
+         getline(fin,student_cur->SocialID,'\n');
          
-         students->next_Student = new Student;
-         students = students->next_Student;
+         student_cur->next_Student = new Student;
+         student_cur->next_Student->previous_Student = student_cur;
+         student_cur = student_cur->next_Student;
     }
-    Student* temp = students;
-    students = students->previous_Student;
+    Student* temp = student_cur;
+    student_cur = student_cur->previous_Student;
+    student_cur->next_Student = nullptr;
     delete temp;
     fin.close();
+}
+void getStudentList(string className, StudentList*& studentList) {
+	string path = "CLASS/" + className + "/studentList.txt";
+	ifstream fin(path);
+	StudentList* studentList_cur = studentList;
+	while (fin >> studentList_cur->ID){
+         studentList_cur->next_Student = new StudentList;
+         studentList_cur->next_Student->previous_Student = studentList_cur;
+         studentList_cur = studentList_cur->next_Student;
+    }
+    StudentList* temp = studentList_cur;
+    studentList_cur = studentList_cur->previous_Student;
+    studentList_cur->next_Student = nullptr;
+    delete temp;
+	fin.close();
+}
+void getStudents(string className,Student*& students){
+    StudentList* studentList = new StudentList;
+    getStudentList(className,studentList);
+
+    Student* student_cur = students;
+    while(StudentList){
+        string path = "CLASS/"+ className + "/" + StudentList->ID + ".txt";
+        ifstream fin(path);
+        fin.ignore();
+        getline(fin,student_cur->ID);
+        getline(fin,student_cur->Name);
+        getline(fin,student_cur->gender);
+        fin >> student_cur->Dob.day >> student_cur->Dob.month >> student_cur->Dob.year;
+        fin.ignore();
+        getline(fin,student_cur->SocialID);
+        fin.close();
+
+        student_cur->next_Student = new Student;
+        student_cur->next_Student->previous_Student = student_cur;
+        student_cur = student_cur->next_Student;
+
+        StudentList = student_List->next_Student;
+    }
+    Student* temp = student_cur;
+    student_cur = student_cur->previous_Student;
+    student_cur->next_Student = nullptr;
+    delete temp;
 }
