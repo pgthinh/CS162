@@ -21,4 +21,6 @@ void addStudents(string className,Student*& students);
 void getStudents(string className,Student*& students);
 void getStudentList(string className, StudentList*& studentList)
 void importStudents(string className,Student*& students);
+
+void Delete_StudentList_List(StudentList*& studentList);
 #endif

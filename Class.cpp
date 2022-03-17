@@ -131,3 +131,10 @@ void getStudents(string className,Student*& students){
     student_cur->next_Student = nullptr;
     delete temp;
 }
+void Delete_StudentList_List(StudentList*& studentList){
+    while(studentList){
+        StudentList* temp = studentList;
+        studentList = studentList->next_Student;
+        delete temp;
+    }
+}
