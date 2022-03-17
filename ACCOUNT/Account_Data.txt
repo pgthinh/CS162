@@ -1,24 +1,24 @@
-Student ID:123
-User name:phuochung123
-Password:123456
+123
+phuochung123
+123456
 Role:Student
-Student ID:456
-User name:thinhpham03
-Password:020103
-Role:Student
-Student ID:138
-User name:vanhieu99
-Password:123456
-Role:Student
-Student ID:067
-User name:minhvi123
-Password:123456
-Role:Student
-Student ID:057
-User name:sieunhan03
-Password:020103
-Role:Student
-Student ID:953
-User name:meovan99
-Password:123456
-Role:Student
+456
+thinhpham03
+020103
+Student
+138
+vanhieu99
+123456
+Student
+067
+minhvi123
+123456
+Student
+057
+sieunhan03
+020103
+Student
+953
+meovan99
+123456
+Student
