@@ -52,10 +52,11 @@ struct Class {
 struct Student {
     int No;
     string ID; // Username when login to the system
-    string Password;
+    //string Password;
     string Name;
     string Gender;
     Time Dob;
+    string socialID;
     Student* previous_Student = NULL;
     Student* next_Student = NULL;
     Student(int No, string ID, string Password, string Name, string Gender, Time Dob) :
