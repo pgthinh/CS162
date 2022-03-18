@@ -1,0 +1,15 @@
+2
+123
+CS162
+Tien
+3
+50
+MON-S1
+SAT-S3
+1234
+Phys2
+Nha
+3
+50
+WES-S4
+THU-S4

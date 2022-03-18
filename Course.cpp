@@ -37,8 +37,7 @@ Course getCurrentCourse() {
 }
 // Common Function
 void WriteFileCurrentCourse(Course* course) {
-//    string path = "DATA/cache/currentCourse.txt";
-    string path = "/Users/apple/Documents/Tài Liiệu đại học/Năm 1/HK2/CS162/Project/updateCourse/currentCourse.txt";
+    string path = "DATA/cache/currentCourse.txt";
     ofstream fout;
     fout.open(path, ios::app);
     fout << course->CourseID << '\n';
@@ -51,8 +50,7 @@ void WriteFileCurrentCourse(Course* course) {
     fout.close();
 }
 void WriteFileCourseList(int year, int semester, Course* courseList) {
-//    string path = "DATA/" + to_string(year) + "/" + to_string(year) + "_" + to_string(semester) + "/course_list/Course_List.txt";
-    string path = "/Users/apple/Documents/Tài Liiệu đại học/Năm 1/HK2/CS162/Project/updateCourse/currentCourse.txt";
+    string path = "DATA/" + to_string(year) + "/" + to_string(year) + "_" + to_string(semester) + "/course_list/Course_List.txt";    
     ofstream fout;
     fout.open(path, ios::trunc);
     Course* courseCur = courseList;
@@ -95,7 +93,6 @@ void deleteCourseList(Course* courseList) {
 // Main Function
 void setCourseRegistration(Time start, Time end) {
     Semester semester = getCurrentSemester();
-
     string path = "DATA/" + to_string(semester.Year) + '/' + to_string(semester.TheOrderOfSemester) + "/Course_Registration.txt";
     ofstream fout(path);
     fout << start.day << ' ' << start.month << ' ' << start.year << '\n';
@@ -136,7 +133,7 @@ void addCourse() {
     _mkdir(path.c_str());
     ofstream fout;
     // create a data file for a course
-    path += "Course_Data.txt"
+    path += "Course_Data.txt";
     fout.open(path, ofstream::out);
     fout.close();
     // add course's informations to the CourseList
@@ -152,10 +149,8 @@ void addCourse() {
     fout.close();
 }
 void getCourseList(int year, int semester, Course* &courseList) {
-    fstream fin;
-//    string path = "DATA/" + to_string(year) + "/" + to_string(year) + "_" + to_string(semester) + "/course_list/Course_List.txt";
-    string path = "/Users/apple/Documents/Tài Liiệu đại học/Năm 1/HK2/CS162/Project/updateCourse/currentCourse.txt";
-    fin.open(path);
+    string path = "DATA/" + to_string(year) + "/" + to_string(year) + "_" + to_string(semester) + "/course_list/Course_List.txt";
+    fstream fin; fin.open("path");
     Course* courseCur = courseList;
     while(!fin.eof()) {
         Course* new_Course = new Course;
@@ -222,6 +217,51 @@ void updateCourse() {
         WriteFileCourseList(year, semester, courseList);
         deleteCourseList(courseList);
     }
+}
+void deleteCourse() {
+    int year, semester;
+    string CourseID;
+    Course* courseList = NULL;
+    cout<< "year: "; cin >> year;
+    cout << "semester: " ; cin >> semester;
+    getCourseList(year, semester, courseList);
+    printCourseList(courseList);
+    cin.ignore();
+    cout << "CourseID that you want to delete: "; getline(cin, CourseID);
+    Course* courseCur = courseList;
+    while(courseCur) {
+        if(courseCur->CourseID == CourseID) {
+            if(courseCur == courseList) {
+                if(courseCur->next_Course == NULL) deleteCourseList(courseList);
+                else {
+                    Course* t = courseList;
+                    courseList = courseList->next_Course;
+                    courseList->previous_Course = NULL;
+                    delete t;
+                }
+            }
+            else if(courseCur->next_Course == NULL) {
+                Course* t = courseCur;
+                courseCur->previous_Course->next_Course = NULL;
+                delete t;
+            }
+            else {
+                Course* t = courseCur;
+                courseCur->previous_Course->next_Course = courseCur->next_Course;
+                courseCur->next_Course->previous_Course = courseCur->previous_Course;
+                courseCur->next_Course = NULL;
+                courseCur->previous_Course = NULL;
+                delete t;
+            }
+            cout << "The course has been deleted" << endl;
+            WriteFileCourseList(year, semester, courseList);
+            deleteCourseList(courseList);
+            return;
+        }
+        else courseCur = courseCur->next_Course;
+    }
+    cout << "The course does not exist";
+    deleteCourseList(courseList);
 }
 
 
