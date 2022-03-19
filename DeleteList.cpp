@@ -1,5 +1,5 @@
 #include <iostream>
-#include "struct.hpp"
+#include "Struct.hpp"
 using namespace std;
 
 void DeleteClass(Class*& class){
