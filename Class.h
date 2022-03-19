@@ -1,7 +1,7 @@
 #ifndef HEADER_CLASS_INCLUDED
 #define HEADER_CLASS_INCLUDED
 
-#include "struct.hpp"
+#include "Struct.hpp"
 #include <fstream>
 #include <iostream>
 #include <direct.h>
