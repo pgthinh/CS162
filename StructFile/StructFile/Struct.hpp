@@ -60,7 +60,7 @@ struct Student {
     Student* previous_Student = NULL;
     Student* next_Student = NULL;
     Student(int No, string ID, string Password, string Name, string Gender, Time Dob) :
-		No(No), ID(ID), Password(Password), Name(Name), Gender(Gender), Dob(Dob) {};
+		No(No), ID(ID), Name(Name), Gender(Gender), Dob(Dob) {};
 };
 
 struct User{
@@ -69,5 +69,9 @@ struct User{
     string role;
     User(string username, string password, string role) : username(username), password(password), role(role) {};
 };
+
+// Funtions used to delete doubly linked list.
+void DeleteClass(Class*& class);
+void DeleteStudent(Student*& student);
 
 #endif /* Struct_hpp */
