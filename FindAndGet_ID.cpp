@@ -4,7 +4,7 @@ bool Find_Course(string CourseId)
 {
 	Course* first_course = new Course;
 	Course* course_cur = first_course;
-	string path = 'DATA /' + to_string(getCurrentYear()) + '/' + to_string(getCurrentSemester()) + '/courses/courseList.txt';
+	string path = 'DATA /' + to_string(getCurrentYear()) + '/' + to_string(getCurrentSemester()) + '/courses_list/course_list.txt';
 	ifstream fin(path);
 	while (fin >> course_cur->CourseID) {
 		course_cur->next_Course = new Course;
@@ -28,14 +28,14 @@ bool Find_Course(string CourseId)
 bool Find_ID(string CourseID, string student_id)
 {
 	if (!Find_Course(CourseID)) return false;
-	string id;
-	string path = 'Data /' + to_string(getCurrentYear()) + '/' + to_string(getCurrentSemester()) + '/courses/' + CourseID + '/Students.txt';
+	string id; string className;
+	string path = 'DATA /' + to_string(getCurrentYear()) + '/' + to_string(getCurrentSemester()) + '/courses_list/' + CourseID + '/students.txt';
 	ifstream fin(path);
-	while (fin >> id) {
+	while (fin >> id >> className) {
 		if (id == student_id) break;
 	}
 	fin.close();
-	if (id == student_id)  return true;
+	if (id == student_id) return true;
 	return false;
 }
 
