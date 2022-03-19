@@ -71,7 +71,7 @@ struct User{
 };
 
 // Funtions used to delete doubly linked list.
-void DeleteClass(Class*& class);
-void DeleteStudent(Student*& student);
-
+void DeleteClassList(Class*& class);
+void DeleteStudentList(Student*& student);
+void deleteCourseList(Course* courseList) 
 #endif /* Struct_hpp */

@@ -83,7 +83,7 @@ void printCourseList(Course* courseList) {
         courseCurrent = courseCurrent->next_Course;
     }
 }
-void deleteCourseList(Course* courseList) {
+void deleteCourseList(Course* &courseList) {
     while(courseList) {
         Course* t = courseList;
         courseList = courseList->next_Course;
