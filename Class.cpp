@@ -1,17 +1,17 @@
 #include "Class.h"
  
  void createClass(string className){
-    string path = "data/classes/" + className;
+    string path = "CLASS/" + className;
     _mkdir(path.c_str());
     
-    path="data/classes/classList.txt";
+    path="CLASS/classList.txt";
     ofstream fout;
 	fout.open(path, std::fstream::app);
     fout << className << endl;
     fout.close();
 }
 void getClasses(Class*& first_class){
-    string path = "DATA/classes/classList.txt";
+    string path = "CLASS/classList.txt";
     ifstream fin(path);
     first_class = new Class;
     Class class_cur = first_class;
@@ -53,6 +53,7 @@ void addStudents(string className,Student*& students){
     while(student_cur){
         path = "CLASS/"+ className + "/" + student_cur->ID + ".txt";
         fout.open(path);
+        fout << student_cur->No << endl;
         fout << student_cur->ID << endl;
         fout << student_cur->Name << endl;
         fout << student_cur->Gender << endl;
@@ -107,10 +108,14 @@ void getStudents(string className,Student*& students){
     StudentList* studentList = new StudentList;
     getStudentList(className,studentList);
 
+    StudentList* studentList_cur = studentList;
+
     Student* student_cur = students;
-    while(StudentList){
-        string path = "CLASS/"+ className + "/" + StudentList->ID + ".txt";
+    while(studentList_cur){
+        string path = "CLASS/"+ className + "/" + studentList->ID + ".txt";
         ifstream fin(path);
+        fin.ignore();
+        fin >> student_cur->No;
         fin.ignore();
         getline(fin,student_cur->ID);
         getline(fin,student_cur->Name);
@@ -124,12 +129,13 @@ void getStudents(string className,Student*& students){
         student_cur->next_Student->previous_Student = student_cur;
         student_cur = student_cur->next_Student;
 
-        StudentList = student_List->next_Student;
+        studentList_cur = studentList_cur->next_Student;
     }
     Student* temp = student_cur;
     student_cur = student_cur->previous_Student;
     student_cur->next_Student = nullptr;
     delete temp;
+    Delete_StudentList_List(studentList);
 }
 void Delete_StudentList_List(StudentList*& studentList){
     while(studentList){

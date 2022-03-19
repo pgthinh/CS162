@@ -52,14 +52,15 @@ struct Class {
 struct Student {
     int No;
     string ID; // Username when login to the system
-    string Password;
+    //string Password;
     string Name;
     string Gender;
     Time Dob;
+    string socialID;
     Student* previous_Student = NULL;
     Student* next_Student = NULL;
     Student(int No, string ID, string Password, string Name, string Gender, Time Dob) :
-		No(No), ID(ID), Password(Password), Name(Name), Gender(Gender), Dob(Dob) {};
+		No(No), ID(ID), Name(Name), Gender(Gender), Dob(Dob) {};
 };
 
 struct User{
@@ -69,4 +70,8 @@ struct User{
     User(string username, string password, string role) : username(username), password(password), role(role) {};
 };
 
+// Funtions used to delete doubly linked list.
+void DeleteClassList(Class*& class);
+void DeleteStudentList(Student*& student);
+void deleteCourseList(Course* courseList) 
 #endif /* Struct_hpp */
