@@ -1,7 +1,7 @@
 123
 phuochung123
 123456
-Role:Student
+Student
 456
 thinhpham03
 020103
