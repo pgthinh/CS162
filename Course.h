@@ -13,6 +13,7 @@ Semester getCurrentSemester();
 Course getCurrentCourse();
 // Common Function
 void WriteFileCurrentCourse(Course* course);
+void updateCurrentCourse();
 void WriteFileCourseList(int year, int semester, Course* courseList);
 void printCourseInformation(Course* course);
 void printCourseList(Course* courseList);
@@ -25,3 +26,17 @@ void addCourse();
 void getCourseList(int year, int semester, Course* &courseList);
 void updateCourse();
 void deleteCourse();
+void viewCourseMangementMenu();
+void getCourseStudentList(int year, int semester, string CourseID, Student* &studentList);
+void viewCourseStudent(Student* student);
+void viewCourseStudentList();
+
+void getMarkOfCourse();
+
+
+void exportScoreboard();
+void importScoreboard();
+void viewScoreboard():
+
+
+void manageCourse();

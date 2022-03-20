@@ -166,7 +166,7 @@ void addCourse() {
 }
 void getCourseList(int year, int semester, Course* &courseList) {
     string path = "DATA/" + to_string(year) + "/" + to_string(year) + "_" + to_string(semester) + "/course_list/Course_List.txt";
-    fstream fin; fin.open("path");
+    fstream fin; fin.open(path);
     Course* courseCur = courseList;
     while(!fin.eof()) {
         Course* new_Course = new Course;
@@ -279,6 +279,127 @@ void deleteCourse() {
     cout << "The course does not exist";
     deleteCourseList(courseList);
 }
+void viewCourseMangementMenu() {
+    cout << "1. View student" << endl;
+    cout << "2. Export scorebroad" << endl;
+    cout << "3. Import scorebroad" << endl;
+    cout << "4. View scorebroad" << endl;
+    cout << "5. Go Back" << endl; // go back to Course Menu;
 
+}
+void getCourseStudentList(int year, int semester, string CourseID, Student* &studentList) {
+    string path = "DATA/" + to_string(year) + "/" + to_string(year) + "_" + to_string(semester) + "/course_list/" + CourseID + "/student.txt";
+    fstream fin; fin.open(path);
+    Student* studentCur = studentList;
+    while(!fin.eof()) {
+        Student* new_student = new Student;
+        getline(fin, new_student->ID, ",");
+        getline(fin, new_student->Name, ",");
+        getline(fin, new_student->Gender, ",");
+        getline(fin, new_student->Dob, ",");
+        getline(fin, new_student->socialID, ",");
+        if(!courseCur) {studentCur = new_student; studentList = new_student;}
+        else {
+            studentCur->next_Student = new_student;
+            new_student->previous_Student = studentCur;
+            studentCur = studentCur->next_Student;
+        }
+    }
+    fin.close();
+}
+void viewCourseStudent(Student* student) {
+    cout << student->ID << endl;
+    cout << student->Name << endl;
+    cout << student->Gender << endl;
+    cout << student->Dob << endl;
+    cout << student->socialID << endl;
+}
+void viewCourseStudentList(Student* studentList) {
+    Student* studentCur = studentList;
+    while(studentCur) {
+        viewCourseStudent(studentCur);
+        studentCur = studentCur->next_Student;
+    }
+}
+
+void getMarkOfCourse(int year, int semester, string CourseID,) {
+    string path = "DATA/" + to_string(year) + "/" + to_string(year) + "_" + to_string(semester) + "/course_list/" + CourseID + "/marks.txt";
+    fstream fin; fin.open(path);
+    Mark* studentCur = studentList;
+    while(!fin.eof()) {
+        Student* new_student = new Student;
+        getline(fin, new_student->ID, ",");
+        getline(fin, new_student->Name, ",");
+        getline(fin, new_student->Gender, ",");
+        getline(fin, new_student->Dob, ",");
+        getline(fin, new_student->socialID, ",");
+        if(!courseCur) {studentCur = new_student; studentList = new_student;}
+        else {
+            studentCur->next_Student = new_student;
+            new_student->previous_Student = studentCur;
+            studentCur = studentCur->next_Student;
+        }
+    }
+    fin.close();
+}
+void exportScoreboard() {
+
+}
+void importScoreboard() {
+
+}
+void viewScoreboard() {
+
+}
+
+
+void manageCourse() {
+    int year, semester;
+    string CourseID;
+    Course* courseList = NULL;
+    cout<< "year: "; cin >> year;
+    cout << "semester: " ; cin >> semester;
+    getCourseList(year, semester, courseList);
+    Course* courseCur = courseList;
+
+    cout << "Choose CourseID to manage" << endl;
+    printCourseList(courseList) << endl;
+    cin.ignore();
+    cout << "CourseID: "; getline(cin, CourseID);
+    bool check = false;
+    while(courseCur && !check) {
+        if(courseCur->CourseID == CourseID) { check = true; break;}
+        else courseCur = courseCur->next_Course;
+    }
+    if(!check){ cout << "The course does not exist"; return;}
+    else {
+        viewCourseMangementMenu();
+        int select;
+        cout << "Select the number: ";
+        cin >> select;
+        switch (select)
+        {
+            case 1: { // view student
+                Student* CourseStudentList;
+                getCourseStudentList(year, semester, CourseID, CourseStudentList);
+                viewCourseStudentList(CourseStudentList);
+            }
+            break;
+            case 2: { // export scoreboard
+
+            }
+            break;
+            case 2: { // import scoreboard
+                
+            }
+            break;
+            case 2: { // view scoreboard
+                
+            }
+            break;
+        }
+
+    }
+}
 
 
