@@ -103,6 +103,7 @@ void createSemester() {
                 int year; fin >> year;
                 fin.close();
                 ofstream fout;
+		fout.open("CurrentYear.txt");
                 fout << year << '\n' << semester << '\n' << start.day << " " << start.month << " " << start.year <<'\n';
                 fout << end.day << " " << end.month << " " << end.year;
                 cout << "\n\t\t\t\t\t   Semester has been created successfully";
