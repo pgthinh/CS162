@@ -21,8 +21,8 @@ Course getCurrentCourse() {
     int nCredits, maxCapacity;
     string day1, ses1, day2, ses2;
 
-//    string path = "DATA/cache/currentCourse.txt";
-    string path = "/Users/apple/Documents/Tài Liiệu đại học/Năm 1/HK2/CS162/Project/updateCourse/currentCourse.txt";
+   string path = "DATA/cache/currentCourse.txt";
+    // string path = "/Users/apple/Documents/Tài Liiệu đại học/Năm 1/HK2/CS162/Project/updateCourse/currentCourse.txt";
     ifstream fin(path);
     getline(fin, id);
     getline(fin, name);
