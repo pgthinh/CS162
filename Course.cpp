@@ -49,6 +49,22 @@ void WriteFileCurrentCourse(Course* course) {
     fout << course->SecondDayOfWeek << ' ' << course->SecondSessionOfWeek << '\n';
     fout.close();
 }
+void updateCurrentCourse() {
+    int year, semester;
+    string CourseID;
+    Course* courseList = NULL;
+    cout<< "year: "; cin >> year;
+    cout << "semester: " ; cin >> semester;
+    cin.ignore();
+    cout << "CourseID: "; getline(cin, CourseID);
+    getCourseList(year, semester, courseList);
+    Course* courseCur = courseList;
+    bool check = false;
+    while(courseCur->next_Course) {
+        courseCur = courseCur->next_Course;
+    }
+    WriteFileCurrentCourse(courseCur);
+}
 void WriteFileCourseList(int year, int semester, Course* courseList) {
     string path = "DATA/" + to_string(year) + "/" + to_string(year) + "_" + to_string(semester) + "/course_list/Course_List.txt";    
     ofstream fout;
