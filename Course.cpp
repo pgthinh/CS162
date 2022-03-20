@@ -66,7 +66,7 @@ void updateCurrentCourse() {
     WriteFileCurrentCourse(courseCur);
 }
 void WriteFileCourseList(int year, int semester, Course* courseList) {
-    string path = "DATA/" + to_string(year) + "/" + to_string(year) + "_" + to_string(semester) + "/course_list/Course_List.txt";    
+    string path = "DATA/" + to_string(year)+ "/" + to_string(semester) + "/course_list/Course_List.txt";    
     ofstream fout;
     fout.open(path, ios::trunc);
     Course* courseCur = courseList;
@@ -107,22 +107,20 @@ void deleteCourseList(Course* &courseList) {
     }
 }
 // Main Function
-void setCourseRegistration(Time start, Time end) {
+void writeFileCourseRegistration(Time start, Time end) {
     Semester semester = getCurrentSemester();
-    string path = "DATA/" + to_string(semester.Year) + '/' + to_string(semester.TheOrderOfSemester) + "/Course_Registration.txt";
+    string path = "DATA/" + to_string(semester.Year) + '/' + to_string(semester.TheOrderOfSemester) + "registration.txt";
     ofstream fout(path);
     fout << start.day << ' ' << start.month << ' ' << start.year << '\n';
     fout << end.day << ' ' << end.month << ' ' << end.year << '\n';
     fout.close();
 }
-void getCourseRegistration(Time &start, Time &end) {
-    Semester semester = getCurrentSemester();
-
-    string path = "DATA/" + to_string(semester.Year) + '/' + to_string(semester.TheOrderOfSemester) + "/Course_Registration.txt";
-    ifstream fin(path);
-    fin >> start.day >> start.month >> start.year;
-    fin >> end.day >> end.month >> end.year;
-    fin.close();
+void updateCourseRegistration(Time &start, Time &end) {
+    cout << "Start day month year: " 
+    cin >> start.day >> start.month >> start.year;
+    cout << endl;
+    cout << "Start day month year: " 
+    cin >> end.day >> end.month >> end.year;
 }
 void setCourseInformation(Course &course) {
     cout << "SET COURSE INFORMATION";
@@ -144,7 +142,7 @@ void addCourse() {
     int year = semester.Year;
     int term = semester.TheOrderOfSemester;
 
-    string path = "DATA/" + to_string(year) + "/" + to_string(year) + "_" + to_string(term) + "/courses_list/" + course.CourseID;
+    string path = "DATA/" + to_string(year) + "/" + to_string(term) + "/courses_list/" + course.CourseID;
     // create a folder (name: year_term_courseID)
     _mkdir(path.c_str());
     ofstream fout;
@@ -153,7 +151,7 @@ void addCourse() {
     fout.open(path, ofstream::out);
     fout.close();
     // add course's informations to the CourseList
-    path = "DATA/" + to_string(year) + "/" + to_string(year) + "_" + to_string(term) + "/courses_list/" + "Course_List.txt";
+    path = "DATA/" + to_string(year) + "/" + to_string(term) + "/courses_list/" + "Course_List.txt";
     fout.open(path, ofstream::out | ofstream::app);
     fout << course.CourseID << '\n';
     fout << course.CourseName << '\n';
@@ -165,7 +163,7 @@ void addCourse() {
     fout.close();
 }
 void getCourseList(int year, int semester, Course* &courseList) {
-    string path = "DATA/" + to_string(year) + "/" + to_string(year) + "_" + to_string(semester) + "/course_list/Course_List.txt";
+    string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/Course_List.txt";
     fstream fin; fin.open(path);
     Course* courseCur = courseList;
     while(!fin.eof()) {
@@ -288,7 +286,7 @@ void viewCourseMangementMenu() {
 
 }
 void getCourseStudentList(int year, int semester, string CourseID, Student* &studentList) {
-    string path = "DATA/" + to_string(year) + "/" + to_string(year) + "_" + to_string(semester) + "/course_list/" + CourseID + "/student.txt";
+    string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + CourseID + "/student.txt";
     fstream fin; fin.open(path);
     Student* studentCur = studentList;
     while(!fin.eof()) {
@@ -322,37 +320,39 @@ void viewCourseStudentList(Student* studentList) {
     }
 }
 
-void getMarkOfCourse(int year, int semester, string CourseID,) {
-    string path = "DATA/" + to_string(year) + "/" + to_string(year) + "_" + to_string(semester) + "/course_list/" + CourseID + "/marks.txt";
+void getMarkOfCourse(int year, int semester, string CourseID, Mark* &markList) {
+    string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + CourseID + "/marks.txt";
     fstream fin; fin.open(path);
-    Mark* studentCur = studentList;
+    Mark* markCur = markList;
     while(!fin.eof()) {
-        Student* new_student = new Student;
-        getline(fin, new_student->ID, ",");
-        getline(fin, new_student->Name, ",");
-        getline(fin, new_student->Gender, ",");
-        getline(fin, new_student->Dob, ",");
-        getline(fin, new_student->socialID, ",");
-        if(!courseCur) {studentCur = new_student; studentList = new_student;}
-        else {
-            studentCur->next_Student = new_student;
-            new_student->previous_Student = studentCur;
-            studentCur = studentCur->next_Student;
-        }
+        Mark* newMark = new Mark;
+        fin >> newMark->totalMark; fin.ignore(1);
+        fin >> newMark->finalMark; fin.ignore(1);
+        fin >> newMark->midtermMark; fin.ignore(1);
+        fin >> newMark->otherMark;
+        markCur->newMark = newMark;
+        newMark->previous_Mark = markCur;
+        markCur = markCur->newMark;
     }
     fin.close();
 }
-void exportScoreboard() {
+void exportScoreboard(int year, int semester, string CourseID, Mark* markList) {
+    string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + CourseID + "/marks.txt";
+    fstream fout; fout.open(path);
+    Mark* markCur = markList;
+    while(markCur) {
+        fout << markCur->
+
+        markCur = markCur->next_Mark;
+    }
+    fout.close();
+}
+void importScoreboard(Mark* markList) {
 
 }
-void importScoreboard() {
+void viewScoreboard(Mark* markList) {
 
 }
-void viewScoreboard() {
-
-}
-
-
 void manageCourse() {
     int year, semester;
     string CourseID;
@@ -386,7 +386,8 @@ void manageCourse() {
             }
             break;
             case 2: { // export scoreboard
-
+                Mark* MarkList;
+                getMarkOfCourse(year, semester, CourseID, MarkList)
             }
             break;
             case 2: { // import scoreboard
@@ -401,5 +402,44 @@ void manageCourse() {
 
     }
 }
-
+//MENU
+void courseMenu() {
+    cout << "1. Create course registration" << endl;
+    cout << "2. Add course" << endl;
+    cout << "3. Update course" << endl;
+    cout << "4. Delete course" << endl;
+    cout << "5. Choose course to manage" << endl;
+    cout << "6. Go back" << endl;
+    int select;
+    cout << "Select number: "; cin >> select;
+    switch(select)
+    {
+    case 1:  {
+        Time startDate, endDate;
+        updateCourseRegistration(startDate, endDate);
+        writeFileCourseRegistration(startDate, endDate);
+    }
+    break;
+    case 2: {
+        addCourse();
+    }
+    break;
+    case 3: {
+        updateCourse();
+    }
+    break;
+    case 4: {
+        deleteCourse();
+    }
+    break;
+    case 5: {
+        
+    }
+    break;
+    case 6: {
+        courseMenu();
+    }
+    break;
+    }
+}
 
