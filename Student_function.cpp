@@ -212,3 +212,40 @@ void Menu(List& l)
         }
     }
 }
+void getStudentScoreboard(int year,int term,string studentID,Course*& courseList,Mark*& mark){
+    Mark* mark_cur = mark;
+    Course* courseList_cur = courseList;
+    string path = "DATA/" + to_string(year) + "/" + to_string(term) + "/students/" + studentID + "/marks.txt";
+    ifstream fin(path);
+    while(fin >> courseList_cur->CourseID >> mark_cur->totalMark >> mark_cur->finalMark >> mark_cur->midtermMark >> mark_cur->otherMark ){
+        courseList_cur->next_Course = new Course;
+        courseList_cur->next_Course->previous_Course = courseList_cur;
+        courseList_cur = courseList_cur->next_Course;
+
+        mark_cur->next_Mark = new Course;
+        mark_cur->next_Mark->previous_Mark = mark_cur;
+        mark_cur = mark_cur->next_Mark;
+    }
+    Course* temp1 = courseList_cur;
+    courseList_cur = courseList_cur->previous_Course;
+    courseList_cur->next_Course = nullptr;
+    delete temp1;
+
+    Course* temp2 = mark_cur;
+    mark_cur = mark_cur->previouse_Mark;
+    mark_cur->next_Mark = nullptr;
+    delete temp2;
+}
+float getStudentGPA(string studentID,string className){
+    string path = "CLASS/" + className + "/" + studentID + "_marks.txt";
+    ifstream fin(path);
+    float mark, sum = 0;
+    int cnt = 0;
+    while(fin >> mark){
+        sum += mark;
+        cnt += 1;
+    }
+    fin.close();
+    float GPA = cnt > 0 ? sum / cnt : 0;
+    return GPA / 10 * 4;
+}
