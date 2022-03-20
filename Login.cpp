@@ -31,18 +31,19 @@ void getAccounts(User* &accounts){
 
 	f.open("Account_Data.txt");
 
-	while (!f.eof()){
+	while (true){
 	    User *temp = new User;
-	    f >> s; temp->id = s;
+	    f >> s;
+	    if (s == "0") break;
+	    temp->id = s;
         f >> s; temp->username = s;
         f >> s; temp->password = s;
         f >> s; temp->role = s;
         if (pCur) pCur->Next = temp;
         else accounts = temp;
         pCur = temp;
-      //  cout << temp1->id << " " << temp1->username << " " << temp1->role << endl;
+        //cout << temp->id << " " << temp->username << " " << temp->role << endl;
     }
-
     f.close();
 }
 
@@ -79,7 +80,7 @@ void getCurrentAccount(User account){
 }
 
 void Login(){
-
+    clrscr();
     cout << "\n\n\n\n\n\n\n";
     for (int rep = 1; rep <= 120; rep++) cout << char(219); cout << endl;
     cout << "\n";
@@ -116,4 +117,80 @@ void Login(){
         setCurrentAccount(account);
         if (account.role == "Staff") staffMenu(); else studentMenu();
     }
+}
+
+void updateAccounts(User* &accounts){
+    ofstream f;
+    f.open("Account_Data.txt");
+    accounts = accounts->Next;
+    while (accounts != NULL){
+        f << accounts->id << '\n' << accounts->username << '\n' << accounts->password << '\n' << accounts->role << '\n';
+       // cout << accounts->id << '\n' << accounts->username << '\n' << accounts->password << '\n' << accounts->role << '\n';
+        accounts = accounts->Next;
+    }
+    f << "0";
+    f.close();
+}
+void changePassword(){
+    clrscr(); Heading();
+    cout << "\n\n\t\t\t\t\t       ";
+    for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " CHANGE PASSWORD "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
+    cout << "\n\n";
+    cout << "\t\t\t\t\t      Current password     : \n\n";
+    cout << "\t\t\t\t\t      New password         : \n\n";
+    cout << "\t\t\t\t\t      Confirm new password : \n\n";
+    cout << "\t\t\t\t\t      Action(commit/back)  : \n\n\n\n";
+    for (int rep = 1; rep <= 120; rep++) cout << char(220); cout << endl;
+
+    string currentPassword, newPassword, confirmPassword;
+    readPassword(currentPassword, 69, 12);
+    readPassword(newPassword, 69, 14);
+    readPassword(confirmPassword, 69, 16);
+
+
+    User account;
+    ifstream f;
+    f.open("CurrentAccount.txt");
+    f >> account.id >> account.username >> account.password >> account.role;
+    f.close();
+
+    do {
+        string confirm; fflush(stdin);
+        gotoxy(69, 18); cin >> confirm;
+        if (confirm == "back") return; else
+            if (confirm == "commit") {
+                if (account.password != currentPassword){
+                    gotoxy(46, 20); cout << "Current password is incorrect";
+                    delay(1500); changePassword();
+                    return;
+                }
+
+                if (newPassword != confirmPassword) {
+                    gotoxy(46, 20); cout << "New password is incorrect";
+                    delay(1500); changePassword();
+                    return;
+                }
+
+                account.password = newPassword;
+                setCurrentAccount(account);
+
+                User* accounts = new User;
+                getAccounts(accounts);
+                User* pCur = accounts;
+
+                while (pCur){
+                    if (pCur->id == account.id){
+                        pCur->password = account.password;
+                        updateAccounts(accounts);
+                        break;
+                    }
+                //    cout << pCur->id << '\n' << pCur->username << '\n' << pCur->password << '\n' << pCur->role << '\n';
+                    pCur = pCur->Next;
+                }
+
+                cout << "\n\t\t\t\t\t   Password has been changed successfully";
+                delay(1500); return;
+            }
+        gotoxy(69, 18); for (char c : confirm) cout << ' ';
+    } while (true);
 }
