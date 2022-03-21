@@ -214,7 +214,7 @@ void Menu(List& l)
         cout << "3.My courses" << endl;
         cout << "4.My scoreboard" << endl;
         cout << "5.Change password" << endl;
-        cout << "6.Change profile" << endl;
+        cout << "6.View profile" << endl;
         cout << "7.log out" << endl;
         cout << "------------------" << endl;
         cout << "Input your choice = "; cin >> choice;
@@ -243,6 +243,11 @@ void Menu(List& l)
         else if (choice == 4)
         {
             My_Score(l);
+            system("pause");
+        }
+        else if (choice == 6)
+        {
+            Show_Profile();
             system("pause");
         }
     }
@@ -318,4 +323,46 @@ void My_Score(const List &l)
         cout << "Can not find your information" << endl;
     }
     FileIn.close();
+}
+void Show_Profile()
+{
+    ifstream FileIn;
+
+    int ID;
+    cout << "Please input your ID = "; cin >> ID;
+    stringstream ss;
+    ss << ID;
+    string str; 
+    ss >> str;
+    int class1;
+    cout << "Which class are you in ? "; cin >> class1;
+    stringstream ss1;
+    ss1 << class1;
+    string str1;
+    ss1 >> str1;
+
+    string strpath = "CLASS/21APCS" + str1 + "/" + str + ".txt";
+    cout << strpath << endl;
+    FileIn.open(strpath, ios_base::in);
+    Student stu;
+    FileIn >> stu.No;
+    FileIn.ignore();
+    getline(FileIn, stu.ID);
+    getline(FileIn, stu.Name);
+    getline(FileIn, stu.Gender);
+    FileIn >> stu.Dob.day;
+    FileIn >> stu.Dob.month;
+    FileIn >> stu.Dob.year;
+    FileIn.ignore();
+    getline(FileIn, stu.socialID);
+    FileIn.close();
+
+    cout << "-----------------------" << endl;
+    cout << "\t\tYour information" << endl;
+    cout << "NO." << stu.No << endl;
+    cout << "Name : " << stu.Name << endl;
+    cout << "Gender : " << stu.Gender << endl;
+    cout << "Date of birth = " << stu.Dob.day << "/" << stu.Dob.month << "/" << stu.Dob.year << endl;
+    cout << "Social ID = " << stu.socialID << endl;
+
 }
