@@ -83,8 +83,9 @@ struct User{
     User(string username, string password, string role) : username(username), password(password), role(role) {};
 };
 
-// Funtions used to delete doubly linked list.
+// Functions used to delete doubly linked list.
 void DeleteClassList(Class*& class);
 void DeleteStudentList(Student*& student);
-void deleteCourseList(Course* courseList) 
+void DeleteCourseList(Course*& courseList);
+void DeleteMarkList(Mark*& mark);
 #endif /* Struct_hpp */

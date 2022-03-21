@@ -4,4 +4,4 @@ Dinh Ba Tien
 50
 100
 MON S1
-TUE S1
+SAT S2

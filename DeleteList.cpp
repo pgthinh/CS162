@@ -16,10 +16,17 @@ void DeleteStudentList(Student*& student){
         delete temp;
     }
 }
-void deleteCourseList(Course* &courseList) {
+void DeleteCourseList(Course* &courseList) {
     while(courseList) {
         Course* t = courseList;
         courseList = courseList->next_Course;
         delete t;
+    }
+}
+void DeleteMarkList(Mark*& mark){
+    while(mark){
+        Mark* temp = mark;
+        mark = mark->next_Mark;
+        delete temp;
     }
 }
