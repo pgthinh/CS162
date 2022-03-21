@@ -59,8 +59,21 @@ struct Student {
     string socialID;
     Student* previous_Student = NULL;
     Student* next_Student = NULL;
-    Student(int No, string ID, string Password, string Name, string Gender, Time Dob) :
-		No(No), ID(ID), Name(Name), Gender(Gender), Dob(Dob) {};
+    Student(int No, string ID, string Password, string Name, string Gender, Time Dob, string socialID) :
+		No(No), ID(ID), Name(Name), Gender(Gender), Dob(Dob), socialID(socialID) {};
+};
+
+struct Mark {
+	float totalMark;
+	float finalMark;
+	float midtermMark;
+	float otherMark;
+    Mark* previous_Mark = nullptr;
+    Mark* next_Mark = nullptr;
+
+	Mark(float totalMark, float finalMark, float midtermMark, float otherMark) :
+		totalMark(totalMark), finalMark(finalMark), midtermMark(midtermMark), otherMark(otherMark) {};
+	Mark() {};
 };
 
 struct User{
@@ -70,8 +83,9 @@ struct User{
     User(string username, string password, string role) : username(username), password(password), role(role) {};
 };
 
-// Funtions used to delete doubly linked list.
+// Functions used to delete doubly linked list.
 void DeleteClassList(Class*& class);
 void DeleteStudentList(Student*& student);
-void deleteCourseList(Course* courseList) 
+void DeleteCourseList(Course*& courseList);
+void DeleteMarkList(Mark*& mark);
 #endif /* Struct_hpp */

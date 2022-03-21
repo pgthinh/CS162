@@ -20,7 +20,6 @@ void SetBGColor(WORD color)
 
 	SetConsoleTextAttribute(hConsoleOutput, wAttributes);
 }
-
 void set_console_size()
 {
     HANDLE hOut;

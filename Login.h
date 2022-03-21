@@ -11,5 +11,6 @@ void getAccounts(User* &accounts);
 User login(string username, string password, User* accounts);
 void readPassword(std::string &password, int x, int y);
 void Login();
+void changePassword();
 
 #endif // Login_h
