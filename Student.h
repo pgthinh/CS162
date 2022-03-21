@@ -3,6 +3,7 @@
 #include <string.h>
 #include <cstring>
 #include <fstream>
+#include <sstream>
 using namespace std;
 struct Course
 {
@@ -32,3 +33,5 @@ void Read_My_Course_From_TXT(List& l);
 void Show_My_course(List l);
 void Remove_A_Course(List& l);
 void Menu(List& l);
+void My_Score(const List &l);
+void Write_To_My_Course(const List& l);
