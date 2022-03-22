@@ -15,7 +15,7 @@ void Add_Course(List& l, const Course& course)
 {
     if (l.pHead == NULL)
     {
-        l.pHead = CreatNode(course);
+        l.pHead= l.pTail= CreatNode(course);
     }
     else
     {
@@ -63,19 +63,38 @@ void AddCourse(List& l)
         cout << "Choose the course ID " << endl;
         cout << "If you dont want to choose any more , press 0 " << endl;
         cout << "Your choice = "; cin >> choice;
+        cout << "---------------------" << endl;
         if (choice == 0)
         {
             break;
         }
-        for (int i = 0; i < numbers_of_course; i++)
+        bool Check = false;
+        Node* node = l.pHead;
+        while (node)
         {
-            if (course[i].ID == choice)
+            if (node->course.ID == choice)
             {
-                Add_Course(l, course[i]);
+                Check = true;
                 break;
             }
         }
-        cout << "Can not find any course with ID = " << choice << endl;
+        if (Check == false)
+        {
+            for (int i = 0; i < numbers_of_course; i++)
+            {
+                if (course[i].ID == choice)
+                {
+                    cout << "Add course successful" << endl;
+                    Add_Course(l, course[i]);
+                    break;
+                }
+            }
+            cout << "Can not find any course with ID = " << choice << endl;
+        }
+        else
+        {
+            cout << "You can not insert this course anymore" << endl;
+        }
     }
 
 
@@ -107,8 +126,6 @@ void Read_My_Course_From_TXT(List& l)
 }
 void Show_My_course(List l)
 {
-    ofstream FileOut;
-    FileOut.open("MyCourse.txt", ios_base::out);
     if (l.pHead == NULL)
     {
         cout << "You have not registered any course" << endl;
@@ -129,20 +146,6 @@ void Show_My_course(List l)
             count++;
             node = node->pNext;
         }
-        node = l.pHead;
-        FileOut << count << endl;
-        while (node != NULL)
-        {
-            FileOut << node->course.ID << endl;
-            FileOut << node->course.name << endl;
-            FileOut << node->course.Instructor << endl;
-            FileOut << node->course.numbers_of_credits << endl;
-            FileOut << node->course.maximum_students << endl;
-            FileOut << node->course.first_section << endl;
-            FileOut << node->course.second_section << endl;
-            node = node->pNext;
-        }
-        FileOut.close();
     }
 }
 void Remove_A_Course(List& l)
@@ -173,6 +176,32 @@ void Remove_A_Course(List& l)
         }
     }
 }
+void Write_To_My_Course(const List &l)
+{
+    ofstream FileOut;
+    FileOut.open("MyCourse.txt", ios_base::out);
+    int count = 0;
+    Node* node = l.pHead;
+    while (node != NULL)
+    {
+        count ++;
+        node = node->pNext;
+    }
+    FileOut << count << endl;
+    node = l.pHead;
+    while (node)
+    {
+        FileOut << node->course.ID << endl;
+        FileOut << node->course.name << endl;
+        FileOut << node->course.Instructor << endl;
+        FileOut << node->course.numbers_of_credits << endl;
+        FileOut << node->course.maximum_students << endl;
+        FileOut << node->course.first_section << endl;
+        FileOut << node->course.second_section << endl;
+        node = node->pNext;
+    }
+    FileOut.close();
+}
 void Menu(List& l)
 {
     int choice;
@@ -185,13 +214,14 @@ void Menu(List& l)
         cout << "3.My courses" << endl;
         cout << "4.My scoreboard" << endl;
         cout << "5.Change password" << endl;
-        cout << "6.Change profile" << endl;
+        cout << "6.View profile" << endl;
         cout << "7.log out" << endl;
         cout << "------------------" << endl;
         cout << "Input your choice = "; cin >> choice;
         if (choice == 7)
         {
             cout << "See you next time" << endl;
+            Write_To_My_Course(l);
             system("pause");
             break;
         }
@@ -210,42 +240,129 @@ void Menu(List& l)
             Show_My_course(l);
             system("pause");
         }
+        else if (choice == 4)
+        {
+            My_Score(l);
+            system("pause");
+        }
+        else if (choice == 6)
+        {
+            Show_Profile();
+            system("pause");
+        }
     }
 }
-void getStudentScoreboard(int year,int term,string studentID,Course*& courseList,Mark*& mark){
-    Mark* mark_cur = mark;
-    Course* courseList_cur = courseList;
-    string path = "DATA/" + to_string(year) + "/" + to_string(term) + "/students/" + studentID + "/marks.txt";
-    ifstream fin(path);
-    while(fin >> courseList_cur->CourseID >> mark_cur->totalMark >> mark_cur->finalMark >> mark_cur->midtermMark >> mark_cur->otherMark ){
-        courseList_cur->next_Course = new Course;
-        courseList_cur->next_Course->previous_Course = courseList_cur;
-        courseList_cur = courseList_cur->next_Course;
+void My_Score(const List &l)
+{
+    ifstream FileIn;
+    string pathfixed = "csvFile";
+    int ID;
+    cout << "Please input your ID = "; cin >> ID;
 
-        mark_cur->next_Mark = new Course;
-        mark_cur->next_Mark->previous_Mark = mark_cur;
-        mark_cur = mark_cur->next_Mark;
+    int year;
+    cout << "Input year = "; cin >> year;
+    int semester;
+    cout << "Input semester = "; cin >> semester;
+    stringstream ss;
+    stringstream ss1;
+
+    ss << year;
+    string str;
+    ss >> str;
+    string str1;
+    ss1 << semester;
+    ss1 >> str1;
+    string str2;
+    cin.ignore();
+    cout << "Input semester name = "; getline(cin, str2);
+    for (int i = 0; i < str2.length(); i++)
+    {
+        str2[i] = toupper(str2[i]);
     }
-    Course* temp1 = courseList_cur;
-    courseList_cur = courseList_cur->previous_Course;
-    courseList_cur->next_Course = nullptr;
-    delete temp1;
+ 
+    string strpath = pathfixed + "/" + str + "/" + str + "_" + str1 + "/" +str2+"16"+str1+".csv";
+    cout << strpath << endl;
+    FileIn.open(strpath, ios_base::in);
+    string str3;
+    getline(FileIn, str3);
+    cout << "---------------------" << endl;
+    cout << str3 << endl;
 
-    Course* temp2 = mark_cur;
-    mark_cur = mark_cur->previouse_Mark;
-    mark_cur->next_Mark = nullptr;
-    delete temp2;
+    bool Check = false;
+    while (FileIn.eof() == false)
+    {
+        int ID1 = 0;
+        getline(FileIn, str3);
+        string str4;
+        for (int i = 0; i < str3.length(); i++)
+        {
+            if (str3[i] == ',')
+            {
+                int j = i + 1;
+                while (str3[j] != ',')
+                {
+                    str4 += str3[j];
+                    j += 1;
+                }
+                stringstream ss2;
+                ss2 << str4;
+                ss2 >> ID1;
+                break;
+            }
+        }
+        if (ID1 == ID)
+        {
+            Check = true;
+            cout << str3 << endl;
+            break;
+        }
+
+    }
+    if (Check == false)
+    {
+        cout << "Can not find your information" << endl;
+    }
+    FileIn.close();
 }
-float getStudentGPA(string studentID,string className){
-    string path = "CLASS/" + className + "/" + studentID + "_marks.txt";
-    ifstream fin(path);
-    float mark, sum = 0;
-    int cnt = 0;
-    while(fin >> mark){
-        sum += mark;
-        cnt += 1;
-    }
-    fin.close();
-    float GPA = cnt > 0 ? sum / cnt : 0;
-    return GPA / 10 * 4;
+void Show_Profile()
+{
+    ifstream FileIn;
+
+    int ID;
+    cout << "Please input your ID = "; cin >> ID;
+    stringstream ss;
+    ss << ID;
+    string str; 
+    ss >> str;
+    int class1;
+    cout << "Which class are you in ? "; cin >> class1;
+    stringstream ss1;
+    ss1 << class1;
+    string str1;
+    ss1 >> str1;
+
+    string strpath = "CLASS/21APCS" + str1 + "/" + str + ".txt";
+    cout << strpath << endl;
+    FileIn.open(strpath, ios_base::in);
+    Student stu;
+    FileIn >> stu.No;
+    FileIn.ignore();
+    getline(FileIn, stu.ID);
+    getline(FileIn, stu.Name);
+    getline(FileIn, stu.Gender);
+    FileIn >> stu.Dob.day;
+    FileIn >> stu.Dob.month;
+    FileIn >> stu.Dob.year;
+    FileIn.ignore();
+    getline(FileIn, stu.socialID);
+    FileIn.close();
+
+    cout << "-----------------------" << endl;
+    cout << "\t\tYour information" << endl;
+    cout << "NO." << stu.No << endl;
+    cout << "Name : " << stu.Name << endl;
+    cout << "Gender : " << stu.Gender << endl;
+    cout << "Date of birth = " << stu.Dob.day << "/" << stu.Dob.month << "/" << stu.Dob.year << endl;
+    cout << "Social ID = " << stu.socialID << endl;
+
 }
