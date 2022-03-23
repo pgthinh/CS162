@@ -47,7 +47,7 @@ Node* CreatNode(Course course);
 void Add_Course(List& l, const Course& course);
 void AddCourse(List& l);
 void Read_My_Course_From_TXT(List& l);
-void Show_My_course(List l);
+void Show_My_course(const List &l);
 void Remove_A_Course(List& l);
 void Menu(List& l);
 void My_Score(const List &l);

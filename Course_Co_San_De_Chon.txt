@@ -1,4 +1,4 @@
-2
+3
 123
 CS162
 Tien
@@ -12,4 +12,11 @@ Nha
 3
 50
 WES-S4
+THU-S4
+12345
+Cal2
+Thu
+4
+50
+MON-S3
 THU-S4
