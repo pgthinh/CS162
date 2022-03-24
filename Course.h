@@ -14,27 +14,30 @@ Course getCurrentCourse();
 // Common Function
 void WriteFileCurrentCourse(Course* course);
 void updateCurrentCourse();
+void getCourseList(int year, int semester, Course* &courseList);
 void WriteFileCourseList(int year, int semester, Course* courseList);
 void printCourseInformation(Course* course);
 void printCourseList(Course* courseList);
-void deleteCourseList(Course* courseList);
+void deleteCourseList(Course* &courseList);
 // Main Functions
+
 void writeFileCourseRegistration(Time start, Time end);
 void updateCourseRegistration(Time &start, Time &end);
+
 void setCourseInformation(Course &course);
 void addCourse();
-void getCourseList(int year, int semester, Course* &courseList);
-void updateCourse();
-void deleteCourse();
+
+void updateCourse(int year, int semester, string CourseID);
+
+void deleteCourse(int year, int semester, string CourseID);
+
 void viewCourseMangementMenu();
 void getCourseStudentList(int year, int semester, string CourseID, Student* &studentList);
 void viewCourseStudent(Student* student);
-void viewCourseStudentList();
-
-void getMarkOfCourse(int year, int semester, string CourseID, Mark* &markList);
-void exportScoreboard(int year, int semester, string CourseID, Mark* markList);
-void importScoreboard(Mark* markList);
-void viewScoreboard(Mark* markList);
+void viewCourseStudentList(Student* studentList);
+void exportScoreboardOfStudentListOfCourse(int year, int semester, string CourseID, Student* &studentList);
+void importScoreboardOfStudentListOfCourse(int year, int semester, string CourseID, Student* studentList);
+void viewScoreboard(Student* studentList);
 void manageCourse();
 
-void courseMenu(); 
+void courseMenu();
