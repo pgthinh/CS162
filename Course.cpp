@@ -22,7 +22,7 @@ Course getCurrentCourse() {
     string day1, ses1, day2, ses2;
 
    string path = "DATA/cache/currentCourse.txt";
-    // string path = "/Users/apple/Documents/Tài Liiệu đại học/Năm 1/HK2/CS162/Project/updateCourse/currentCourse.txt";
+    // string path = "currentCourse.txt";
     ifstream fin(path);
     getline(fin, id);
     getline(fin, name);
@@ -59,26 +59,57 @@ void updateCurrentCourse() {
     cout << "CourseID: "; getline(cin, CourseID);
     getCourseList(year, semester, courseList);
     Course* courseCur = courseList;
-    bool check = false;
     while(courseCur->next_Course) {
         courseCur = courseCur->next_Course;
     }
     WriteFileCurrentCourse(courseCur);
 }
+void getCourseList(int year, int semester, Course* &courseList) {
+    string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/courseList.txt";
+    fstream fin; fin.open(path, ios::in);
+    Course* courseCur = courseList;
+    while(!fin.eof()) {
+        Course* new_Course = new Course;
+        getline(fin, new_Course->CourseID, ',');
+//        cout << new_Course->CourseID << endl;
+        getline(fin, new_Course->CourseName, ',');
+//        cout << new_Course->CourseName << endl;
+        getline(fin, new_Course->TeacherName, ',');
+//        cout << new_Course->TeacherName << endl;
+        fin >> new_Course->NumberOfCredits; fin.ignore();
+//        cout << new_Course->NumberOfCredits << endl;
+        fin >> new_Course->MaxNumOfStudent;fin.ignore();
+//        cout << new_Course->MaxNumOfStudent << endl;
+        getline(fin, new_Course->FirstDayOfWeek, ',');
+        getline(fin, new_Course->FirstSessionOfWeek, ',');
+//        cout << new_Course->FirstDayOfWeek << " " << new_Course->FirstSessionOfWeek;
+        getline(fin, new_Course->SecondDayOfWeek, ',');
+        getline(fin, new_Course->SecondSessionOfWeek);
+//        cout << new_Course->SecondDayOfWeek << " " << new_Course->SecondSessionOfWeek;
+        if(!courseCur) {courseCur = new_Course; courseList = new_Course;}
+        else {
+            courseCur->next_Course = new_Course;
+            new_Course->previous_Course = courseCur;
+            courseCur = courseCur->next_Course;
+        }
+    }
+    fin.close();
+}
 void WriteFileCourseList(int year, int semester, Course* courseList) {
-    string path = "DATA/" + to_string(year)+ "/" + to_string(semester) + "/course_list/Course_List.txt";    
+    string path = "DATA/" + to_string(year)+ "/" + to_string(semester) + "/course_list/courseList.txt";
     ofstream fout;
     fout.open(path, ios::trunc);
     Course* courseCur = courseList;
     while(courseCur) {
-        fout << courseCur->CourseID << '\n';
-        fout << courseCur->CourseName << '\n';
-        fout << courseCur->TeacherName << '\n';
-        fout << courseCur->NumberOfCredits << '\n';
-        fout << courseCur->MaxNumOfStudent << '\n';
-        fout << courseCur->FirstDayOfWeek << ' ' << courseCur->FirstSessionOfWeek << '\n';
-        if(!courseCur->next_Course) fout << courseCur->SecondDayOfWeek << ' ' << courseCur->SecondSessionOfWeek;
-        else fout << courseCur->SecondDayOfWeek << ' ' << courseCur->SecondSessionOfWeek << '\n';
+        fout << courseCur->CourseID << ',';
+        fout << courseCur->CourseName << ',';
+        fout << courseCur->TeacherName << ',';
+        fout << courseCur->NumberOfCredits << ',';
+        fout << courseCur->MaxNumOfStudent << ',';
+        fout << courseCur->FirstDayOfWeek << ',';
+        fout << courseCur->FirstSessionOfWeek << ',';
+        fout << courseCur->SecondDayOfWeek << ',';
+        fout << courseCur->SecondSessionOfWeek << '\n';
         courseCur = courseCur->next_Course;
     }
     fout.close();
@@ -106,33 +137,37 @@ void deleteCourseList(Course* &courseList) {
         delete t;
     }
 }
+
 // Main Function
+// 1. Course registration
 void writeFileCourseRegistration(Time start, Time end) {
     Semester semester = getCurrentSemester();
-    string path = "DATA/" + to_string(semester.Year) + '/' + to_string(semester.TheOrderOfSemester) + "registration.txt";
-    ofstream fout(path);
+    string path = "DATA/" + to_string(semester.Year) + '/' + to_string(semester.TheOrderOfSemester) + '/' + "registration.txt";
+
+    ofstream fout;
+    fout.open(path);
     fout << start.day << ' ' << start.month << ' ' << start.year << '\n';
     fout << end.day << ' ' << end.month << ' ' << end.year << '\n';
     fout.close();
 }
 void updateCourseRegistration(Time &start, Time &end) {
-    cout << "Start day month year: " 
+    cout << "Start day month year: ";
     cin >> start.day >> start.month >> start.year;
-    cout << endl;
-    cout << "Start day month year: " 
+    cout << "End day month year: ";
     cin >> end.day >> end.month >> end.year;
 }
+// 2. Add course
 void setCourseInformation(Course &course) {
-    cout << "SET COURSE INFORMATION";
-    cout << endl << "Course ID: "; cin >> course.CourseID;
-    cout << endl << "Course Name: "; getline(cin, course.CourseName);
-    cout << endl << "Teacher Name: "; getline(cin, course.TeacherName);
-    cout << endl << "Number of Credits: "; cin >> course.NumberOfCredits;
-    cout << endl << "Maximum Students: "; cin >> course.MaxNumOfStudent;
-    cout << endl << "Day 1: "; getline(cin, course.FirstDayOfWeek);
-    cout << endl << "Session: "; getline(cin, course.FirstSessionOfWeek);
-    cout << endl << "Day 2: "; getline(cin, course.SecondDayOfWeek);
-    cout << endl << "Session: "; getline(cin, course.SecondSessionOfWeek);
+    cout << "SET COURSE INFORMATION" << endl;
+    cout << "Course ID: "; cin >> course.CourseID;
+    cout << "Course Name: "; cin.ignore(1); getline(cin, course.CourseName);
+    cout << "Teacher Name: "; getline(cin, course.TeacherName);
+    cout << "Number of Credits: "; cin >> course.NumberOfCredits;
+    cout << "Maximum Students: "; cin >> course.MaxNumOfStudent;
+    cout << "Day 1: "; cin.ignore(1); getline(cin, course.FirstDayOfWeek);
+    cout << "Session: "; getline(cin, course.FirstSessionOfWeek);
+    cout << "Day 2: "; getline(cin, course.SecondDayOfWeek);
+    cout << "Session: "; getline(cin, course.SecondSessionOfWeek);
 }
 void addCourse() {
     Course course;
@@ -144,7 +179,8 @@ void addCourse() {
 
     string path = "DATA/" + to_string(year) + "/" + to_string(term) + "/courses_list/" + course.CourseID;
     // create a folder (name: year_term_courseID)
-    _mkdir(path.c_str());
+//    mkdir(path);
+//    boost::filesystem::create_directories(path);
     ofstream fout;
     // create a data file for a course
     path += "Course_Data.txt";
@@ -162,29 +198,7 @@ void addCourse() {
     fout << course.SecondDayOfWeek << ' ' << course.SecondSessionOfWeek << '\n';
     fout.close();
 }
-void getCourseList(int year, int semester, Course* &courseList) {
-    string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/Course_List.txt";
-    fstream fin; fin.open(path);
-    Course* courseCur = courseList;
-    while(!fin.eof()) {
-        Course* new_Course = new Course;
-        getline(fin, new_Course->CourseID);
-        getline(fin, new_Course->CourseName);
-        getline(fin, new_Course->TeacherName);
-        fin >> new_Course->NumberOfCredits;
-        fin >> new_Course->MaxNumOfStudent;
-        fin >> new_Course->FirstDayOfWeek >> new_Course->FirstSessionOfWeek;
-        fin >> new_Course->SecondDayOfWeek >> new_Course->SecondSessionOfWeek;
-        fin.ignore(1);
-        if(!courseCur) {courseCur = new_Course; courseList = new_Course;}
-        else {
-            courseCur->next_Course = new_Course;
-            new_Course->previous_Course = courseCur;
-            courseCur = courseCur->next_Course;
-        }
-    }
-    fin.close();
-}
+// 3. Update course
 void updateCourse(int year, int semester, string CourseID) {
     Course* courseList = NULL;
     getCourseList(year, semester, courseList);
@@ -225,16 +239,19 @@ void updateCourse(int year, int semester, string CourseID) {
         WriteFileCourseList(year, semester, courseList);
         deleteCourseList(courseList);
     }
+    deleteCourseList(courseList);
 }
+// 4. Delete course
 void deleteCourse(int year, int semester, string CourseID) {
     Course* courseList = NULL;
     getCourseList(year, semester, courseList);
-    printCourseList(courseList);
     Course* courseCur = courseList;
     while(courseCur) {
         if(courseCur->CourseID == CourseID) {
             if(courseCur == courseList) {
-                if(courseCur->next_Course == NULL) deleteCourseList(courseList);
+                if(courseCur->next_Course == NULL) {
+                    deleteCourseList(courseList);
+                }
                 else {
                     Course* t = courseList;
                     courseList = courseList->next_Course;
@@ -265,6 +282,7 @@ void deleteCourse(int year, int semester, string CourseID) {
     cout << "The course does not exist";
     deleteCourseList(courseList);
 }
+// 5. Course management
 void viewCourseMangementMenu() {
     cout << "1. View student" << endl;
     cout << "2. Export scorebroad" << endl;
@@ -279,17 +297,24 @@ void getCourseStudentList(int year, int semester, string CourseID, Student* &stu
     Student* studentCur = studentList;
     while(!fin.eof()) {
         Student* new_student = new Student;
-        getline(fin, new_student->ID, ",");
-        getline(fin, new_student->Name, ",");
-        getline(fin, new_student->Gender, ",");
-        getline(fin, new_student->Dob, ",");
-        getline(fin, new_student->socialID, ",");
-        if(!courseCur) {studentCur = new_student; studentList = new_student;}
+        getline(fin, new_student->ID, ' ');
+        getline(fin,new_student->className, '\n');
+        string pathToClass = "CLASS/" + new_student->className + "/" + new_student->ID + ".txt";
+        fstream fileinClass; fileinClass.open(pathToClass, ios::in);
+        fin >> new_student->No; fin.ignore();
+        getline(fin, new_student->ID, '\n');
+        getline(fin, new_student->Name, '\n');
+        getline(fin, new_student->Gender, '\n');
+        fin >> new_student->Dob.day; fin >> new_student->Dob.month; fin >> new_student->Dob.year; fin.ignore();
+        getline(fin, new_student->socialID, '\n');
+        fileinClass.close();
+        if(!studentCur) {studentCur = new_student; studentList = new_student;}
         else {
             studentCur->next_Student = new_student;
             new_student->previous_Student = studentCur;
             studentCur = studentCur->next_Student;
         }
+        
     }
     fin.close();
 }
@@ -297,7 +322,7 @@ void viewCourseStudent(Student* student) {
     cout << student->ID << endl;
     cout << student->Name << endl;
     cout << student->Gender << endl;
-    cout << student->Dob << endl;
+    cout << student->Dob.day << " " << student->Dob.month << " " << student->Dob.year << endl;
     cout << student->socialID << endl;
 }
 void viewCourseStudentList(Student* studentList) {
@@ -307,50 +332,55 @@ void viewCourseStudentList(Student* studentList) {
         studentCur = studentCur->next_Student;
     }
 }
-
-void getMarkOfCourse(int year, int semester, string CourseID, Mark* &markList) {
-    string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + CourseID + "/marks.txt";
+void exportScoreboardOfStudentListOfCourse(int year, int semester, string CourseID, Student* &studentList) {
+    string path = "csvFile/" + to_string(year) + "/" + to_string(semester) + CourseID + ".csv";
     fstream fin; fin.open(path);
-    Mark* markCur = markList;
+    Student* studentCur = studentList;
     while(!fin.eof()) {
-        Mark* newMark = new Mark;
-        fin >> newMark->totalMark; fin.ignore(1);
-        fin >> newMark->finalMark; fin.ignore(1);
-        fin >> newMark->midtermMark; fin.ignore(1);
-        fin >> newMark->otherMark;
-        markCur->newMark = newMark;
-        newMark->previous_Mark = markCur;
-        markCur = markCur->newMark;
+        Student* new_student = new Student;
+        fin >> new_student->No; fin.ignore(1);
+        getline(fin, new_student->ID, ',');
+        getline(fin, new_student->Name, ',');
+        fin >> new_student->mark.totalMark; fin.ignore(1);
+        fin >> new_student->mark.finalMark; fin.ignore(1);
+        fin >> new_student->mark.midtermMark; fin.ignore(1);
+        fin >> new_student->mark.otherMark;
+        fin.ignore();
+        if(!studentCur) {studentCur = new_student; studentList = new_student;}
+        else {
+            studentCur->next_Student = new_student;
+            new_student->previous_Student = studentCur;
+            studentCur = studentCur->next_Student;
+        }
     }
     fin.close();
 }
-void exportScoreboard(int year, int semester, string CourseID, Mark* markList) {
-    string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + CourseID + "/marks.txt";
+void importScoreboardOfStudentListOfCourse(int year, int semester, string CourseID, Student* studentList) {
+    string path = "csvFile/" + to_string(year) + "/" + to_string(semester) + CourseID + ".csv";
     fstream fout; fout.open(path);
-    Mark* markCur = markList;
-    while(markCur) {
-        fout << markCur->
-
-        markCur = markCur->next_Mark;
+    Student* studentCur = studentList;
+    while(studentCur) {
+        fout << studentCur->No << ',' << studentCur->Name << ',' << studentCur->mark.totalMark << ',' << studentCur->mark.finalMark << ',' << studentCur->mark.midtermMark << ',' << studentCur->mark.otherMark << '\n';
+        studentCur = studentCur->next_Student;
     }
     fout.close();
 }
-void importScoreboard(Mark* markList) {
-
+void viewScoreboard(Student* studentList) {
+    Student* studentCur = studentList;
+    while(studentCur) {
+        cout << studentCur->No << ',' << studentCur->Name << ',' << studentCur->mark.totalMark << ',' << studentCur->mark.finalMark << ',' << studentCur->mark.midtermMark << ',' << studentCur->mark.otherMark << '\n';
+        studentCur = studentCur->next_Student;
+    }
 }
-void viewScoreboard(Mark* markList) {
-
-}
-void manageCourse(int year, int semseter) {
+void manageCourse(int year, int semester) {
     Course* courseList = NULL;
     getCourseList(year, semester, courseList);
-    Course* courseCur = courseList;
-
+    string CourseID;
     cout << "Choose CourseID to manage" << endl;
-    printCourseList(courseList) << endl;
-    cin.ignore();
+    printCourseList(courseList);
     cout << "CourseID: "; getline(cin, CourseID);
     bool check = false;
+    Course* courseCur = courseList;
     while(courseCur && !check) {
         if(courseCur->CourseID == CourseID) { check = true; break;}
         else courseCur = courseCur->next_Course;
@@ -368,24 +398,31 @@ void manageCourse(int year, int semseter) {
                 getCourseStudentList(year, semester, CourseID, CourseStudentList);
                 viewCourseStudentList(CourseStudentList);
             }
-            break;
+                break;
             case 2: { // export scoreboard
-                Mark* MarkList;
-                getMarkOfCourse(year, semester, CourseID, MarkList)
+                Student* studentList;
+                exportScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);
             }
-            break;
-            case 2: { // import scoreboard
-                
+                break;
+            case 3: { // import scoreboard
+                Student* studentList;
+                exportScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);
+                importScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);
             }
-            break;
-            case 2: { // view scoreboard
-                
+                break;
+            case 4: { // view scoreboard
+                Student* studentList;
+                exportScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);
+                viewScoreboard(studentList);
             }
-            break;
+                break;
+            case 5:
+                courseMenu();
+                break;
         }
     }
 }
-//MENU
+
 void courseMenu() {
     cout << "1. Create course registration" << endl;
     cout << "2. Add course" << endl;
@@ -402,27 +439,45 @@ void courseMenu() {
         updateCourseRegistration(startDate, endDate);
         writeFileCourseRegistration(startDate, endDate);
     }
-    break;
+            break;
     case 2: {
         addCourse();
     }
-    break;
+            break;
     case 3: {
-        updateCourse();
+        int year;
+        int semester;
+        string CourseID;
+        cout << "UPDATE COURSE" << endl;
+        cout << "Year: "; cin >> year;
+        cout << "Semester: "; cin >> semester;
+        cout << "Course ID: "; cin.ignore(1); getline(cin, CourseID, '\n');
+        updateCourse(year, semester, CourseID);
     }
-    break;
+            break;
     case 4: {
-        deleteCourse();
+        int year;
+        int semester;
+        string CourseID;
+        cout << "DELETE COURSE" << endl;
+        cout << "Year: "; cin >> year;
+        cout << "Semester: "; cin >> semester;
+        cout << "Course ID: "; cin.ignore(1); getline(cin, CourseID, '\n');
+        deleteCourse(year, semester, CourseID);
     }
-    break;
+        break;
     case 5: {
-        
+        int year;
+        int semester;
+        cout << "MANAGE COURSE" << endl;
+        cout << "Year: "; cin >> year;
+        cout << "Semester: "; cin >> semester;
+        manageCourse(year, semester);
     }
-    break;
+        break;
     case 6: {
         return;
     }
-    break;
+        break;
     }
 }
-
