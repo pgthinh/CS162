@@ -185,14 +185,8 @@ void getCourseList(int year, int semester, Course* &courseList) {
     }
     fin.close();
 }
-void updateCourse() {
-    int year, semester;
-    string CourseID;
+void updateCourse(int year, int semester, string CourseID) {
     Course* courseList = NULL;
-    cout<< "year: "; cin >> year;
-    cout << "semester: " ; cin >> semester;
-    cin.ignore();
-    cout << "CourseID: "; getline(cin, CourseID);
     getCourseList(year, semester, courseList);
     Course* courseCur = courseList;
     bool check = false;
@@ -232,16 +226,10 @@ void updateCourse() {
         deleteCourseList(courseList);
     }
 }
-void deleteCourse() {
-    int year, semester;
-    string CourseID;
+void deleteCourse(int year, int semester, string CourseID) {
     Course* courseList = NULL;
-    cout<< "year: "; cin >> year;
-    cout << "semester: " ; cin >> semester;
     getCourseList(year, semester, courseList);
     printCourseList(courseList);
-    cin.ignore();
-    cout << "CourseID that you want to delete: "; getline(cin, CourseID);
     Course* courseCur = courseList;
     while(courseCur) {
         if(courseCur->CourseID == CourseID) {
@@ -353,12 +341,8 @@ void importScoreboard(Mark* markList) {
 void viewScoreboard(Mark* markList) {
 
 }
-void manageCourse() {
-    int year, semester;
-    string CourseID;
+void manageCourse(int year, int semseter) {
     Course* courseList = NULL;
-    cout<< "year: "; cin >> year;
-    cout << "semester: " ; cin >> semester;
     getCourseList(year, semester, courseList);
     Course* courseCur = courseList;
 
@@ -399,7 +383,6 @@ void manageCourse() {
             }
             break;
         }
-
     }
 }
 //MENU
@@ -437,7 +420,7 @@ void courseMenu() {
     }
     break;
     case 6: {
-        courseMenu();
+        return;
     }
     break;
     }
