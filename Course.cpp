@@ -64,6 +64,53 @@ void updateCurrentCourse() {
     }
     WriteFileCurrentCourse(courseCur);
 }
+void getCourseInfoList(int year, int semester, Course* &courseList) {
+    string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/courseList.txt";
+    fstream fin; fin.open(path, ios::in);
+    Course* courseCur = courseList;
+    while(!fin.eof()) {
+        Course* new_Course = new Course;
+        getline(fin, new_Course->CourseID, '\n');
+        string pathToInfo = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + new_Course->CourseID + "/info.txt";
+        fstream fileinToInfo; fileinToInfo.open(path);
+        getline(fin, new_Course->CourseID, ',');
+        getline(fin, new_Course->CourseName, ',');
+        getline(fin, new_Course->TeacherName, ',');
+        fin >> new_Course->NumberOfCredits; fin.ignore();
+        fin >> new_Course->MaxNumOfStudent;fin.ignore();
+        getline(fin, new_Course->FirstDayOfWeek, ',');
+        getline(fin, new_Course->FirstSessionOfWeek, ',');
+        getline(fin, new_Course->SecondDayOfWeek, ',');
+        getline(fin, new_Course->SecondSessionOfWeek);
+        fileinToInfo.close();
+        if(!courseCur) {courseCur = new_Course; courseList = new_Course;}
+        else {
+            courseCur->next_Course = new_Course;
+            new_Course->previous_Course = courseCur;
+            courseCur = courseCur->next_Course;
+        }
+    }
+    fin.close();
+}
+void WriteFileCourseInfoList(int year, int semester, Course* courseList) {
+    Course* courseCur = courseList;
+    while(courseCur) {
+        string pathToInfo = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + courseCur->CourseID + "/info.txt";
+        fstream fileoutToInfo; fileoutToInfo.open(path, ios::trunc);
+        fout << courseCur->CourseID << '\n';
+        fout << courseCur->CourseName << '\n';
+        fout << courseCur->TeacherName << '\n';
+        fout << courseCur->NumberOfCredits << '\n';
+        fout << courseCur->MaxNumOfStudent << '\n';
+        fout << courseCur->FirstDayOfWeek << '\n';
+        fout << courseCur->FirstSessionOfWeek << '\n';
+        fout << courseCur->SecondDayOfWeek << '\n';
+        fout << courseCur->SecondSessionOfWeek;
+        fileoutToInfo.close();
+        courseCur = courseCur->next_Course;
+        }
+    fin.close();
+}
 void getCourseList(int year, int semester, Course* &courseList) {
     string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/courseList.txt";
     fstream fin; fin.open(path, ios::in);
@@ -71,21 +118,6 @@ void getCourseList(int year, int semester, Course* &courseList) {
     while(!fin.eof()) {
         Course* new_Course = new Course;
         getline(fin, new_Course->CourseID, ',');
-//        cout << new_Course->CourseID << endl;
-        getline(fin, new_Course->CourseName, ',');
-//        cout << new_Course->CourseName << endl;
-        getline(fin, new_Course->TeacherName, ',');
-//        cout << new_Course->TeacherName << endl;
-        fin >> new_Course->NumberOfCredits; fin.ignore();
-//        cout << new_Course->NumberOfCredits << endl;
-        fin >> new_Course->MaxNumOfStudent;fin.ignore();
-//        cout << new_Course->MaxNumOfStudent << endl;
-        getline(fin, new_Course->FirstDayOfWeek, ',');
-        getline(fin, new_Course->FirstSessionOfWeek, ',');
-//        cout << new_Course->FirstDayOfWeek << " " << new_Course->FirstSessionOfWeek;
-        getline(fin, new_Course->SecondDayOfWeek, ',');
-        getline(fin, new_Course->SecondSessionOfWeek);
-//        cout << new_Course->SecondDayOfWeek << " " << new_Course->SecondSessionOfWeek;
         if(!courseCur) {courseCur = new_Course; courseList = new_Course;}
         else {
             courseCur->next_Course = new_Course;
@@ -102,14 +134,6 @@ void WriteFileCourseList(int year, int semester, Course* courseList) {
     Course* courseCur = courseList;
     while(courseCur) {
         fout << courseCur->CourseID << ',';
-        fout << courseCur->CourseName << ',';
-        fout << courseCur->TeacherName << ',';
-        fout << courseCur->NumberOfCredits << ',';
-        fout << courseCur->MaxNumOfStudent << ',';
-        fout << courseCur->FirstDayOfWeek << ',';
-        fout << courseCur->FirstSessionOfWeek << ',';
-        fout << courseCur->SecondDayOfWeek << ',';
-        fout << courseCur->SecondSessionOfWeek << '\n';
         courseCur = courseCur->next_Course;
     }
     fout.close();
@@ -177,17 +201,12 @@ void addCourse() {
     int year = semester.Year;
     int term = semester.TheOrderOfSemester;
 
-    string path = "DATA/" + to_string(year) + "/" + to_string(term) + "/courses_list/" + course.CourseID;
-    // create a folder (name: year_term_courseID)
-//    mkdir(path);
-//    boost::filesystem::create_directories(path);
-    ofstream fout;
-    // create a data file for a course
-    path += "Course_Data.txt";
-    fout.open(path, ofstream::out);
+    string path = "DATA/" + to_string(year) + "/" + to_string(term) + "/courses_list/courseList.txt";
+    ofstream fout; fout.open(path);
+    fout << course.CourseID << '\n';
     fout.close();
-    // add course's informations to the CourseList
-    path = "DATA/" + to_string(year) + "/" + to_string(term) + "/courses_list/" + "Course_List.txt";
+
+    path -= "courseList.txt"; path += course.CourseID + "info/txt";
     fout.open(path, ofstream::out | ofstream::app);
     fout << course.CourseID << '\n';
     fout << course.CourseName << '\n';
@@ -196,12 +215,12 @@ void addCourse() {
     fout << course.MaxNumOfStudent << '\n';
     fout << course.FirstDayOfWeek << ' ' << course.FirstSessionOfWeek << '\n';
     fout << course.SecondDayOfWeek << ' ' << course.SecondSessionOfWeek << '\n';
-    fout.close();
+    fout.close();  
 }
 // 3. Update course
 void updateCourse(int year, int semester, string CourseID) {
     Course* courseList = NULL;
-    getCourseList(year, semester, courseList);
+    getCourseInfoList(year, semester, courseList);
     Course* courseCur = courseList;
     bool check = false;
     while(courseCur && !check) {
@@ -236,8 +255,12 @@ void updateCourse(int year, int semester, string CourseID) {
         }
         cout << "The course has been updated: " << endl;
         printCourseInformation(courseCur);
+        
         WriteFileCourseList(year, semester, courseList);
+        WriteFileCourseInfoList(year, semester, courseList);
+
         deleteCourseList(courseList);
+        return;
     }
     deleteCourseList(courseList);
 }
@@ -291,8 +314,31 @@ void viewCourseMangementMenu() {
     cout << "5. Go Back" << endl; // go back to Course Menu;
 
 }
+
+void getCourseMarkList(int year, int semester, string CourseID, Student* &studentList) {
+    string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + CourseID + "/marks.txt";
+    fstream fin; fin.open(path);
+    Student* studentCur = studentList;
+    while(!fin.eof()) {
+        Student* new_student = new Student;
+        getline(fin, new_student->ID, ' ');
+        fin >> new_student->mark.totalMark; 
+        fin >> new_student->mark.finalMark;
+        fin >> new_student->mark.midtermMark;
+        fin >> new_student->mark.otherMark;
+        fin.ignore();
+        getline(fin, new_student->Name, '\n');
+        if(!studentCur) {studentCur = new_student; studentList = new_student;}
+        else {
+            studentCur->next_Student = new_student;
+            new_student->previous_Student = studentCur;
+            studentCur = studentCur->next_Student;
+        }
+    }
+    fin.close();
+}
 void getCourseStudentList(int year, int semester, string CourseID, Student* &studentList) {
-    string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + CourseID + "/student.txt";
+    string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + CourseID + "/students.txt";
     fstream fin; fin.open(path);
     Student* studentCur = studentList;
     while(!fin.eof()) {
@@ -314,7 +360,6 @@ void getCourseStudentList(int year, int semester, string CourseID, Student* &stu
             new_student->previous_Student = studentCur;
             studentCur = studentCur->next_Student;
         }
-        
     }
     fin.close();
 }
@@ -333,6 +378,17 @@ void viewCourseStudentList(Student* studentList) {
     }
 }
 void exportScoreboardOfStudentListOfCourse(int year, int semester, string CourseID, Student* &studentList) {
+    getCourseMarkList(year, semester, CourseID, studentList);
+    string path = "csvFile/" + to_string(year) + "/" + to_string(semester) + CourseID + ".csv";
+    fstream fout; fout.open(path);
+    Student* studentCur = studentList;
+    while(studentCur) {
+        fout << studentCur->No << ',' << studentCur->Name << ',' << studentCur->mark.totalMark << ',' << studentCur->mark.finalMark << ',' << studentCur->mark.midtermMark << ',' << studentCur->mark.otherMark << '\n';
+        studentCur = studentCur->next_Student;
+    }
+    fout.close();
+}
+void importScoreboardOfStudentListOfCourse(int year, int semester, string CourseID, Student* studentList) {
     string path = "csvFile/" + to_string(year) + "/" + to_string(semester) + CourseID + ".csv";
     fstream fin; fin.open(path);
     Student* studentCur = studentList;
@@ -354,21 +410,12 @@ void exportScoreboardOfStudentListOfCourse(int year, int semester, string Course
         }
     }
     fin.close();
-}
-void importScoreboardOfStudentListOfCourse(int year, int semester, string CourseID, Student* studentList) {
-    string path = "csvFile/" + to_string(year) + "/" + to_string(semester) + CourseID + ".csv";
-    fstream fout; fout.open(path);
-    Student* studentCur = studentList;
-    while(studentCur) {
-        fout << studentCur->No << ',' << studentCur->Name << ',' << studentCur->mark.totalMark << ',' << studentCur->mark.finalMark << ',' << studentCur->mark.midtermMark << ',' << studentCur->mark.otherMark << '\n';
-        studentCur = studentCur->next_Student;
-    }
-    fout.close();
+    viewScoreboard(studentList);
 }
 void viewScoreboard(Student* studentList) {
     Student* studentCur = studentList;
     while(studentCur) {
-        cout << studentCur->No << ',' << studentCur->Name << ',' << studentCur->mark.totalMark << ',' << studentCur->mark.finalMark << ',' << studentCur->mark.midtermMark << ',' << studentCur->mark.otherMark << '\n';
+        cout << studentCur->No << ' ' << studentCur->Name << ' ' << studentCur->mark.totalMark << ' ' << studentCur->mark.finalMark << ' ' << studentCur->mark.midtermMark << ' ' << studentCur->mark.otherMark << '\n';
         studentCur = studentCur->next_Student;
     }
 }

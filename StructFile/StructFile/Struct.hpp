@@ -73,8 +73,8 @@ struct Student {
     Student* previous_Student = NULL;
     Student* next_Student = NULL;
     Mark mark;
-    Student(int No, string ID, string Password, string Name, string Gender, Time Dob, string socialID) :
-        No(No), ID(ID), Name(Name), Gender(Gender), Dob(Dob), socialID(socialID) {};
+    Student(int No, string ID, string Password, string Name, string Gender, Time Dob, string socialID, string className, Mark mark) :
+        No(No), ID(ID), Name(Name), Gender(Gender), Dob(Dob), socialID(socialID), className(className), mark(mark) {};
     Student() {};
 };
 
