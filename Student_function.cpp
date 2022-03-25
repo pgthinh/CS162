@@ -31,40 +31,46 @@ void AddCourse(List& l)
 {
     ifstream FileIn;
     FileIn.open("DATA/2021/1/course_list/courseList.txt", ios_base::in);
-    int numbers_of_course;
-    FileIn >> numbers_of_course;
+    int numbers_of_course = 0;
+    while (!FileIn.eof())
+    {
+        string str;
+        getline(FileIn,str);
+        numbers_of_course++;
+    }
+    FileIn.close();
+    FileIn.open("DATA/2021/1/course_list/courseList.txt", ios_base::in);
     Course* course = new Course[numbers_of_course];
     // đọc dữ liệu hàm từ file để in ra cho người dùng chọn
-    FileIn.ignore();
     for (int i = 0; i < numbers_of_course; i++)
     {
-        getline(FileIn, course[i].shortened_name);
+        getline(FileIn, course[i].CourseID);
     }
     FileIn.close();
     for (int i = 0; i < numbers_of_course; i++)
     {
-        string strpath = "DATA/2021/1/course_list/" + course[i].shortened_name+"/"+"info.txt";
+        string strpath = "DATA/2021/1/course_list/" + course[i].CourseID+"/"+"info.txt";
         FileIn.open(strpath, ios_base::in);
-        getline(FileIn, course[i].shortened_name);
-        getline(FileIn, course[i].name);
-        getline(FileIn, course[i].Instructor);
-        FileIn >> course[i].numbers_of_credits;
-        FileIn >> course[i].maximum_students;
+        getline(FileIn, course[i].CourseID);
+        getline(FileIn, course[i].CourseName);
+        getline(FileIn, course[i].TeacherName);
+        FileIn >> course[i].NumberOfCredits;
+        FileIn >> course[i].MaxNumOfStudent;
         FileIn.ignore();
-        getline(FileIn, course[i].first_section);
-        getline(FileIn, course[i].second_section);
+        FileIn >> course[i].FirstDayOfWeek >> course[i].FirstSessionOfWeek;
+        FileIn >> course[i].SecondDayOfWeek >> course[i].SecondSessionOfWeek;
         FileIn.close();
     }
     for (int i = 0; i < numbers_of_course; i++)
     {
         cout << i + 1 << endl;
-        cout << "course ID = " << course[i].shortened_name << endl;
-        cout << "course name  = " << course[i].name << endl;
-        cout << "course instructor = " << course[i].Instructor << endl;
-        cout << "Numbers of credits = " << course[i].numbers_of_credits << endl;
-        cout << "Maximum student = " << course[i].maximum_students << endl;
-        cout << "first section = " << course[i].first_section << endl;
-        cout << "second section = " << course[i].second_section << endl;
+        cout << "course ID = " << course[i].CourseID << endl;
+        cout << "course name  = " << course[i].CourseName << endl;
+        cout << "course instructor = " << course[i].TeacherName << endl;
+        cout << "Numbers of credits = " << course[i].NumberOfCredits << endl;
+        cout << "Maximum student = " << course[i].MaxNumOfStudent<< endl;
+        cout << "first section = " << course[i].FirstDayOfWeek <<" "<< course[i].FirstSessionOfWeek << endl;
+        cout << "second section = "<<course[i].SecondDayOfWeek<<" "<<course[i].SecondSessionOfWeek<<endl;
     }
     cout << "---------------------------" << endl;
     cin.ignore();
@@ -87,7 +93,7 @@ void AddCourse(List& l)
         Node* node = l.pHead;
         while (node)
         {
-            if (node->course.shortened_name == choice)
+            if (node->course.CourseID == choice)
             {
                 Check = true;
                 break;
@@ -98,14 +104,15 @@ void AddCourse(List& l)
         {
             for (int i = 0; i < numbers_of_course; i++)
             {
-                if (course[i].shortened_name == choice)
+                if (course[i].CourseID == choice)
                 {
                     Node* node = l.pHead;
                     bool Check1 = false; // check xem môn chọn co bi trùng giờ các môn trước hay không ?
                     while (node)
                     {
-                        if (course[i].first_section == node->course.first_section || course[i].first_section == node->course.second_section || course[i].second_section == node->course.first_section || course[i].second_section == node->course.second_section)
+                        if (course[i].FirstDayOfWeek == node->course.FirstDayOfWeek || course[i].SecondDayOfWeek == node->course.SecondDayOfWeek)
                         {
+                            if(course[i].FirstSessionOfWeek == node->course.FirstSessionOfWeek || course[i].SecondSessionOfWeek == node->course.SecondSessionOfWeek)
                             Check1 = true;
                             break;
                         }
@@ -148,20 +155,31 @@ void Read_My_Course_From_TXT(List& l)
 {
     ifstream FileIn;
     FileIn.open("MyCourse.txt", ios_base::in);
-    int numbers_of_course;
-    FileIn >> numbers_of_course;
-    FileIn.ignore();
+    int numbers_of_course = 0;
+    while (!FileIn.eof())
+    {
+        Course course;
+        getline(FileIn, course.CourseID);
+        getline(FileIn, course.CourseName);
+        getline(FileIn, course.TeacherName);
+        FileIn >> course.NumberOfCredits;
+        FileIn >> course.MaxNumOfStudent;
+        FileIn >> course.FirstDayOfWeek >> course.FirstSessionOfWeek;
+        FileIn >> course.SecondDayOfWeek >> course.SecondSessionOfWeek;
+        numbers_of_course++;
+    }
+    FileIn.close();
+    FileIn.open("MyCourse.txt", ios_base::in);
     Course* course = new Course[numbers_of_course];
     for (int i = 0; i < numbers_of_course; i++)
     {
-        getline(FileIn, course[i].shortened_name);
-        getline(FileIn, course[i].name);
-        getline(FileIn, course[i].Instructor);
-        FileIn >> course[i].numbers_of_credits;
-        FileIn >> course[i].maximum_students;
-        FileIn.ignore();
-        getline(FileIn, course[i].first_section);
-        getline(FileIn, course[i].second_section);
+        getline(FileIn, course[i].CourseID);
+        getline(FileIn, course[i].CourseName);
+        getline(FileIn, course[i].TeacherName);
+        FileIn >> course[i].NumberOfCredits;
+        FileIn >> course[i].MaxNumOfStudent;
+        FileIn >> course[i].FirstDayOfWeek >> course[i].FirstSessionOfWeek;
+        FileIn >> course[i].SecondDayOfWeek >> course[i].SecondSessionOfWeek;
     }
     for (int i = 0; i < numbers_of_course; i++)
     {
@@ -184,13 +202,13 @@ void Show_My_course(const List &l)
         int count = 0;
         while (node)
         {
-            cout << "Course ID = " << node->course.shortened_name << endl;
-            cout << "Course name = " << node->course.name << endl;
-            cout << "Course Instructor = " << node->course.Instructor << endl;
-            cout << "Numbers of credits = " << node->course.numbers_of_credits << endl;
-            cout << "Maximum student = " << node->course.maximum_students << endl;
-            cout << "first section = " << node->course.first_section << endl;
-            cout << "second section = " << node->course.second_section << endl;
+            cout << "Course ID = " << node->course.CourseID << endl;
+            cout << "Course name = " << node->course.CourseName << endl;
+            cout << "Course Instructor = " << node->course.TeacherName << endl;
+            cout << "Numbers of credits = " << node->course.NumberOfCredits << endl;
+            cout << "Maximum student = " << node->course.MaxNumOfStudent << endl;
+            cout << "first section = " << node->course.FirstDayOfWeek <<" "<<node->course.FirstSessionOfWeek << endl;
+            cout << "second section = " << node->course.SecondDayOfWeek << node->course.SecondSessionOfWeek << endl;
             cout << "----------------------------" << endl;
             count++;
             node = node->pNext;
@@ -217,12 +235,12 @@ void Remove_A_Course(List& l)
             name[i] = toupper(name[i]);
         }
         Node* node = l.pHead;
-        if (l.pHead->course.shortened_name == name)
+        if (l.pHead->course.CourseID== name)
         {
             l.pHead = l.pHead->pNext;
             delete node;
         }
-        else if (l.pTail->course.shortened_name == name)
+        else if (l.pTail->course.CourseID == name)
         {
             while (node->pNext != l.pTail)
             {
@@ -234,7 +252,7 @@ void Remove_A_Course(List& l)
         }
         else
         {
-            while (node->pNext->course.shortened_name != name)
+            while (node->pNext->course.CourseID != name)
             {
                 node = node->pNext;
             }
@@ -263,13 +281,13 @@ void Write_To_My_Course(const List &l)
     node = l.pHead;
     while (node)
     {
-        FileOut << node->course.shortened_name << endl;
-        FileOut << node->course.name << endl;
-        FileOut << node->course.Instructor << endl;
-        FileOut << node->course.numbers_of_credits << endl;
-        FileOut << node->course.maximum_students << endl;
-        FileOut << node->course.first_section << endl;
-        FileOut << node->course.second_section << endl;
+        FileOut << node->course.CourseID << endl;
+        FileOut << node->course.CourseName << endl;
+        FileOut << node->course.TeacherName << endl;
+        FileOut << node->course.NumberOfCredits << endl;
+        FileOut << node->course.MaxNumOfStudent << endl;
+        FileOut << node->course.FirstDayOfWeek << " " << node->course.FirstSessionOfWeek << endl;
+        FileOut << node->course.SecondDayOfWeek<<" "<<node->course.SecondSessionOfWeek << endl;
         node = node->pNext;
     }
     FileOut.close();

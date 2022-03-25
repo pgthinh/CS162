@@ -5,15 +5,22 @@
 #include <fstream>
 #include <sstream>
 using namespace std;
-struct Course
-{
-    int ID;
-    string name;
-    string Instructor;
-    int numbers_of_credits;
-    int maximum_students;
-    string first_section;
-    string second_section;
+struct Course {
+    string CourseID;
+    string CourseName;
+    string TeacherName;
+    int NumberOfCredits;
+    int MaxNumOfStudent;
+    string FirstDayOfWeek; // 1.Sun 2.Mon 3.Tue 4.Wed 5.Thu 6.Fri 7.Sat
+    string FirstSessionOfWeek; // 1.S1 2.S2 3.S3 4.S4
+    string SecondDayOfWeek; // 1.Sun 2.Mon 3.Tue 4.Wed 5.Thu 6.Fri 7.Sat ( > the first day)
+    string SecondSessionOfWeek; // 1.S1 2.S2 3.S3 4.S4 (> the first session)
+    Course* previous_Course = NULL;
+    Course* next_Course = NULL;
+    Course(string CourseID, string CourseName, string TeacherName, int NumberOfCredits, int MaxNumOfStudent, string FirstDayOfWeek, string FirstSessionOfWeek, string SecondDayOfWeek, string SecondSessionOfWeek) :
+        CourseID(CourseID), CourseName(CourseName), TeacherName(TeacherName), NumberOfCredits(NumberOfCredits), MaxNumOfStudent(MaxNumOfStudent), FirstDayOfWeek(FirstDayOfWeek), FirstSessionOfWeek(FirstSessionOfWeek), SecondDayOfWeek(SecondDayOfWeek), SecondSessionOfWeek(SecondSessionOfWeek)
+    {};
+    Course() {};
 };
 struct Node
 {
@@ -38,8 +45,8 @@ struct Student {
     string Gender;
     Time Dob;
     string socialID;
-    //Student* previous_Student = NULL;
-    //Student* next_Student = NULL;
+    Student* previous_Student = NULL;
+    Student* next_Student = NULL;
 };
 
 void InnitList(List& l);

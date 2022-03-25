@@ -1,8 +1,0 @@
-1
-CS161
-Introduction to Computer Science I
-Dinh Ba Tien
-50
-100
-MON S1
-SAT S2
