@@ -26,23 +26,26 @@ void Add_Course(List& l, const Course& course)
         l.pTail = new_node;
     }
 }
-void Doc_Du_Lieu_Tu_File_De_In_Ra()
-{
-
-}
 // Hàm hỏi người dùng để add course nào vào
 void AddCourse(List& l)
 {
     ifstream FileIn;
-    FileIn.open("Course_Co_San_De_Chon.txt", ios_base::in);
+    FileIn.open("DATA/2021/1/course_list/courseList.txt", ios_base::in);
     int numbers_of_course;
     FileIn >> numbers_of_course;
     Course* course = new Course[numbers_of_course];
     // đọc dữ liệu hàm từ file để in ra cho người dùng chọn
+    FileIn.ignore();
     for (int i = 0; i < numbers_of_course; i++)
     {
-        FileIn >> course[i].ID;
-        FileIn.ignore();
+        getline(FileIn, course[i].shortened_name);
+    }
+    FileIn.close();
+    for (int i = 0; i < numbers_of_course; i++)
+    {
+        string strpath = "DATA/2021/1/course_list/" + course[i].shortened_name+"/"+"info.txt";
+        FileIn.open(strpath, ios_base::in);
+        getline(FileIn, course[i].shortened_name);
         getline(FileIn, course[i].name);
         getline(FileIn, course[i].Instructor);
         FileIn >> course[i].numbers_of_credits;
@@ -50,13 +53,12 @@ void AddCourse(List& l)
         FileIn.ignore();
         getline(FileIn, course[i].first_section);
         getline(FileIn, course[i].second_section);
-
+        FileIn.close();
     }
-    FileIn.close();
     for (int i = 0; i < numbers_of_course; i++)
     {
         cout << i + 1 << endl;
-        cout << "course ID = " << course[i].ID << endl;
+        cout << "course ID = " << course[i].shortened_name << endl;
         cout << "course name  = " << course[i].name << endl;
         cout << "course instructor = " << course[i].Instructor << endl;
         cout << "Numbers of credits = " << course[i].numbers_of_credits << endl;
@@ -65,14 +67,19 @@ void AddCourse(List& l)
         cout << "second section = " << course[i].second_section << endl;
     }
     cout << "---------------------------" << endl;
-    int choice;
+    cin.ignore();
+    string choice;
     while (true)
     {
-        cout << "Choose the course ID " << endl;
+        cout << "Input the course ID " << endl;
         cout << "If you dont want to choose any more , press 0 " << endl;
-        cout << "Your choice = "; cin >> choice;
+        cout << "Your choice = "; getline(cin,choice);
         cout << "---------------------" << endl;
-        if (choice == 0)
+        for (int i = 0; i < choice.length(); i++)
+        {
+            choice[i] = toupper(choice[i]);
+        }
+        if (choice == "0")
         {
             break;
         }
@@ -80,7 +87,7 @@ void AddCourse(List& l)
         Node* node = l.pHead;
         while (node)
         {
-            if (node->course.ID == choice)
+            if (node->course.shortened_name == choice)
             {
                 Check = true;
                 break;
@@ -91,7 +98,7 @@ void AddCourse(List& l)
         {
             for (int i = 0; i < numbers_of_course; i++)
             {
-                if (course[i].ID == choice)
+                if (course[i].shortened_name == choice)
                 {
                     Node* node = l.pHead;
                     bool Check1 = false; // check xem môn chọn co bi trùng giờ các môn trước hay không ?
@@ -135,8 +142,6 @@ void AddCourse(List& l)
             cout << "----------------------------" << endl;
         }
     }
-
-
 }
 // Đọc từ file xem đã chọn sẵn những hàm nào
 void Read_My_Course_From_TXT(List& l)
@@ -145,11 +150,11 @@ void Read_My_Course_From_TXT(List& l)
     FileIn.open("MyCourse.txt", ios_base::in);
     int numbers_of_course;
     FileIn >> numbers_of_course;
+    FileIn.ignore();
     Course* course = new Course[numbers_of_course];
     for (int i = 0; i < numbers_of_course; i++)
     {
-        FileIn >> course[i].ID;
-        FileIn.ignore();
+        getline(FileIn, course[i].shortened_name);
         getline(FileIn, course[i].name);
         getline(FileIn, course[i].Instructor);
         FileIn >> course[i].numbers_of_credits;
@@ -179,7 +184,7 @@ void Show_My_course(const List &l)
         int count = 0;
         while (node)
         {
-            cout << "Course ID = " << node->course.ID << endl;
+            cout << "Course ID = " << node->course.shortened_name << endl;
             cout << "Course name = " << node->course.name << endl;
             cout << "Course Instructor = " << node->course.Instructor << endl;
             cout << "Numbers of credits = " << node->course.numbers_of_credits << endl;
@@ -204,15 +209,20 @@ void Remove_A_Course(List& l)
     else
     {
         Show_My_course(l);
-        int ID;
-        cout << "Input course ID you want to remove = "; cin >> ID;
+        string name;
+        cin.ignore();
+        cout << "Input course shortened name you want to remove = "; getline(cin,name);
+        for (int i = 0; i < name.length(); i++)
+        {
+            name[i] = toupper(name[i]);
+        }
         Node* node = l.pHead;
-        if (l.pHead->course.ID == ID)
+        if (l.pHead->course.shortened_name == name)
         {
             l.pHead = l.pHead->pNext;
             delete node;
         }
-        else if (l.pTail->course.ID == ID)
+        else if (l.pTail->course.shortened_name == name)
         {
             while (node->pNext != l.pTail)
             {
@@ -224,7 +234,7 @@ void Remove_A_Course(List& l)
         }
         else
         {
-            while (node->pNext->course.ID != ID)
+            while (node->pNext->course.shortened_name != name)
             {
                 node = node->pNext;
             }
@@ -253,7 +263,7 @@ void Write_To_My_Course(const List &l)
     node = l.pHead;
     while (node)
     {
-        FileOut << node->course.ID << endl;
+        FileOut << node->course.shortened_name << endl;
         FileOut << node->course.name << endl;
         FileOut << node->course.Instructor << endl;
         FileOut << node->course.numbers_of_credits << endl;
@@ -431,4 +441,5 @@ void Show_Profile()
     cout << "Your day of birth = " << stu.Dob.day << "-" << stu.Dob.month << "-" << stu.Dob.year << endl;
     cout << "Your social ID = " << stu.socialID << endl;
     cout << "-----------------" << endl;
+    return;
 }
