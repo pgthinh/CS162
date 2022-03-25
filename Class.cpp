@@ -71,9 +71,9 @@ void importStudents(string className,Student*& students){
     string sub; getline(fin,sub);
     while( fin >> student_cur->No) {
          fin.ignore();
-         getline(fin,student_cur->id,',');
-         getline(fin,student_cur->name,',');
-         getline(fin,student_cur->gender,',');
+         getline(fin,student_cur->ID,',');
+         getline(fin,student_cur->Name,',');
+         getline(fin,student_cur->Gender,',');
          fin >> student_cur->dob.day; fin.ignore();
          fin >> student_cur->dob.month; fin.ignore();
          fin >> student_cur->dob.year; fin.ignore();
@@ -89,26 +89,26 @@ void importStudents(string className,Student*& students){
     delete temp;
     fin.close();
 }
-void getStudentList(string className, StudentList*& studentList) {
+void getStudentList(string className, Student*& studentList) {
 	string path = "CLASS/" + className + "/studentList.txt";
 	ifstream fin(path);
-	StudentList* studentList_cur = studentList;
+	Student* studentList_cur = studentList;
 	while (fin >> studentList_cur->ID){
-         studentList_cur->next_Student = new StudentList;
+         studentList_cur->next_Student = new Student;
          studentList_cur->next_Student->previous_Student = studentList_cur;
          studentList_cur = studentList_cur->next_Student;
     }
-    StudentList* temp = studentList_cur;
+    Student* temp = studentList_cur;
     studentList_cur = studentList_cur->previous_Student;
     studentList_cur->next_Student = nullptr;
     delete temp;
 	fin.close();
 }
 void getStudents(string className,Student*& students){
-    StudentList* studentList = new StudentList;
+    Student* studentList = new Student;
     getStudentList(className,studentList);
 
-    StudentList* studentList_cur = studentList;
+    Student* studentList_cur = studentList;
 
     Student* student_cur = students;
     while(studentList_cur){
@@ -135,12 +135,5 @@ void getStudents(string className,Student*& students){
     student_cur = student_cur->previous_Student;
     student_cur->next_Student = nullptr;
     delete temp;
-    Delete_StudentList_List(studentList);
-}
-void Delete_StudentList_List(StudentList*& studentList){
-    while(studentList){
-        StudentList* temp = studentList;
-        studentList = studentList->next_Student;
-        delete temp;
-    }
+    DeleteStudentList(studentList);
 }

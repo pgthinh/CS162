@@ -49,20 +49,6 @@ struct Class {
     Class* previous_Class = NULL;
     Class* next_Class = NULL;
 };
-struct Student {
-    int No;
-    string ID; // Username when login to the system
-    //string Password;
-    string Name;
-    string Gender;
-    Time Dob;
-    string socialID;
-    Student* previous_Student = NULL;
-    Student* next_Student = NULL;
-    Student(int No, string ID, string Password, string Name, string Gender, Time Dob, string socialID) :
-		No(No), ID(ID), Name(Name), Gender(Gender), Dob(Dob), socialID(socialID) {};
-};
-
 struct Mark {
 	float totalMark;
 	float finalMark;
@@ -74,6 +60,22 @@ struct Mark {
 	Mark(float totalMark, float finalMark, float midtermMark, float otherMark) :
 		totalMark(totalMark), finalMark(finalMark), midtermMark(midtermMark), otherMark(otherMark) {};
 	Mark() {};
+};
+struct Student {
+    int No;
+    string ID; // Username when login to the system
+    string Password;
+    string Name;
+    string Gender;
+    Time Dob;
+    string socialID;
+    string className;
+    Student* previous_Student = NULL;
+    Student* next_Student = NULL;
+    Mark mark;
+    Student(int No, string ID, string Password, string Name, string Gender, Time Dob, string socialID, string className, Mark mark) :
+        No(No), ID(ID), Name(Name), Gender(Gender), Dob(Dob), socialID(socialID), className(className), mark(mark) {};
+    Student() {};
 };
 
 struct User{
