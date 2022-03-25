@@ -267,7 +267,7 @@ void updateCourse(int year, int semester, string CourseID) {
 // 4. Delete course
 void deleteCourse(int year, int semester, string CourseID) {
     Course* courseList = NULL;
-    getCourseList(year, semester, courseList);
+    getCourseInfoList(year,semester,courseList);
     Course* courseCur = courseList;
     while(courseCur) {
         if(courseCur->CourseID == CourseID) {
@@ -297,6 +297,7 @@ void deleteCourse(int year, int semester, string CourseID) {
             }
             cout << "The course has been deleted" << endl;
             WriteFileCourseList(year, semester, courseList);
+            WriteFileCourseInfoList(year, semester, courseList);
             deleteCourseList(courseList);
             return;
         }
@@ -421,7 +422,7 @@ void viewScoreboard(Student* studentList) {
 }
 void manageCourse(int year, int semester) {
     Course* courseList = NULL;
-    getCourseList(year, semester, courseList);
+    getCourseInfoList(year, semester, courseList);
     string CourseID;
     cout << "Choose CourseID to manage" << endl;
     printCourseList(courseList);
