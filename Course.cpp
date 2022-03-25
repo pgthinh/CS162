@@ -313,7 +313,6 @@ void viewCourseMangementMenu() {
     cout << "3. Import scorebroad" << endl;
     cout << "4. View scorebroad" << endl;
     cout << "5. Go Back" << endl; // go back to Course Menu;
-
 }
 
 void getCourseMarkList(int year, int semester, string CourseID, Student* &studentList) {
