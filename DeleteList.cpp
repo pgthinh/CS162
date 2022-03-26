@@ -2,10 +2,10 @@
 #include "Struct.hpp"
 using namespace std;
 
-void DeleteClassList(Class*& class){
-    while(class){
-        Class* temp = class;
-        class = class->next_Class;
+void DeleteClassList(Class*& classList){
+    while(classList){
+        Class* temp = classList;
+        classList = classList->next_Class;
         delete temp;
     }
 }

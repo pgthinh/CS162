@@ -1,9 +1,11 @@
 #ifndef UPDATERESULT_H
 #define UPDATERESULT_H
 
-#include "struct.hpp"
+#include "Struct.hpp"
+#include "Semester.h"
+#include "SchoolYear.h"
 #include <fstream>
-#include <string>
+
 using namespace std;
 bool Find_Course(string& CourseId);
 bool Find_ID(string& CourseID, string& student_id);
