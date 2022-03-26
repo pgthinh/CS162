@@ -356,25 +356,17 @@ void My_Score(const List &l)
     cout << "Input year = "; cin >> year;
     int semester;
     cout << "Input semester = "; cin >> semester;
-    stringstream ss;
-    stringstream ss1;
-
-    ss << year;
-    string str;
-    ss >> str;
-    string str1;
-    ss1 << semester;
-    ss1 >> str1;
+   
     string str2;
     cin.ignore();
-    cout << "Input semester name = "; getline(cin, str2);
+    cout << "Input course name = "; getline(cin, str2);
     for (int i = 0; i < str2.length(); i++)
     {
         str2[i] = toupper(str2[i]);
     }
  
-    string strpath = pathfixed + "/" + str + "/" + str + "_" + str1 + "/" +str2+"16"+str1+".csv";
-    cout << strpath << endl;
+    string strpath = pathfixed + "/" + to_string(year) + "/" + to_string(year) + "_" + to_string(semester) + "/" + str2 + "16" + to_string(semester) + ".csv";
+
     FileIn.open(strpath, ios_base::in);
     string str3;
     getline(FileIn, str3);
@@ -424,18 +416,10 @@ void Show_Profile()
     ifstream FileIn;
     int ID;
     cout << "Please input your ID = "; cin >> ID;
-    stringstream ss;
-    ss << ID;
-    string str; 
-    ss >> str;
     int class1;
     cout << "Which class are you in ? "; cin >> class1;
-    stringstream ss1;
-    ss1 << class1;
-    string str1;
-    ss1 >> str1;
-
-    string strpath = "CLASS/21APCS" + str1 + "/" + str + ".txt";
+    
+    string strpath = "CLASS/21APCS" + to_string(class1) + "/" + to_string(ID) + ".txt";
 
     FileIn.open(strpath, ios_base::in);
 
