@@ -3,7 +3,7 @@
 bool Find_Course(string& CourseId)
 {
 	string courseName;
-	string path = 'DATA /' + to_string(getCurrentYear()) + '/' + to_string(getCurrentSemester()) + '/courses_list/course_list.txt';
+	string path = "DATA/" + to_string(getCurrentYear()) + '/' + to_string(getCurrentSemester().TheOrderOfSemester) + "/ courses_list / course_list.txt";
 	ifstream fin(path);
 	while (fin >> courseName) {
 		if(CourseId == courseName) return true;
@@ -14,7 +14,7 @@ bool Find_ID(string& CourseID, string& student_id)
 {
 	if (!Find_Course(CourseID)) return false;
 	string id; string className;
-	string path = 'DATA /' + to_string(getCurrentYear()) + '/' + to_string(getCurrentSemester()) + '/course_list/' + CourseID + '/students.txt';
+	string path = "DATA/" + to_string(getCurrentYear()) + "/" + to_string(getCurrentSemester().TheOrderOfSemester) + "/course_list/" + CourseID + "/students.txt";
 	ifstream fin(path);
 	while (fin >> id >> className) {
 		if (id == student_id) break;
@@ -26,7 +26,7 @@ bool Find_ID(string& CourseID, string& student_id)
 Mark* getInitialMarkOfStudent(string& CourseID,string& studentID){
 	Mark* mark = new Mark;
 	Course* course = new Course;
-	string path = "DATA/" + to_string(getCurrentYear()) + '/' + to_string(getCurrentSemester()) + '/students/' + studentID + '/marks.txt';
+	string path = "DATA/" + to_string(getCurrentYear()) + '/' + to_string(getCurrentSemester().TheOrderOfSemester) + "/students/" + studentID + "/marks.txt";
 	ifstream fin(path);
     while(fin >> course->CourseID >> mark->totalMark >> mark->finalMark >> mark->midtermMark >> mark->otherMark){
 		if(course->CourseID == CourseID){
@@ -45,7 +45,7 @@ void ChangeMarkFileAfterUpdate(Mark& changeMark,string& CourseID,string& student
 	// change in year/semester/students/studentID/marks.txt
 	Mark* first_mark = new Mark; Mark* mark_cur = first_mark;
 	Course* first_course = new Course; Course* course_cur = first_course;
-    string path = "DATA/" + to_string(getCurrentYear()) + '/' + to_string(getCurrentSemester()) + '/students/' + studentID + '/marks.txt';
+    string path = "DATA/" + to_string(getCurrentYear()) + '/' + to_string(getCurrentSemester().TheOrderOfSemester) + "/students/" + studentID + "/marks.txt";
 	ifstream fin(path);
 	while(fin >> course_cur->CourseID >> mark_cur->totalMark >> mark_cur->finalMark >> mark_cur->midtermMark >> mark_cur->otherMark){
 		if(course_cur->CourseID == CourseID){
@@ -85,8 +85,8 @@ void ChangeMarkFileAfterUpdate(Mark& changeMark,string& CourseID,string& student
 	// change in year/semester/course_list/CourseID/marks.txt
 	Student* first_student = new Student;  Student* student_cur = first_student;
 	first_mark = new Mark;  mark_cur = first_mark;
-	path = 'DATA/' + to_string(getCurrentYear()) + '/' + to_string(getCurrentSemester()) + '/course_list/' + CourseID + '/marks.txt';
-    fin(path);
+	path = "DATA / " + to_string(getCurrentYear()) + '/' + to_string(getCurrentSemester().TheOrderOfSemester) + "/ course_list /" + CourseID + "/ marks.txt";
+    fin.open(path);
 	while(fin >> student_cur->ID >> mark_cur->totalMark >> mark_cur->finalMark >> mark_cur->midtermMark >> mark_cur->otherMark >> student_cur->Name){
 		if(student_cur->ID == studentID){
 			mark_cur->totalMark = changeMark.totalMark;
@@ -114,7 +114,7 @@ void ChangeMarkFileAfterUpdate(Mark& changeMark,string& CourseID,string& student
 	delete temp4;
 
 	mark_cur = first_mark;   student_cur = first_student;
-	fout(path);
+	fout.open(path);
 	while(student_cur){
 		fout << student_cur->ID << " " << mark_cur->totalMark << " " << mark_cur->finalMark << " " << mark_cur->midtermMark << " " << mark_cur->otherMark << " " << student_cur->Name << endl;
 		student_cur = student_cur->next_Student;
@@ -124,16 +124,16 @@ void ChangeMarkFileAfterUpdate(Mark& changeMark,string& CourseID,string& student
 	fout.close();
 	// change in CLASS/className/StudentID_marks.txt
 	string className; string student_id;
-	path = 'DATA/' + to_string(getCurrentYear()) + '/' + to_string(getCurrentSemester()) + '/course_list/' + CourseID + '/students.txt';
-    fin(path);
+	path = "DATA/" + to_string(getCurrentYear()) + "/" + to_string(getCurrentSemester().TheOrderOfSemester) + "/ course_list /" + CourseID + "/students.txt";
+    fin.open(path);
 	while(fin >> student_id >> className){
 		if(student_id == studentID) break;
 	} 
 
 	Mark* initialMark = getInitialMarkOfStudent(CourseID,studentID);
 	first_mark = new Mark;  mark_cur = first_mark;
-	path = 'CLASS/' + className + '/' + studentID + '_marks.txt';
-	fin(path);
+	path = "CLASS/" + className + "/" + studentID + "_marks.txt";
+	fin.open(path);
 	while( fin >> mark_cur->totalMark){
 		if(mark_cur->totalMark == initialMark->totalMark){
 			mark_cur->totalMark = changeMark.totalMark;
@@ -149,7 +149,7 @@ void ChangeMarkFileAfterUpdate(Mark& changeMark,string& CourseID,string& student
 	delete temp5;
     
 	mark_cur = first_mark;
-	fout(path);
+	fout.open(path);
 	while(mark_cur){
 		fout << mark_cur->totalMark << endl;
 		mark_cur = mark_cur->next_Mark;

@@ -14,11 +14,11 @@ void getClasses(Class*& first_class){
     string path = "CLASS/classList.txt";
     ifstream fin(path);
     first_class = new Class;
-    Class class_cur = first_class;
-    while(fin >> class_cur->ClassID){
+    Class* class_cur = first_class;
+    while(fin >> class_cur->ClassId){
         class_cur->next_Class = new Class;
 		class_cur->next_Class->previous_Class = class_cur;
-		class_cur = class_cur->next_class;
+		class_cur = class_cur->next_Class;
 	}
 	Class* temp = class_cur;
 	class_cur = class_cur->previous_Class;
@@ -33,10 +33,12 @@ void setCurrentClass(string className){
     fout.close();
 }
 string getCurrentClass(){
+    string className;
     string path = "DATA/cache/currentClass.txt";
     ifstream fin(path);
-    string className; fin >> className;
-    fout.close();
+    fin >> className;
+    fin.close();
+    return className;
 }
 void addStudents(string className,Student*& students){
     importStudents(className,students);
@@ -45,7 +47,7 @@ void addStudents(string className,Student*& students){
     Student* student_cur = students; 
     while(student_cur){
         fout << student_cur->ID << endl;
-        addAccount(User(student_cur->ID,student_cur->SocialID,"student",className));
+        /*addAccount(User(student_cur->ID,student_cur->SocialID,"student",className));*/
         student_cur = student_cur->next_Student; 
     }
     fout.close();
@@ -59,7 +61,7 @@ void addStudents(string className,Student*& students){
         fout << student_cur->Gender << endl;
         fout << student_cur->Gender << endl;
         fout << student_cur->Dob.day << student_cur->Dob.month << student_cur->Dob.year << endl;
-        fout << student_cur->SocialID << endl;
+        fout << student_cur->socialID << endl;
         fout.close();
         student_cur = student_cur->next_Student;
     }
@@ -67,17 +69,17 @@ void addStudents(string className,Student*& students){
 void importStudents(string className,Student*& students){
     Student* student_cur = students;
     string path = "csvFile/classes/" + className + ".csv";
-    ifstream fin(path);
+    ifstream fin; fin.open(path, ios::in);
     string sub; getline(fin,sub);
     while( fin >> student_cur->No) {
          fin.ignore();
          getline(fin,student_cur->ID,',');
          getline(fin,student_cur->Name,',');
          getline(fin,student_cur->Gender,',');
-         fin >> student_cur->dob.day; fin.ignore();
-         fin >> student_cur->dob.month; fin.ignore();
-         fin >> student_cur->dob.year; fin.ignore();
-         getline(fin,student_cur->SocialID,'\n');
+         fin >> student_cur->Dob.day; fin.ignore();
+         fin >> student_cur->Dob.month; fin.ignore();
+         fin >> student_cur->Dob.year; fin.ignore();
+         getline(fin,student_cur->socialID,'\n');
          
          student_cur->next_Student = new Student;
          student_cur->next_Student->previous_Student = student_cur;
@@ -119,10 +121,10 @@ void getStudents(string className,Student*& students){
         fin.ignore();
         getline(fin,student_cur->ID);
         getline(fin,student_cur->Name);
-        getline(fin,student_cur->gender);
+        getline(fin,student_cur->Gender);
         fin >> student_cur->Dob.day >> student_cur->Dob.month >> student_cur->Dob.year;
         fin.ignore();
-        getline(fin,student_cur->SocialID);
+        getline(fin,student_cur->socialID);
         fin.close();
 
         student_cur->next_Student = new Student;
