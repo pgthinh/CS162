@@ -73,14 +73,14 @@ void getCourseInfoList(int year, int semester, Course* &courseList) {
         getline(fin, new_Course->CourseID, '\n');
         string pathToInfo = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + new_Course->CourseID + "/info.txt";
         fstream fileinToInfo; fileinToInfo.open(path);
-        getline(fin, new_Course->CourseID, ',');
-        getline(fin, new_Course->CourseName, ',');
-        getline(fin, new_Course->TeacherName, ',');
+        getline(fin, new_Course->CourseID, '\n');
+        getline(fin, new_Course->CourseName, '\n');
+        getline(fin, new_Course->TeacherName, '\n');
         fin >> new_Course->NumberOfCredits; fin.ignore();
         fin >> new_Course->MaxNumOfStudent;fin.ignore();
-        getline(fin, new_Course->FirstDayOfWeek, ',');
-        getline(fin, new_Course->FirstSessionOfWeek, ',');
-        getline(fin, new_Course->SecondDayOfWeek, ',');
+        getline(fin, new_Course->FirstDayOfWeek, '\n');
+        getline(fin, new_Course->FirstSessionOfWeek, '\n');
+        getline(fin, new_Course->SecondDayOfWeek, '\n');
         getline(fin, new_Course->SecondSessionOfWeek);
         fileinToInfo.close();
         if(!courseCur) {courseCur = new_Course; courseList = new_Course;}
@@ -231,7 +231,7 @@ void updateCourse(int year, int semester, string CourseID) {
         if(courseCur->CourseID == CourseID) { check = true; break;}
         else courseCur = courseCur->next_Course;
     }
-    if(!check){ cout << "The course does not exist"; return;}
+    if(!check){ cout << "The course does not exist" << endl; return;}
     else {
         int select;
         cout << "Which feature do you want to update" << endl; cout << "1. ID" << endl;cout << "2. Name" << endl;cout << "3. Teacher Name" << endl;cout << "4. NumCredit" << endl;cout << "5. MaxNumStu" << endl;cout << "6. D1" << endl;cout << "7. S1" << endl;cout << "8. D2" << endl;cout << "9. S2" << endl;
