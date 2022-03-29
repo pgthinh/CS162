@@ -204,7 +204,8 @@ void addCourse() {
     _mkdir(path.c_str());
 
     path += "info.txt";
-    ofstream fout.open(path, ofstream::out | ofstream::app);
+    ofstream fout;
+    fout.open(path, ofstream::out | ofstream::app);
     fout << course.CourseID << '\n';
     fout << course.CourseName << '\n';
     fout << course.TeacherName << '\n';
@@ -215,7 +216,7 @@ void addCourse() {
     fout.close();  
 
     path = "DATA/" + to_string(year) + "/" + to_string(term) + "/courses_list/courseList.txt";
-    fout; fout.open(path);
+    fout.open(path);
     fout << course.CourseID << '\n';
     fout.close();
     
