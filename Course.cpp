@@ -96,20 +96,19 @@ void WriteFileCourseInfoList(int year, int semester, Course* courseList) {
     Course* courseCur = courseList;
     while(courseCur) {
         string pathToInfo = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + courseCur->CourseID + "/info.txt";
-        fstream fileoutToInfo; fileoutToInfo.open(path, ios::trunc);
-        fout << courseCur->CourseID << '\n';
-        fout << courseCur->CourseName << '\n';
-        fout << courseCur->TeacherName << '\n';
-        fout << courseCur->NumberOfCredits << '\n';
-        fout << courseCur->MaxNumOfStudent << '\n';
-        fout << courseCur->FirstDayOfWeek << '\n';
-        fout << courseCur->FirstSessionOfWeek << '\n';
-        fout << courseCur->SecondDayOfWeek << '\n';
-        fout << courseCur->SecondSessionOfWeek;
+        fstream fileoutToInfo; fileoutToInfo.open(pathToInfo, ios::trunc);
+        fileoutToInfo << courseCur->CourseID << '\n';
+        fileoutToInfo << courseCur->CourseName << '\n';
+        fileoutToInfo << courseCur->TeacherName << '\n';
+        fileoutToInfo << courseCur->NumberOfCredits << '\n';
+        fileoutToInfo << courseCur->MaxNumOfStudent << '\n';
+        fileoutToInfo << courseCur->FirstDayOfWeek << '\n';
+        fileoutToInfo << courseCur->FirstSessionOfWeek << '\n';
+        fileoutToInfo << courseCur->SecondDayOfWeek << '\n';
+        fileoutToInfo << courseCur->SecondSessionOfWeek;
         fileoutToInfo.close();
         courseCur = courseCur->next_Course;
         }
-    fin.close();
 }
 void getCourseList(int year, int semester, Course* &courseList) {
     string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/courseList.txt";
@@ -201,11 +200,11 @@ void addCourse() {
     int year = semester.Year;
     int term = semester.TheOrderOfSemester;
 
-    string path = "DATA/" + to_string(year) + "/" + to_string(term) + "/courses_list/" + course.CourseID;
-    mkdir(path);
+    string path = "DATA/" + to_string(year) + "/" + to_string(term) + "/course_list/" + course.CourseID;
+    _mkdir(path.c_str());
 
     path += "info.txt";
-    fout.open(path, ofstream::out | ofstream::app);
+    ofstream fout.open(path, ofstream::out | ofstream::app);
     fout << course.CourseID << '\n';
     fout << course.CourseName << '\n';
     fout << course.TeacherName << '\n';
@@ -215,8 +214,8 @@ void addCourse() {
     fout << course.SecondDayOfWeek << ' ' << course.SecondSessionOfWeek << '\n';
     fout.close();  
 
-    string path = "DATA/" + to_string(year) + "/" + to_string(term) + "/courses_list/courseList.txt";
-    ofstream fout; fout.open(path);
+    path = "DATA/" + to_string(year) + "/" + to_string(term) + "/courses_list/courseList.txt";
+    fout; fout.open(path);
     fout << course.CourseID << '\n';
     fout.close();
     
@@ -489,10 +488,12 @@ void courseMenu() {
         Time startDate, endDate;
         updateCourseRegistration(startDate, endDate);
         writeFileCourseRegistration(startDate, endDate);
+        courseMenu();
     }
             break;
     case 2: {
         addCourse();
+        courseMenu();
     }
             break;
     case 3: {
@@ -504,6 +505,7 @@ void courseMenu() {
         cout << "Semester: "; cin >> semester;
         cout << "Course ID: "; cin.ignore(1); getline(cin, CourseID, '\n');
         updateCourse(year, semester, CourseID);
+        courseMenu();
     }
             break;
     case 4: {
@@ -515,6 +517,7 @@ void courseMenu() {
         cout << "Semester: "; cin >> semester;
         cout << "Course ID: "; cin.ignore(1); getline(cin, CourseID, '\n');
         deleteCourse(year, semester, CourseID);
+        courseMenu();
     }
         break;
     case 5: {
@@ -524,6 +527,7 @@ void courseMenu() {
         cout << "Year: "; cin >> year;
         cout << "Semester: "; cin >> semester;
         manageCourse(year, semester);
+        courseMenu();
     }
         break;
     case 6: {
