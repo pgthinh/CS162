@@ -1,4 +1,4 @@
-#include "Course.h"
+#include "function.hpp"
 
 Semester getCurrentSemester() {
     int year;
@@ -6,7 +6,7 @@ Semester getCurrentSemester() {
     int startday, startmonth, startyear;
     int endday, endmonth, endyear;
     
-    string path = "/Users/apple/Documents/Tài Liiệu đại học/Năm 1/HK2/CS162/Project/updateCourse/DATA/cache/currentSemester.txt";
+    string path = "DATA/cache/currentSemester.txt";
     ifstream fin(path);
     fin >> year;
     fin >> term;
@@ -21,7 +21,7 @@ Course getCurrentCourse() {
     int nCredits, maxCapacity;
     string day1, ses1, day2, ses2;
 
-   string path = "/Users/apple/Documents/Tài Liiệu đại học/Năm 1/HK2/CS162/Project/updateCourse/DATA/cache/currentCourse.txt";
+   string path = "DATA/cache/currentCourse.txt";
     // string path = "currentCourse.txt";
     ifstream fin(path);
     getline(fin, id);
@@ -37,7 +37,7 @@ Course getCurrentCourse() {
 }
 // Common Function
 void WriteFileCurrentCourse(Course* course) {
-    string path = "/Users/apple/Documents/Tài Liiệu đại học/Năm 1/HK2/CS162/Project/updateCourse/DATA/cache/currentCourse.txt";
+    string path = "DATA/cache/currentCourse.txt";
     ofstream fout;
     fout.open(path, ios::app);
     fout << course->CourseID << '\n';
@@ -68,15 +68,18 @@ void WriteFileCourseInfoList(int year, int semester, Course* courseList) {
     Course* courseCur = courseList;
     while(courseCur) {
         string pathToInfo = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + courseCur->CourseID + "/info.txt";
-        fstream fileoutToInfo; fileoutToInfo.open(pathToInfo, ios::trunc);
+        cout << pathToInfo << endl;
+        ofstream fileoutToInfo;
+        fileoutToInfo.open(pathToInfo, ios::trunc);
+        if(fileoutToInfo.is_open()) cout << "OK";
         fileoutToInfo << courseCur->CourseID << '\n';
         fileoutToInfo << courseCur->CourseName << '\n';
         fileoutToInfo << courseCur->TeacherName << '\n';
         fileoutToInfo << courseCur->NumberOfCredits << '\n';
         fileoutToInfo << courseCur->MaxNumOfStudent << '\n';
-        fileoutToInfo << courseCur->FirstDayOfWeek << '\n';
+        fileoutToInfo << courseCur->FirstDayOfWeek << ' ';
         fileoutToInfo << courseCur->FirstSessionOfWeek << '\n';
-        fileoutToInfo << courseCur->SecondDayOfWeek << '\n';
+        fileoutToInfo << courseCur->SecondDayOfWeek << ' ';
         fileoutToInfo << courseCur->SecondSessionOfWeek;
         fileoutToInfo.close();
         courseCur = courseCur->next_Course;
@@ -103,9 +106,7 @@ void getCourseList(int year, int semester, Course* &courseList) {
         getline(fileinToInfo, new_Course->FirstSessionOfWeek, '\n');
         getline(fileinToInfo, new_Course->SecondDayOfWeek, ' ');
         getline(fileinToInfo, new_Course->SecondSessionOfWeek);
-//        printCourseInformation(new_Course);
         fileinToInfo.close();
-        
         if(!courseCur) {courseCur = new_Course; courseList = new_Course;}
         else {
             courseCur->next_Course = new_Course;
@@ -245,8 +246,8 @@ void updateCourse(int year, int semester, string CourseID) {
                 break;
         }
         cout << "The course has been updated: " << endl;
-        printCourseInformation(courseCur);
-        WriteFileCourseList(year, semester, courseList);
+//        printCourseInformation(courseCur);
+        printCourseList(courseList);
         WriteFileCourseInfoList(year, semester, courseList);
         deleteCourseList(courseList);
         return;
