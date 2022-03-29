@@ -1,4 +1,4 @@
-#include "function.hpp"
+#include "Course.h"
 
 Semester getCurrentSemester() {
     int year;
@@ -68,10 +68,8 @@ void WriteFileCourseInfoList(int year, int semester, Course* courseList) {
     Course* courseCur = courseList;
     while(courseCur) {
         string pathToInfo = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + courseCur->CourseID + "/info.txt";
-        cout << pathToInfo << endl;
         ofstream fileoutToInfo;
         fileoutToInfo.open(pathToInfo, ios::trunc);
-        if(fileoutToInfo.is_open()) cout << "OK";
         fileoutToInfo << courseCur->CourseID << '\n';
         fileoutToInfo << courseCur->CourseName << '\n';
         fileoutToInfo << courseCur->TeacherName << '\n';
