@@ -14,7 +14,6 @@ Course getCurrentCourse();
 // Common Function
 void WriteFileCurrentCourse(Course* course);
 void updateCurrentCourse();
-void getCourseInfoList(int year, int semester, Course* &courseList);
 void WriteFileCourseInfoList(int year, int semester, Course* courseList);
 void getCourseList(int year, int semester, Course* &courseList);
 void WriteFileCourseList(int year, int semester, Course* courseList);
