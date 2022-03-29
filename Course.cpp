@@ -201,12 +201,10 @@ void addCourse() {
     int year = semester.Year;
     int term = semester.TheOrderOfSemester;
 
-    string path = "DATA/" + to_string(year) + "/" + to_string(term) + "/courses_list/courseList.txt";
-    ofstream fout; fout.open(path);
-    fout << course.CourseID << '\n';
-    fout.close();
+    string path = "DATA/" + to_string(year) + "/" + to_string(term) + "/courses_list/" + course.CourseID;
+    mkdir(path);
 
-    path -= "courseList.txt"; path += course.CourseID + "info/txt";
+    path += "info.txt";
     fout.open(path, ofstream::out | ofstream::app);
     fout << course.CourseID << '\n';
     fout << course.CourseName << '\n';
@@ -216,6 +214,12 @@ void addCourse() {
     fout << course.FirstDayOfWeek << ' ' << course.FirstSessionOfWeek << '\n';
     fout << course.SecondDayOfWeek << ' ' << course.SecondSessionOfWeek << '\n';
     fout.close();  
+
+    string path = "DATA/" + to_string(year) + "/" + to_string(term) + "/courses_list/courseList.txt";
+    ofstream fout; fout.open(path);
+    fout << course.CourseID << '\n';
+    fout.close();
+    
 }
 // 3. Update course
 void updateCourse(int year, int semester, string CourseID) {
