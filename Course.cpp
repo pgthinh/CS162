@@ -132,7 +132,7 @@ void WriteFileCourseList(int year, int semester, Course* courseList) {
     fout.open(path, ios::trunc);
     Course* courseCur = courseList;
     while(courseCur) {
-        fout << courseCur->CourseID << ',';
+        fout << courseCur->CourseID << '\n';
         courseCur = courseCur->next_Course;
     }
     fout.close();
@@ -233,7 +233,7 @@ void updateCourse(int year, int semester, string CourseID) {
     if(!check){ cout << "The course does not exist"; return;}
     else {
         int select;
-        cout << "Which feature do you want to update";cout << "1. ID" << endl;cout << "2. Name" << endl;cout << "3. Teacher Name" << endl;cout << "4. NumCredit" << endl;cout << "5. MaxNumStu" << endl;cout << "6. D1" << endl;cout << "7. S1" << endl;cout << "8. D2" << endl;cout << "9. S2" << endl;
+        cout << "Which feature do you want to update" << endl; cout << "1. ID" << endl;cout << "2. Name" << endl;cout << "3. Teacher Name" << endl;cout << "4. NumCredit" << endl;cout << "5. MaxNumStu" << endl;cout << "6. D1" << endl;cout << "7. S1" << endl;cout << "8. D2" << endl;cout << "9. S2" << endl;
         cin >> select;
         cout << "Change to: ";
         switch (select) {
@@ -247,18 +247,17 @@ void updateCourse(int year, int semester, string CourseID) {
                 break;
             case 5: cin >> courseCur->MaxNumOfStudent;
                 break;
-            case 6: cin >> courseCur->FirstDayOfWeek;
+            case 6: {cin.ignore();getline(cin,courseCur->FirstDayOfWeek);}
                 break;
-            case 7: cin >> courseCur->FirstSessionOfWeek;
+            case 7: {cin.ignore();getline(cin,courseCur->FirstSessionOfWeek);}
                 break;
-            case 8: cin >> courseCur->SecondDayOfWeek;
+            case 8: {cin.ignore();getline(cin,courseCur->SecondDayOfWeek);}
                 break;
-            case 9: cin >> courseCur->SecondSessionOfWeek;
+            case 9: {cin.ignore();getline(cin,courseCur->SecondSessionOfWeek);}
                 break;
         }
         cout << "The course has been updated: " << endl;
         printCourseInformation(courseCur);
-        
         WriteFileCourseList(year, semester, courseList);
         WriteFileCourseInfoList(year, semester, courseList);
 
