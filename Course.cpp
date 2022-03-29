@@ -89,7 +89,6 @@ void getCourseList(int year, int semester, Course* &courseList) {
     while(!fin.eof()) {
         Course* new_Course = new Course;
         getline(fin, new_Course->CourseID, '\n');
-        cout << "ID " << new_Course->CourseID << endl;
         string pathToInfo = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + new_Course->CourseID + "/info.txt";
         
         fstream fileinToInfo;
@@ -100,9 +99,9 @@ void getCourseList(int year, int semester, Course* &courseList) {
         getline(fileinToInfo, new_Course->TeacherName, '\n');
         fileinToInfo >> new_Course->NumberOfCredits; fileinToInfo.ignore();
         fileinToInfo >> new_Course->MaxNumOfStudent;fileinToInfo.ignore();
-        getline(fileinToInfo, new_Course->FirstDayOfWeek, '\n');
+        getline(fileinToInfo, new_Course->FirstDayOfWeek, ' ');
         getline(fileinToInfo, new_Course->FirstSessionOfWeek, '\n');
-        getline(fileinToInfo, new_Course->SecondDayOfWeek, '\n');
+        getline(fileinToInfo, new_Course->SecondDayOfWeek, ' ');
         getline(fileinToInfo, new_Course->SecondSessionOfWeek);
 //        printCourseInformation(new_Course);
         fileinToInfo.close();
