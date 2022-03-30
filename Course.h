@@ -41,6 +41,6 @@ void viewCourseStudentList(Student* studentList);
 void exportScoreboardOfStudentListOfCourse(int year, int semester, string CourseID, Student* &studentList);
 void importScoreboardOfStudentListOfCourse(int year, int semester, string CourseID, Student* studentList);
 void viewScoreboard(Student* studentList);
-void manageCourse();
+void manageCourse(int year, int semester, string CourseID);
 
 void courseMenu();

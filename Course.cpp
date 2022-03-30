@@ -1,5 +1,4 @@
 #include "Course.h"
-
 Semester getCurrentSemester() {
     int year;
     int term;
@@ -68,6 +67,7 @@ void WriteFileCourseInfoList(int year, int semester, Course* courseList) {
     Course* courseCur = courseList;
     while(courseCur) {
         string pathToInfo = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + courseCur->CourseID + "/info.txt";
+        cout << pathToInfo << endl;
         ofstream fileoutToInfo;
         fileoutToInfo.open(pathToInfo, ios::trunc);
         fileoutToInfo << courseCur->CourseID << '\n';
@@ -84,17 +84,16 @@ void WriteFileCourseInfoList(int year, int semester, Course* courseList) {
         }
 }
 void getCourseList(int year, int semester, Course* &courseList) {
+
     string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/courseList.txt";
-    fstream fin; fin.open(path, ios::in);
+    ifstream fin; fin.open(path, ios::in);
     Course* courseCur = courseList;
     while(!fin.eof()) {
         Course* new_Course = new Course;
         getline(fin, new_Course->CourseID, '\n');
         string pathToInfo = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + new_Course->CourseID + "/info.txt";
-        
-        fstream fileinToInfo;
+        ifstream fileinToInfo;
         fileinToInfo.open(pathToInfo);
-        
         getline(fileinToInfo, new_Course->CourseID, '\n');
         getline(fileinToInfo, new_Course->CourseName, '\n');
         getline(fileinToInfo, new_Course->TeacherName, '\n');
@@ -304,7 +303,7 @@ void viewCourseMangementMenu() {
 
 void getCourseMarkList(int year, int semester, string CourseID, Student* &studentList) {
     string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + CourseID + "/marks.txt";
-    fstream fin; fin.open(path);
+    ifstream fin; fin.open(path, ios::in);
     Student* studentCur = studentList;
     while(!fin.eof()) {
         Student* new_student = new Student;
@@ -326,21 +325,24 @@ void getCourseMarkList(int year, int semester, string CourseID, Student* &studen
 }
 void getCourseStudentList(int year, int semester, string CourseID, Student* &studentList) {
     string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + CourseID + "/students.txt";
-    fstream fin; fin.open(path);
+    ifstream fin; fin.open(path, ios::in);
     Student* studentCur = studentList;
     while(!fin.eof()) {
         Student* new_student = new Student;
         getline(fin, new_student->ID, ' ');
         getline(fin,new_student->className, '\n');
+        
         string pathToClass = "CLASS/" + new_student->className + "/" + new_student->ID + ".txt";
-        fstream fileinClass; fileinClass.open(pathToClass, ios::in);
-        fin >> new_student->No; fin.ignore();
-        getline(fin, new_student->ID, '\n');
-        getline(fin, new_student->Name, '\n');
-        getline(fin, new_student->Gender, '\n');
-        fin >> new_student->Dob.day; fin >> new_student->Dob.month; fin >> new_student->Dob.year; fin.ignore();
-        getline(fin, new_student->socialID, '\n');
-        fileinClass.close();
+        ifstream fileinClass; fileinClass.open(pathToClass, ios::in);
+        
+        fileinClass >> new_student->No; fileinClass.ignore();
+        getline(fileinClass, new_student->ID, '\n');
+        getline(fileinClass, new_student->Name, '\n');
+        getline(fileinClass, new_student->Gender, '\n');
+        fileinClass >> new_student->Dob.day >> new_student->Dob.month >> new_student->Dob.year;
+        fileinClass.ignore();
+        getline(fileinClass, new_student->socialID, '\n');
+        fileinClass.close();        
         if(!studentCur) {studentCur = new_student; studentList = new_student;}
         else {
             studentCur->next_Student = new_student;
@@ -351,6 +353,7 @@ void getCourseStudentList(int year, int semester, string CourseID, Student* &stu
     fin.close();
 }
 void viewCourseStudent(Student* student) {
+    cout << student->No << endl;
     cout << student->ID << endl;
     cout << student->Name << endl;
     cout << student->Gender << endl;
@@ -406,13 +409,9 @@ void viewScoreboard(Student* studentList) {
         studentCur = studentCur->next_Student;
     }
 }
-void manageCourse(int year, int semester) {
+void manageCourse(int year, int semester, string CourseID) {
     Course* courseList = NULL;
     getCourseList(year, semester, courseList);
-    string CourseID;
-    cout << "Choose CourseID to manage" << endl;
-    printCourseList(courseList);
-    cout << "CourseID: "; getline(cin, CourseID);
     bool check = false;
     Course* courseCur = courseList;
     while(courseCur && !check) {
@@ -428,24 +427,23 @@ void manageCourse(int year, int semester) {
         switch (select)
         {
             case 1: { // view student
-                Student* CourseStudentList;
+                Student* CourseStudentList = NULL;
                 getCourseStudentList(year, semester, CourseID, CourseStudentList);
                 viewCourseStudentList(CourseStudentList);
-            }
+                }
                 break;
             case 2: { // export scoreboard
-                Student* studentList;
+                Student* studentList = NULL;
                 exportScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);
             }
                 break;
             case 3: { // import scoreboard
-                Student* studentList;
+                Student* studentList = NULL;
                 exportScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);
-                importScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);
-            }
+                importScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);            }
                 break;
             case 4: { // view scoreboard
-                Student* studentList;
+                Student* studentList = NULL;
                 exportScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);
                 viewScoreboard(studentList);
             }
@@ -507,10 +505,12 @@ void courseMenu() {
     case 5: {
         int year;
         int semester;
+        string CourseID;
         cout << "MANAGE COURSE" << endl;
         cout << "Year: "; cin >> year;
         cout << "Semester: "; cin >> semester;
-        manageCourse(year, semester);
+        cout << "Course ID: "; cin.ignore(1); getline(cin, CourseID, '\n');
+        manageCourse(year, semester, CourseID);
         courseMenu();
     }
         break;
