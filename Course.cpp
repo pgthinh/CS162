@@ -1,10 +1,11 @@
 #include "Course.h"
+#include "Console.h"
 Semester getCurrentSemester() {
     int year;
     int term;
     int startday, startmonth, startyear;
     int endday, endmonth, endyear;
-    
+
     string path = "DATA/cache/currentSemester.txt";
     ifstream fin(path);
     fin >> year;
@@ -161,28 +162,39 @@ void writeFileCourseRegistration(Time start, Time end) {
     fout.close();
 }
 void updateCourseRegistration(Time &start, Time &end) {
-    cout << "Start day month year: ";
+    clrscr(); //Heading();
+    gotoxy(0,15);
+    cout << "\n\n\t\t\t\t      ";
+    for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " CREATE COURSE REGISTRATION SESSION "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
+    cout << "\n\n";
+    cout << "\t\t\t\t\t    Start date(dd mm yyyy): ";
     cin >> start.day >> start.month >> start.year;
-    cout << "End day month year: ";
+    cout << "\n\n";
+    cout << "\t\t\t\t\t    End date(dd mm yyyy)  : ";
     cin >> end.day >> end.month >> end.year;
 }
 // 2. Add course
 void setCourseInformation(Course &course) {
-    cout << "SET COURSE INFORMATION" << endl;
-    cout << "Course ID: "; cin >> course.CourseID;
-    cout << "Course Name: "; cin.ignore(1); getline(cin, course.CourseName);
-    cout << "Teacher Name: "; getline(cin, course.TeacherName);
-    cout << "Number of Credits: "; cin >> course.NumberOfCredits;
-    cout << "Maximum Students: "; cin >> course.MaxNumOfStudent;
-    cout << "Day 1: "; cin.ignore(1); getline(cin, course.FirstDayOfWeek);
-    cout << "Session: "; getline(cin, course.FirstSessionOfWeek);
-    cout << "Day 2: "; getline(cin, course.SecondDayOfWeek);
-    cout << "Session: "; getline(cin, course.SecondSessionOfWeek);
+    system("CLS"); //Heading();
+    cout << "\n\n\t\t\t\t\t\t  ";
+    for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " ENTER A COURSE "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
+    cout << "\n\n";
+    cout << "\t\t\t\t      Course ID: ";  cin >> course.CourseID;
+    cout << "\n\t\t\t\t      Couse name: "; cin.ignore(1); getline(cin, course.CourseName);
+    cout << "\n\t\t\t\t      Instructor: "; getline(cin, course.TeacherName);
+    cout << "\n\t\t\t\t      Number of credits: "; cin >> course.NumberOfCredits;
+    cout << "\n\t\t\t\t      Maximum student: "; cin >> course.MaxNumOfStudent;
+    cout << "\n\t\t\t\t      First day of week(MON/TUE/WED/THU/FRI/SAT): "; cin.ignore(1); getline(cin, course.FirstDayOfWeek);
+    cout << "\n\t\t\t\t      First session of week(S1/S2/S3/S4): "; getline(cin, course.FirstSessionOfWeek);
+    cout << "\n\t\t\t\t      Second day of week(MON/TUE/WED/THU/FRI/SAT): "; getline(cin, course.SecondDayOfWeek);
+    cout << "\n\t\t\t\t      Second session of week(S1/S2/S3/S4): "; getline(cin, course.SecondSessionOfWeek);
+
+    for (int rep = 1; rep <= 120; rep++) cout << char(220); cout << endl;
 }
 void addCourse() {
     Course course;
     setCourseInformation(course);
-    
+
     Semester semester = getCurrentSemester();
     int year = semester.Year;
     int term = semester.TheOrderOfSemester;
@@ -206,10 +218,13 @@ void addCourse() {
     fout.open(path);
     fout << course.CourseID << '\n';
     fout.close();
-    
+
 }
 // 3. Update course
 void updateCourse(int year, int semester, string CourseID) {
+    for (int rep = 1; rep <= 120; rep++) cout << char(220); cout << endl;
+
+    cout << '\n';
     Course* courseList = NULL;
     getCourseList(year, semester, courseList);
     Course* courseCur = courseList;
@@ -221,7 +236,8 @@ void updateCourse(int year, int semester, string CourseID) {
     if(!check){ cout << "The course does not exist" << endl; return;}
     else {
         int select;
-        cout << "Which feature do you want to update" << endl; cout << "1. Name" << endl;cout << "2. Teacher Name" << endl;cout << "3. NumCredit" << endl;cout << "4. MaxNumStu" << endl;cout << "5. D1" << endl;cout << "6. S1" << endl;cout << "7. D2" << endl;cout << "8. S2" << endl;
+        cout << "\t\t\t\t\t   Which feature do you want to update" << endl;
+        cout << "\t\t\t\t\t   1. Name" << endl;cout << "2. Instructor" << endl;cout << "3. NumCredit" << endl;cout << "4. MaxNumStu" << endl;cout << "5. D1" << endl;cout << "6. S1" << endl;cout << "7. D2" << endl;cout << "8. S2" << endl;
         cin >> select;
         cout << "Change to: ";
         switch (select) {
@@ -331,10 +347,10 @@ void getCourseStudentList(int year, int semester, string CourseID, Student* &stu
         Student* new_student = new Student;
         getline(fin, new_student->ID, ' ');
         getline(fin,new_student->className, '\n');
-        
+
         string pathToClass = "CLASS/" + new_student->className + "/" + new_student->ID + ".txt";
         ifstream fileinClass; fileinClass.open(pathToClass, ios::in);
-        
+
         fileinClass >> new_student->No; fileinClass.ignore();
         getline(fileinClass, new_student->ID, '\n');
         getline(fileinClass, new_student->Name, '\n');
@@ -342,7 +358,7 @@ void getCourseStudentList(int year, int semester, string CourseID, Student* &stu
         fileinClass >> new_student->Dob.day >> new_student->Dob.month >> new_student->Dob.year;
         fileinClass.ignore();
         getline(fileinClass, new_student->socialID, '\n');
-        fileinClass.close();        
+        fileinClass.close();
         if(!studentCur) {studentCur = new_student; studentList = new_student;}
         else {
             studentCur->next_Student = new_student;
@@ -456,14 +472,20 @@ void manageCourse(int year, int semester, string CourseID) {
 }
 
 void courseMenu() {
-    cout << "1. Create course registration" << endl;
-    cout << "2. Add course" << endl;
-    cout << "3. Update course" << endl;
-    cout << "4. Delete course" << endl;
-    cout << "5. Choose course to manage" << endl;
-    cout << "6. Go back" << endl;
+    system("CLS");// Heading();
+    gotoxy(0,10);
+    cout << "\n\n\t\t\t\t\t\t";
+    for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " COURSE MENU "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
+    cout << "\n\n";
+    cout << "\t\t\t\t\t     1. Create course registration\n\n";
+    cout << "\t\t\t\t\t     2. Add a course\n\n";
+    cout << "\t\t\t\t\t     3. Update a course\n\n";
+    cout << "\t\t\t\t\t     4. Delete a course\n\n";
+    cout << "\t\t\t\t\t     5. Choose a course to manage\n\n";
+    cout << "\t\t\t\t\t     6. Go back\n\n";
     int select;
-    cout << "Select number: "; cin >> select;
+    for (int rep = 1; rep <= 120; rep++) cout << char(220); cout << endl;
+    cout << "\n\t\t\t\t\t     Select number: "; cin >> select;
     switch(select)
     {
     case 1:  {
@@ -482,10 +504,13 @@ void courseMenu() {
         int year;
         int semester;
         string CourseID;
-        cout << "UPDATE COURSE" << endl;
-        cout << "Year: "; cin >> year;
-        cout << "Semester: "; cin >> semester;
-        cout << "Course ID: "; cin.ignore(1); getline(cin, CourseID, '\n');
+        clrscr(); //Heading();
+        cout << "\n\n\t\t\t\t\t       ";
+        for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " UPDATE A COURSE "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
+        cout << "\n\n";
+        cout << "\t\t\t\t\t\t      Year: "; cin >> year;
+        cout << "\n\t\t\t\t\t\t      Semester: "; cin >> semester;
+        cout << "\n\t\t\t\t\t\t      Course ID: "; cin.ignore(1); getline(cin, CourseID, '\n');
         updateCourse(year, semester, CourseID);
         courseMenu();
     }
