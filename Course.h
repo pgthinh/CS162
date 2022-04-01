@@ -20,8 +20,8 @@ void WriteFileCourseList(int year, int semester, Course* courseList);
 void printCourseInformation(Course* course);
 void printCourseList(Course* courseList);
 void deleteCourseList(Course* &courseList);
-// Main Functions
 
+// Main Functions
 void writeFileCourseRegistration(Time start, Time end);
 void updateCourseRegistration(Time &start, Time &end);
 
