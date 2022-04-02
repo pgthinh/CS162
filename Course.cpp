@@ -1,5 +1,6 @@
 #include "Course.h"
 #include "Console.h"
+
 Semester getCurrentSemester() {
     int year;
     int term;
@@ -237,9 +238,17 @@ void updateCourse(int year, int semester, string CourseID) {
     else {
         int select;
         cout << "\t\t\t\t\t   Which feature do you want to update" << endl;
-        cout << "\t\t\t\t\t   1. Name" << endl;cout << "2. Instructor" << endl;cout << "3. NumCredit" << endl;cout << "4. MaxNumStu" << endl;cout << "5. D1" << endl;cout << "6. S1" << endl;cout << "7. D2" << endl;cout << "8. S2" << endl;
+        cout << "\n\t\t\t\t\t   1. Name" << endl;
+        cout << "\n\t\t\t\t\t   2. Instructor" << endl;
+        cout << "\n\t\t\t\t\t   3. Number of Credit" << endl;
+        cout << "\n\t\t\t\t\t   4. Maximum Student" << endl;
+        cout << "\n\t\t\t\t\t   5. Day 1" << endl;
+        cout << "\n\t\t\t\t\t   6. Session 1" << endl;
+        cout << "\n\t\t\t\t\t   7. Day 2" << endl;
+        cout << "\n\t\t\t\t\t   8. Session 2" << endl;
+        cout << "\n\t\t\t\t\t   Selection: ";
         cin >> select;
-        cout << "Change to: ";
+        cout << "\n\t\t\t\t\t   Change to: ";
         switch (select) {
             case 1: {cin.ignore();getline(cin,courseCur->CourseName);}
                 break;
@@ -266,6 +275,7 @@ void updateCourse(int year, int semester, string CourseID) {
         return;
     }
 }
+
 // 4. Delete course
 void deleteCourse(int year, int semester, string CourseID) {
     Course* courseList = NULL;
@@ -297,7 +307,10 @@ void deleteCourse(int year, int semester, string CourseID) {
                 courseCur->previous_Course = NULL;
                 delete t;
             }
-            cout << "The course has been deleted" << endl;
+            SetColor(10);
+            cout << "\n\n\t\t\t\t\t       The course has been deleted" << endl;
+            SetColor(15);
+            delay(1500);
             WriteFileCourseList(year, semester, courseList);
             WriteFileCourseInfoList(year, semester, courseList);
             deleteCourseList(courseList);
@@ -305,16 +318,19 @@ void deleteCourse(int year, int semester, string CourseID) {
         }
         else courseCur = courseCur->next_Course;
     }
-    cout << "The course does not exist";
+    SetColor(12);
+    cout << "\n\n\t\t\t\t\t       The course does not exist";
+    SetColor(15);
+    delay(1500);
     deleteCourseList(courseList);
 }
 // 5. Course management
 void viewCourseMangementMenu() {
-    cout << "1. View student" << endl;
-    cout << "2. Export scorebroad" << endl;
-    cout << "3. Import scorebroad" << endl;
-    cout << "4. View scorebroad" << endl;
-    cout << "5. Go Back" << endl; // go back to Course Menu;
+    cout << "\n\t\t\t\t\t   1. View student" << endl;
+    cout << "\n\t\t\t\t\t   2. Export scorebroad" << endl;
+    cout << "\n\t\t\t\t\t   3. Import scorebroad" << endl;
+    cout << "\n\t\t\t\t\t   4. View scorebroad" << endl;
+    cout << "\n\t\t\t\t\t   5. Go Back" << endl; // go back to Course Menu;
 }
 
 void getCourseMarkList(int year, int semester, string CourseID, Student* &studentList) {
@@ -519,10 +535,13 @@ void courseMenu() {
         int year;
         int semester;
         string CourseID;
-        cout << "DELETE COURSE" << endl;
-        cout << "Year: "; cin >> year;
-        cout << "Semester: "; cin >> semester;
-        cout << "Course ID: "; cin.ignore(1); getline(cin, CourseID, '\n');
+        clrscr(); //Heading();
+        cout << "\n\n\t\t\t\t\t       ";
+        for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " REMOVE A COURSE "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
+        cout << "\n\n";
+        cout << "\n\t\t\t\t\t\t    Year: "; cin >> year;
+        cout << "\n\t\t\t\t\t\t    Semester: "; cin >> semester;
+        cout << "\n\t\t\t\t\t\t    Course ID: "; cin.ignore(1); getline(cin, CourseID, '\n');
         deleteCourse(year, semester, CourseID);
         courseMenu();
     }
@@ -531,10 +550,12 @@ void courseMenu() {
         int year;
         int semester;
         string CourseID;
-        cout << "MANAGE COURSE" << endl;
-        cout << "Year: "; cin >> year;
-        cout << "Semester: "; cin >> semester;
-        cout << "Course ID: "; cin.ignore(1); getline(cin, CourseID, '\n');
+        clrscr(); //Heading();
+        cout << "\n\n\t\t\t\t\t       ";
+        for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " MANAGE COURSE "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
+        cout << "\n\n\t\t\t\t\t\t    Year: "; cin >> year;
+        cout << "\n\t\t\t\t\t\t    Semester: "; cin >> semester;
+        cout << "\n\t\t\t\t\t\t    Course ID: "; cin.ignore(1); getline(cin, CourseID, '\n');
         manageCourse(year, semester, CourseID);
         courseMenu();
     }
