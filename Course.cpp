@@ -326,11 +326,11 @@ void deleteCourse(int year, int semester, string CourseID) {
 }
 // 5. Course management
 void viewCourseMangementMenu() {
-    cout << "\n\t\t\t\t\t   1. View student" << endl;
-    cout << "\n\t\t\t\t\t   2. Export scorebroad" << endl;
-    cout << "\n\t\t\t\t\t   3. Import scorebroad" << endl;
-    cout << "\n\t\t\t\t\t   4. View scorebroad" << endl;
-    cout << "\n\t\t\t\t\t   5. Go Back" << endl; // go back to Course Menu;
+    cout << "\n\t\t\t\t\t\t   1. View student" << endl;
+    cout << "\n\t\t\t\t\t\t   2. Export scoreboard" << endl;
+    cout << "\n\t\t\t\t\t\t   3. Import scoreboard" << endl;
+    cout << "\n\t\t\t\t\t\t   4. View scoreboard" << endl;
+    cout << "\n\t\t\t\t\t\t   5. Go Back" << endl; // go back to Course Menu;
 }
 
 void getCourseMarkList(int year, int semester, string CourseID, Student* &studentList) {
@@ -450,18 +450,31 @@ void manageCourse(int year, int semester, string CourseID) {
         if(courseCur->CourseID == CourseID) { check = true; break;}
         else courseCur = courseCur->next_Course;
     }
-    if(!check){ cout << "The course does not exist"; return;}
+    if(!check){  SetColor(12); cout << "\n\n\t\t\t\t\t       The course does not exist"; SetColor(15); delay(1500); return;}
     else {
         viewCourseMangementMenu();
         int select;
-        cout << "Select the number: ";
+        cout << "\n\t\t\t\t\t\t   Selection: ";
         cin >> select;
         switch (select)
         {
             case 1: { // view student
+                clrscr(); //Heading();
+                cout << "\n\n\t\t\t\t\t      ";
+                for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " STUDENT OF COURSE "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
+                cout << "\n\n";
+
+                gotoxy(10, 12); cout << "No";
+                gotoxy(15, 12); cout << "Student ID";
+                gotoxy(30, 12); cout << "First name";
+                gotoxy(50, 12); cout << "Last name";
+                gotoxy(70, 12); cout << "Gender";
+                gotoxy(80, 12); cout << "Date of birth";
+                gotoxy(100, 12); cout << "Social ID";
                 Student* CourseStudentList = NULL;
                 getCourseStudentList(year, semester, CourseID, CourseStudentList);
                 viewCourseStudentList(CourseStudentList);
+                _getch();
                 }
                 break;
             case 2: { // export scoreboard
