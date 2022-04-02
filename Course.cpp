@@ -384,20 +384,22 @@ void getCourseStudentList(int year, int semester, string CourseID, Student* &stu
     }
     fin.close();
 }
-void viewCourseStudent(Student* student) {
-    cout << student->No << endl;
-    cout << student->ID << endl;
-    cout << student->Name << endl;
-    cout << student->Gender << endl;
-    cout << student->Dob.day << " " << student->Dob.month << " " << student->Dob.year << endl;
-    cout << student->socialID << endl;
-}
+
 void viewCourseStudentList(Student* studentList) {
     Student* studentCur = studentList;
+    int i = 0;
     while(studentCur) {
-        viewCourseStudent(studentCur);
+        gotoxy(15, 14 + i * 2); cout << i + 1 << ". ";
+        gotoxy(20, 14 + i * 2); cout << studentCur->ID;
+        gotoxy(35, 14 + i * 2); cout << studentCur->Name;
+        gotoxy(65, 14 + i * 2); cout << studentCur->Gender;
+        gotoxy(75, 14 + i * 2); cout << studentCur->Dob.day << " " << studentCur->Dob.month << " " << studentCur->Dob.year;
+        gotoxy(95, 14 + i * 2); cout << studentCur->socialID << endl;
+        i++;
         studentCur = studentCur->next_Student;
     }
+    cout << "\n\n";
+    for (int rep = 1; rep <= 120; rep++) cout << char(220); cout << endl;
 }
 void exportScoreboardOfStudentListOfCourse(int year, int semester, string CourseID, Student* &studentList) {
     getCourseMarkList(year, semester, CourseID, studentList);
@@ -408,6 +410,11 @@ void exportScoreboardOfStudentListOfCourse(int year, int semester, string Course
         fout << studentCur->No << ',' << studentCur->Name << ',' << studentCur->mark.totalMark << ',' << studentCur->mark.finalMark << ',' << studentCur->mark.midtermMark << ',' << studentCur->mark.otherMark << '\n';
         studentCur = studentCur->next_Student;
     }
+    clrscr();
+    SetColor(10);
+    cout << "\n\n\t\t\t\t\t\t   Export successfully!";
+    SetColor(15);
+    delay(2000);
     fout.close();
 }
 void importScoreboardOfStudentListOfCourse(int year, int semester, string CourseID, Student* studentList) {
@@ -462,15 +469,12 @@ void manageCourse(int year, int semester, string CourseID) {
                 clrscr(); //Heading();
                 cout << "\n\n\t\t\t\t\t      ";
                 for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " STUDENT OF COURSE "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
-                cout << "\n\n";
-
-                gotoxy(10, 12); cout << "No";
-                gotoxy(15, 12); cout << "Student ID";
-                gotoxy(30, 12); cout << "First name";
-                gotoxy(50, 12); cout << "Last name";
-                gotoxy(70, 12); cout << "Gender";
-                gotoxy(80, 12); cout << "Date of birth";
-                gotoxy(100, 12); cout << "Social ID";
+                gotoxy(15, 12); cout << "No";
+                gotoxy(20, 12); cout << "Student ID";
+                gotoxy(35, 12); cout << "First name";
+                gotoxy(65, 12); cout << "Gender";
+                gotoxy(75, 12); cout << "Date of birth";
+                gotoxy(95, 12); cout << "Social ID";
                 Student* CourseStudentList = NULL;
                 getCourseStudentList(year, semester, CourseID, CourseStudentList);
                 viewCourseStudentList(CourseStudentList);
