@@ -86,7 +86,6 @@ void WriteFileCourseInfoList(int year, int semester, Course* courseList) {
         }
 }
 void getCourseList(int year, int semester, Course* &courseList) {
-
     string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/courseList.txt";
     ifstream fin; fin.open(path, ios::in);
     Course* courseCur = courseList;
@@ -403,11 +402,12 @@ void viewCourseStudentList(Student* studentList) {
 }
 void exportScoreboardOfStudentListOfCourse(int year, int semester, string CourseID, Student* &studentList) {
     getCourseMarkList(year, semester, CourseID, studentList);
-    string path = "csvFile/" + to_string(year) + "/" + to_string(semester) + CourseID + ".csv";
-    fstream fout; fout.open(path);
+    string path = "csvFile/" + to_string(year) + "/" + to_string(semester) + "/" + CourseID + ".csv";
+    ofstream fout; fout.open(path,ios::trunc);
     Student* studentCur = studentList;
+    fout << "No,Student ID,Full name,Total mark,Final mark,Midterm mark,Other mark" << '\n';
     while(studentCur) {
-        fout << studentCur->No << ',' << studentCur->Name << ',' << studentCur->mark.totalMark << ',' << studentCur->mark.finalMark << ',' << studentCur->mark.midtermMark << ',' << studentCur->mark.otherMark << '\n';
+        fout << studentCur->No << ',' << studentCur->ID << ',' << studentCur->Name << ',' << studentCur->mark.totalMark << ',' << studentCur->mark.finalMark << ',' << studentCur->mark.midtermMark << ',' << studentCur->mark.otherMark << '\n';
         studentCur = studentCur->next_Student;
     }
     clrscr();
@@ -418,9 +418,10 @@ void exportScoreboardOfStudentListOfCourse(int year, int semester, string Course
     fout.close();
 }
 void importScoreboardOfStudentListOfCourse(int year, int semester, string CourseID, Student* studentList) {
-    string path = "csvFile/" + to_string(year) + "/" + to_string(semester) + CourseID + ".csv";
-    fstream fin; fin.open(path);
+    string path = "csvFile/" + to_string(year) + "/" + to_string(semester) + "/" + CourseID + ".csv";
+    ifstream fin; fin.open(path, ios::in);
     Student* studentCur = studentList;
+    string temp; getline(fin, temp, '\n');
     while(!fin.eof()) {
         Student* new_student = new Student;
         fin >> new_student->No; fin.ignore(1);
@@ -429,8 +430,7 @@ void importScoreboardOfStudentListOfCourse(int year, int semester, string Course
         fin >> new_student->mark.totalMark; fin.ignore(1);
         fin >> new_student->mark.finalMark; fin.ignore(1);
         fin >> new_student->mark.midtermMark; fin.ignore(1);
-        fin >> new_student->mark.otherMark;
-        fin.ignore();
+        fin >> new_student->mark.otherMark; fin.ignore(1);
         if(!studentCur) {studentCur = new_student; studentList = new_student;}
         else {
             studentCur->next_Student = new_student;
@@ -441,6 +441,7 @@ void importScoreboardOfStudentListOfCourse(int year, int semester, string Course
     fin.close();
     viewScoreboard(studentList);
 }
+
 void viewScoreboard(Student* studentList) {
     Student* studentCur = studentList;
     while(studentCur) {
@@ -478,23 +479,28 @@ void manageCourse(int year, int semester, string CourseID) {
                 Student* CourseStudentList = NULL;
                 getCourseStudentList(year, semester, CourseID, CourseStudentList);
                 viewCourseStudentList(CourseStudentList);
+                manageCourse(year, semester, CourseID);
                 _getch();
                 }
                 break;
             case 2: { // export scoreboard
                 Student* studentList = NULL;
                 exportScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);
+                manageCourse(year, semester, CourseID);
             }
                 break;
             case 3: { // import scoreboard
                 Student* studentList = NULL;
                 exportScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);
-                importScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);            }
+                importScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);
+                manageCourse(year, semester, CourseID);
+            }
                 break;
             case 4: { // view scoreboard
                 Student* studentList = NULL;
                 exportScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);
                 viewScoreboard(studentList);
+                manageCourse(year, semester, CourseID);
             }
                 break;
             case 5:
