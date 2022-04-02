@@ -336,8 +336,10 @@ void getCourseMarkList(int year, int semester, string CourseID, Student* &studen
     string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + CourseID + "/marks.txt";
     ifstream fin; fin.open(path, ios::in);
     Student* studentCur = studentList;
+    int i = 1;
     while(!fin.eof()) {
         Student* new_student = new Student;
+        new_student->No = i;
         getline(fin, new_student->ID, ' ');
         fin >> new_student->mark.totalMark;
         fin >> new_student->mark.finalMark;
@@ -351,6 +353,7 @@ void getCourseMarkList(int year, int semester, string CourseID, Student* &studen
             new_student->previous_Student = studentCur;
             studentCur = studentCur->next_Student;
         }
+        ++i;
     }
     fin.close();
 }
