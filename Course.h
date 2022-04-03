@@ -36,7 +36,6 @@ void viewCourseMangementMenu();
 
 void getCourseMarkList(int year, int semester, string CourseID, Student* &studentList);
 void getCourseStudentList(int year, int semester, string CourseID, Student* &studentList);
-void viewCourseStudent(Student* student);
 void viewCourseStudentList(Student* studentList);
 void exportScoreboardOfStudentListOfCourse(int year, int semester, string CourseID, Student* &studentList);
 void importScoreboardOfStudentListOfCourse(int year, int semester, string CourseID, Student* studentList);
