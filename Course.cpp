@@ -86,6 +86,7 @@ void WriteFileCourseInfoList(int year, int semester, Course* courseList) {
         }
 }
 void getCourseList(int year, int semester, Course* &courseList) {
+
     string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/courseList.txt";
     ifstream fin; fin.open(path, ios::in);
     Course* courseCur = courseList;
@@ -336,10 +337,8 @@ void getCourseMarkList(int year, int semester, string CourseID, Student* &studen
     string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/" + CourseID + "/marks.txt";
     ifstream fin; fin.open(path, ios::in);
     Student* studentCur = studentList;
-    int i = 1;
     while(!fin.eof()) {
         Student* new_student = new Student;
-        new_student->No = i;
         getline(fin, new_student->ID, ' ');
         fin >> new_student->mark.totalMark;
         fin >> new_student->mark.finalMark;
@@ -353,7 +352,6 @@ void getCourseMarkList(int year, int semester, string CourseID, Student* &studen
             new_student->previous_Student = studentCur;
             studentCur = studentCur->next_Student;
         }
-        ++i;
     }
     fin.close();
 }
@@ -414,10 +412,6 @@ void exportScoreboardOfStudentListOfCourse(int year, int semester, string Course
         studentCur = studentCur->next_Student;
     }
     clrscr();
-    SetColor(10);
-    cout << "\n\n\t\t\t\t\t\t   Export successfully!";
-    SetColor(15);
-    delay(2000);
     fout.close();
 }
 void importScoreboardOfStudentListOfCourse(int year, int semester, string CourseID, Student* studentList) {
@@ -444,13 +438,34 @@ void importScoreboardOfStudentListOfCourse(int year, int semester, string Course
     fin.close();
     viewScoreboard(studentList);
 }
-
 void viewScoreboard(Student* studentList) {
     Student* studentCur = studentList;
+    clrscr(); // Heading();
+    cout << "\n\n\t\t\t\t\t\t ";
+    for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " Scoreboard "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
+    int based = 5; cout.precision(2);
+    gotoxy(10 + based, 12); cout << "No";
+    gotoxy(15 + based, 12); cout << "Student ID";
+    gotoxy(30 + based, 12); cout << "Full name";
+    gotoxy(60 + based, 12); cout << "Total";
+    gotoxy(70 + based, 12); cout << "Final";
+    gotoxy(80 + based, 12); cout << "Midterm";
+    gotoxy(90 + based, 12); cout << "Other";
+    int i = 0;
     while(studentCur) {
-        cout << studentCur->No << ' ' << studentCur->Name << ' ' << studentCur->mark.totalMark << ' ' << studentCur->mark.finalMark << ' ' << studentCur->mark.midtermMark << ' ' << studentCur->mark.otherMark << '\n';
+        gotoxy(10 + based, 14 + i * 2); cout << i + 1 << ". ";
+        gotoxy(15 + based, 14 + i * 2); cout << studentCur->ID;
+        gotoxy(30 + based, 14 + i * 2); cout << studentCur->Name;
+        gotoxy(60 + based, 14 + i * 2); cout << studentCur->mark.totalMark;
+        gotoxy(70 + based, 14 + i * 2); cout << studentCur->mark.finalMark;
+        gotoxy(80 + based, 14 + i * 2); cout << studentCur->mark.midtermMark;
+        gotoxy(90 + based, 14 + i * 2); cout << studentCur->mark.otherMark;
         studentCur = studentCur->next_Student;
+        i++;
     }
+    cout << "\n\n";
+    for (int rep = 1; rep <= 120; rep++) cout << char(220); cout << endl;
+    _getch();
 }
 void manageCourse(int year, int semester, string CourseID) {
     Course* courseList = NULL;
@@ -482,28 +497,27 @@ void manageCourse(int year, int semester, string CourseID) {
                 Student* CourseStudentList = NULL;
                 getCourseStudentList(year, semester, CourseID, CourseStudentList);
                 viewCourseStudentList(CourseStudentList);
-                manageCourse(year, semester, CourseID);
                 _getch();
                 }
                 break;
             case 2: { // export scoreboard
                 Student* studentList = NULL;
                 exportScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);
-                manageCourse(year, semester, CourseID);
+                SetColor(10);
+                cout << "\n\n\t\t\t\t\t\t   Export successfully!";
+                SetColor(15);
+                delay(2000);
             }
                 break;
             case 3: { // import scoreboard
                 Student* studentList = NULL;
                 exportScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);
-                importScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);
-                manageCourse(year, semester, CourseID);
-            }
+                importScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);            }
                 break;
             case 4: { // view scoreboard
                 Student* studentList = NULL;
                 exportScoreboardOfStudentListOfCourse(year, semester, CourseID, studentList);
                 viewScoreboard(studentList);
-                manageCourse(year, semester, CourseID);
             }
                 break;
             case 5:
@@ -514,7 +528,7 @@ void manageCourse(int year, int semester, string CourseID) {
 }
 
 void courseMenu() {
-    system("CLS");// Heading();
+    clrscr();// Heading();
     gotoxy(0,10);
     cout << "\n\n\t\t\t\t\t\t";
     for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " COURSE MENU "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
