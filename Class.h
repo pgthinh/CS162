@@ -5,6 +5,8 @@
 #include <fstream>
 #include <iostream>
 #include <direct.h>
+#include "SchoolYear.h"
+#include "Semester.h"
 using namespace std;
 
 void createClass(string className);

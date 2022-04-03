@@ -123,7 +123,7 @@ void ChangeMarkFileAfterUpdate(Mark& changeMark,string& CourseID,string& student
 	DeleteStudentList(first_student);  DeleteMarkList(first_mark);
 	fout.close();
 	// change in CLASS/className/StudentID_marks.txt
-	string className; string student_id;
+	/*string className; string student_id;
 	path = "DATA/" + to_string(getCurrentYear()) + "/" + to_string(getCurrentSemester().TheOrderOfSemester) + "/ course_list /" + CourseID + "/students.txt";
     fin.open(path);
 	while(fin >> student_id >> className){
@@ -155,7 +155,7 @@ void ChangeMarkFileAfterUpdate(Mark& changeMark,string& CourseID,string& student
 		mark_cur = mark_cur->next_Mark;
 	}
 	DeleteMarkList(first_mark);  delete initialMark;
-	fout.close();
+	fout.close();*/
 }
 
 
