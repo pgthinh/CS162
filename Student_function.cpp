@@ -429,55 +429,56 @@ void My_Score(const List &l)
     int semester;
     cout << "Input semester = "; cin >> semester;
 
-    string str2;
-    cin.ignore();
-    cout << "Input course name = "; getline(cin, str2);
-
-    string strpath = pathfixed + "/" + to_string(year) + "/" + to_string(semester) + "/" + str2 + ".csv";
-
-    FileIn.open(strpath, ios_base::in);
-    string str3;
-    getline(FileIn, str3);
-    cout << "---------------------" << endl;
-    cout << str3 << endl;
-
-    bool Check = false;
-    while (FileIn.eof() == false)
+    Node* node = l.pHead;
+    while (node != NULL)
     {
-        int ID1 = 0;
+        string strpath = pathfixed + "/" + to_string(year) + "/" + to_string(year) + "_" + to_string(semester) + "/" + node->course.CourseID + ".csv";
+        FileIn.open(strpath, ios_base::in);
+        string str3;
         getline(FileIn, str3);
-        string str4;
-        for (int i = 0; i < str3.length(); i++)
+        cout << "---------------------" << endl;
+        cout << "Score of " << node->course.CourseID << endl;
+        cout << str3 << endl;
+
+        bool Check = false;
+        while (FileIn.eof() == false)
         {
-            if (str3[i] == ',')
+            int ID1 = 0;
+            getline(FileIn, str3);
+            string str4;
+            for (int i = 0; i < str3.length(); i++)
             {
-                int j = i + 1;
-                while (str3[j] != ',')
+                if (str3[i] == ',')
                 {
-                    str4 += str3[j];
-                    j += 1;
+                    int j = i + 1;
+                    while (str3[j] != ',')
+                    {
+                        str4 += str3[j];
+                        j += 1;
+                    }
+                    stringstream ss2;
+                    ss2 << str4;
+                    ss2 >> ID1;
+                    break;
                 }
-                stringstream ss2;
-                ss2 << str4;
-                ss2 >> ID1;
+            }
+            if (ID1 == ID)
+            {
+                Check = true;
+                cout << str3 << endl;
                 break;
             }
-        }
-        if (ID1 == ID)
-        {
-            Check = true;
-            cout << str3 << endl;
-            break;
-        }
 
+        }
+        if (Check == false)
+        {
+            cout << "----------------------------" << endl;
+            cout << "Can not find your information" << endl;
+            cout << "----------------------------" << endl;
+        }
+        FileIn.close();
+        node = node->pNext;
     }
-    if (Check == false)
-    {
-        cout << "----------------------------" << endl;
-        cout << "Can not find your information" << endl;
-        cout << "----------------------------" << endl;
-    }
-    FileIn.close();
 }
 void Show_Profile()
 {
