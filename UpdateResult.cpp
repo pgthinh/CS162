@@ -1,5 +1,6 @@
-﻿#include <iostream>
+#include <iostream>
 #include "UpdateResult.h"
+#include "Struct.hpp"
 bool Find_Course(string& CourseId)
 {
 	string courseName;
@@ -128,7 +129,7 @@ void ChangeMarkFileAfterUpdate(Mark& changeMark,string& CourseID,string& student
     fin.open(path);
 	while(fin >> student_id >> className){
 		if(student_id == studentID) break;
-	} 
+	}
 
 	Mark* initialMark = getInitialMarkOfStudent(CourseID,studentID);
 	first_mark = new Mark;  mark_cur = first_mark;
@@ -147,7 +148,7 @@ void ChangeMarkFileAfterUpdate(Mark& changeMark,string& CourseID,string& student
 	mark_cur = mark_cur->previous_Mark;
 	mark_cur->next_Mark = nullptr;
 	delete temp5;
-    
+
 	mark_cur = first_mark;
 	fout.open(path);
 	while(mark_cur){
