@@ -13,10 +13,13 @@ void createClass(string className);
 void getClasses(Class*& first_class);
 void setCurrentClass(string className);
 string getCurrentClass();
-
 void addStudents(string className,Student*& students);
-void getStudents(string className,Student*& students);
-void getStudentList(string className, Student*& studentList);
 void importStudents(string className,Student*& students);
+void getStudentList(string className, Student*& studentList) ;
+void getStudents(string className,Student*& students);
+void getStudentScoreboard(int year, int term, string studentID, Course*& courseList, Mark*& mark);
+float getStudentGPA(string studentID, string className);
+
+void ClassMenu();
 
 #endif
