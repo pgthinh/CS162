@@ -99,6 +99,7 @@ void AddCourse(List& l)
         getline(cin,choice);
         for (int i = 0; i < choice.length(); i++)
             choice[i] = toupper(choice[i]);
+
         if (choice == "0") break;
         bool Check = false; // kiem tra xem course da chon hay chua ? neu chua chon thi duoc add
         Node* node = l.pHead;
@@ -150,7 +151,6 @@ void AddCourse(List& l)
                         break;
                     }
                 }
-
             }
             if (!Check1){
                 SetColor(12);
@@ -178,7 +178,6 @@ void Read_My_Course_From_TXT(List& l)
     {
         Course course;
         getline(FileIn, course.CourseID);
-      //  cout << course.CourseID << " ";
         getline(FileIn, course.CourseName);
         getline(FileIn, course.TeacherName);
         FileIn >> course.NumberOfCredits;
@@ -189,7 +188,6 @@ void Read_My_Course_From_TXT(List& l)
         getline(FileIn,course.SecondDayOfWeek,' ');
         getline(FileIn,course.SecondSessionOfWeek,'\n');
         numbers_of_course++;
-     //   cout << "1" << " ";
     }
 
     FileIn.close();
@@ -312,7 +310,7 @@ void Remove_A_Course(List& l)
             delete node->pNext;
         }
         SetColor(10);
-        cout << "\t\t\t\t\t  Removed Course Successfully" << endl;
+        cout << "\n\t\t\t\t\t     Removed Course Successfully" << endl;
         SetColor(15);
         delay(1500);
     }
@@ -329,7 +327,6 @@ void Write_To_My_Course(const List &l)
         count ++;
         node = node->pNext;
     }
-  //  FileOut << count << endl;
     node = l.pHead;
     while (node)
     {
@@ -370,36 +367,43 @@ void Menu(List& l)
                 cout << "See you next time" << endl;
                 delay(1500);
                 SetColor(15);
+                //giao dien login
                 break;
             }
             case 1:{
                 AddCourse(l);
                 Write_To_My_Course(l);
-                system("pause");
                 break;
             }
             case 2:{
                 Remove_A_Course(l);
                 Write_To_My_Course(l);
-                system("pause");
                 break;
             }
             case 3:{
                 Read_My_Course_From_TXT(l);
                 Show_My_course(l);
-                system("pause");
+                _getch();
                 break;
             }
             case 4:{
+                Read_My_Course_From_TXT(l);
                 My_Score(l);
-                system("pause");
                 break;
             }
             case 6:{
                 Show_Profile();
-                system("pause");
+                _getch();
                 break;
             }
+
+            /*case 5:{
+                gọi hàm changepassword()
+            }
+            case 7:{
+                goij menu chinh
+            }
+            */
         }
     }
 }
@@ -420,61 +424,47 @@ void My_Score(const List &l)
     gotoxy(77 + based, 12); cout << "Final";
     gotoxy(87 + based, 12); cout << "Midterm";
     gotoxy(97 + based, 12); cout << "Other";
-    
-    int ID;
-    cout << "Please input your ID = "; cin >> ID;
 
+    string ID;
+    cout << "Please input your ID = "; cin >> ID;
+    fflush(stdin);
     int year;
     cout << "Input year = "; cin >> year;
     int semester;
     cout << "Input semester = "; cin >> semester;
 
-    Node* node = l.pHead;
-    while (node != NULL)
-    {
-        string strpath = pathfixed + "/" + to_string(year) + "/" + to_string(year) + "_" + to_string(semester) + "/" + node->course.CourseID + ".csv";
-        FileIn.open(strpath, ios_base::in);
-        string str3;
-        getline(FileIn, str3);
-        cout << "---------------------" << endl;
-        cout << "Score of " << node->course.CourseID << endl;
-        cout << str3 << endl;
 
-        bool Check = false;
-        while (FileIn.eof() == false)
-        {
-            int ID1 = 0;
-            getline(FileIn, str3);
-            string str4;
-            for (int i = 0; i < str3.length(); i++)
-            {
-                if (str3[i] == ',')
-                {
-                    int j = i + 1;
-                    while (str3[j] != ',')
-                    {
-                        str4 += str3[j];
-                        j += 1;
-                    }
-                    stringstream ss2;
-                    ss2 << str4;
-                    ss2 >> ID1;
-                    break;
-                }
-            }
-            if (ID1 == ID)
-            {
-                Check = true;
-                cout << str3 << endl;
+    Node* node = l.pHead;
+    int i = 0;
+    while (node != NULL){
+        string strpath = pathfixed  + "/" + to_string(year) + "/" + to_string(semester) + "/" + node->course.CourseID + ".csv";
+        FileIn.open(strpath, ios::in);
+        Student* new_student = NULL;
+        string temp; getline(FileIn, temp, '\n');
+
+        while (!FileIn.eof()){
+            FileIn >> new_student->No; FileIn.ignore(1);
+          //  cout << new_student->No << "u " ;
+            getline(FileIn, new_student->ID, ',');
+          //  cout << new_student->ID << "ahahahha ";
+            getline(FileIn, new_student->Name, ',');
+            FileIn >> new_student->mark.totalMark; FileIn.ignore(1);
+            FileIn >> new_student->mark.finalMark; FileIn.ignore(1);
+            FileIn >> new_student->mark.midtermMark; FileIn.ignore(1);
+            FileIn >> new_student->mark.otherMark; //FileIn.ignore(1);
+            _getch();
+
+            if (new_student->ID == ID){
+                gotoxy(10 + based, 14 + i * 2); cout << i + 1 << ". ";
+                gotoxy(15 + based, 14 + i * 2); cout << ID;
+              //  gotoxy(27 + based, 14 + i * 2); cout << Courses[i].name;
+                gotoxy(67 + based, 14 + i * 2); cout << new_student->mark.totalMark;
+                gotoxy(77 + based, 14 + i * 2); cout << new_student->mark.finalMark;
+                gotoxy(87 + based, 14 + i * 2); cout << new_student->mark.midtermMark;
+                gotoxy(97 + based, 14 + i * 2); cout << new_student->mark.otherMark;
+                i++;
                 break;
             }
-
-        }
-        if (Check == false)
-        {
-            cout << "----------------------------" << endl;
-            cout << "Can not find your information" << endl;
-            cout << "----------------------------" << endl;
         }
         FileIn.close();
         node = node->pNext;
@@ -484,33 +474,37 @@ void Show_Profile()
 {
     ifstream FileIn;
     int ID;
-    cout << "Please input your ID = "; cin >> ID;
-    int class1;
+    cout << "Please input your ID = "; cin >> ID; //lấy ID từ txt
+    string class1;
     cout << "Which class are you in ? "; cin >> class1;
 
-    string strpath = "CLASS/21APCS" + to_string(class1) + "/" + to_string(ID) + ".txt";
 
-    FileIn.open(strpath, ios_base::in);
+    string strpath = "CLASS/" + class1 + "/" + to_string(ID) + ".txt";
 
+    FileIn.open(strpath, ios::in);
     Student stu;
     FileIn >> stu.No;
     FileIn.ignore();
-    getline(FileIn, stu.ID);
-    getline(FileIn, stu.Name);
-    getline(FileIn, stu.Gender);
+    getline(FileIn, stu.ID,'\n');
+    getline(FileIn, stu.Name,'\n');
+    getline(FileIn, stu.Gender,'\n');
     FileIn >> stu.Dob.day >> stu.Dob.month >> stu.Dob.year;
     FileIn.ignore();
-    getline(FileIn, stu.socialID);
+    getline(FileIn, stu.socialID,'\n');
     FileIn.close();
 
-    cout << "-----------------" << endl;
-    cout << "Your information" << endl;
-    cout << "No." << stu.No << endl;
-    cout << "Your ID = " << stu.ID << endl;
-    cout << "Your name = " << stu.Name << endl;
-    cout << "Your gender = " << stu.Gender << endl;
-    cout << "Your day of birth = " << stu.Dob.day << "-" << stu.Dob.month << "-" << stu.Dob.year << endl;
-    cout << "Your social ID = " << stu.socialID << endl;
-    cout << "-----------------" << endl;
-    return;
+    clrscr(); // Heading();
+    cout << "\n\n\t\t\t\t\t\t   ";
+
+    for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " " << stu.Name << " "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
+    cout << "\n\n";
+
+    gotoxy(50, 10 + 2); cout << "Student ID: " << stu.ID;
+    gotoxy(50, 10 + 4); cout << "Full name: " << stu.Name;
+    gotoxy(50, 10 + 6); cout << "Gender: " << stu.Gender;
+    gotoxy(50, 10 + 8); cout << "Date of Birth: " << stu.Dob.day << "-" << stu.Dob.month << "-" << stu.Dob.year;
+    gotoxy(50, 10 + 10); cout << "Social ID: " << stu.socialID ;
+
+    cout << "\n\n";
+    for (int rep = 1; rep <= 120; rep++) cout << char(220); cout << endl;
 }
