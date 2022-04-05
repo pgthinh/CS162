@@ -444,7 +444,16 @@ void My_Score(const List &l)
         getline(FileIn, str3);
         cout << "---------------------" << endl;
         cout << "Score of " << node->course.CourseID << endl;
-        cout << str3 << endl;
+        for (int i = 0; i < str3.length(); i++)
+        {
+            if (str3[i] == ',')
+            {
+                cout << " | ";
+                continue;
+            }
+            cout << str3[i];
+        }
+        cout << endl;
 
         bool Check = false;
         while (FileIn.eof() == false)
