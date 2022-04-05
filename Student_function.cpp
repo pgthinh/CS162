@@ -443,7 +443,7 @@ void My_Score(const List &l)
     Node* node = l.pHead;
     while (node != NULL)
     {
-        string strpath = pathfixed + "/" + to_string(year) + "/" + to_string(year) + "_" + to_string(semester) + "/" + node->course.CourseID + ".csv";
+        string strpath = pathfixed + "/" + to_string(year) + "/"  + to_string(semester) + "/" + node->course.CourseID + ".csv";
         FileIn.open(strpath, ios_base::in);
         string str3;
         getline(FileIn, str3);
