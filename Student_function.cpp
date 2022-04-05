@@ -173,8 +173,8 @@ void Read_My_Course_From_TXT(List& l)
 {
     ifstream FileIn;
     FileIn.open("MyCourse.txt", ios_base::in);
-    int numbers_of_course = 0;
-    while (!FileIn.eof())
+    int numbers_of_course;
+    /*while (!FileIn.eof())
     {
         Course course;
         getline(FileIn, course.CourseID);
@@ -190,10 +190,12 @@ void Read_My_Course_From_TXT(List& l)
         getline(FileIn,course.SecondSessionOfWeek,'\n');
         numbers_of_course++;
      //   cout << "1" << " ";
+    }*/
+    FileIn >> numbers_of_course;
+    if (numbers_of_course == 0)
+    {
+        return;
     }
-
-    FileIn.close();
-    FileIn.open("MyCourse.txt", ios_base::in);
     Course* course = new Course[numbers_of_course];
     for (int i = 0; i < numbers_of_course; i++)
     {
@@ -428,7 +430,12 @@ void My_Score(const List &l)
     cout << "Input year = "; cin >> year;
     int semester;
     cout << "Input semester = "; cin >> semester;
-
+    if (l.pHead == NULL)
+    {
+        cout << "You have not registered any course yet" << endl;
+        system("pause");
+        return;
+    }
     Node* node = l.pHead;
     while (node != NULL)
     {
@@ -438,7 +445,16 @@ void My_Score(const List &l)
         getline(FileIn, str3);
         cout << "---------------------" << endl;
         cout << "Score of " << node->course.CourseID << endl;
-        cout << str3 << endl;
+        for (int i = 0; i < str3.length(); i++)
+        {
+            if (str3[i] == ',')
+            {
+                cout << " | ";
+                continue;
+            }
+            cout << str3[i];
+        }
+        cout << endl;
 
         bool Check = false;
         while (FileIn.eof() == false)
@@ -465,7 +481,25 @@ void My_Score(const List &l)
             if (ID1 == ID)
             {
                 Check = true;
-                cout << str3 << endl;
+                while (i < str3.length())
+                {
+                    if (str3[i] == ',')
+                    {
+                        cout << " ";
+                        i++;
+                        continue;
+                    }
+                    cout << " ";
+                    while (str3[i] != ',')
+                    {
+                        cout << str3[i];
+                        i++;
+                        if (i == str3.length())
+                        {
+                            break;
+                        }
+                    }
+                }
                 break;
             }
 
@@ -479,6 +513,7 @@ void My_Score(const List &l)
         FileIn.close();
         node = node->pNext;
     }
+    cout << endl;
 }
 void Show_Profile()
 {
