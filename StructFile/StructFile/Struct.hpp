@@ -1,9 +1,11 @@
-
-
 #ifndef Struct_hpp
 #define Struct_hpp
 
 #include <iostream>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <direct.h>
 
 using namespace std;
 
@@ -12,6 +14,7 @@ struct Time {
     int month;
     int year;
     Time(int day, int month, int year) : day(day), month(month), year(year) {};
+    Time() {};
 };
 struct Year {
     int NumberOfYear;
@@ -86,8 +89,9 @@ struct User{
 };
 
 // Functions used to delete doubly linked list.
-void DeleteClassList(Class*& class);
+void DeleteClassList(Class*& classList);
 void DeleteStudentList(Student*& student);
-void DeleteCourseList(Course*& courseList);
+void DeleteCourseList(Course* &courseList);
 void DeleteMarkList(Mark*& mark);
+// Functions used to delete doubly linked list.
 #endif /* Struct_hpp */
