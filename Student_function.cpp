@@ -173,8 +173,8 @@ void Read_My_Course_From_TXT(List& l)
 {
     ifstream FileIn;
     FileIn.open("MyCourse.txt", ios_base::in);
-    int numbers_of_course = 0;
-    while (!FileIn.eof())
+    int numbers_of_course;
+    /*while (!FileIn.eof())
     {
         Course course;
         getline(FileIn, course.CourseID);
@@ -193,7 +193,12 @@ void Read_My_Course_From_TXT(List& l)
     }
 
     FileIn.close();
-    FileIn.open("MyCourse.txt", ios_base::in);
+    FileIn.open("MyCourse.txt", ios_base::in);*/
+    FileIn >> numbers_of_course;
+    if (numbers_of_course == 0)
+    {
+        return;
+    }
     Course* course = new Course[numbers_of_course];
     for (int i = 0; i < numbers_of_course; i++)
     {
@@ -480,7 +485,26 @@ void My_Score(const List &l)
             if (ID1 == ID)
             {
                 Check = true;
-                cout << str3 << endl;
+                int i = 0;
+                while (i < str3.length())
+                {
+                    if (str3[i] == ',')
+                    {
+                        cout << " ";
+                        i++;
+                        continue;
+                    }
+                    cout << " ";
+                    while (str3[i] != ',')
+                    {
+                        cout << str3[i];
+                        i++;
+                        if (i == str3.length())
+                        {
+                            break;
+                        }
+                    }
+                }
                 break;
             }
 
