@@ -406,6 +406,12 @@ void Menu(List& l)
 // Hàm xem điểm từ file - Check tên người dùng
 void My_Score(const List &l)
 {
+    if (l.pHead == NULL)
+    {
+        cout << "You have not registered any course yet" << endl;
+        system("pause");
+        return;
+    }
     ifstream FileIn;
     string pathfixed = "csvFile";
     clrscr(); //Heading();
