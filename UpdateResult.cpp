@@ -28,7 +28,7 @@ bool Find_ID(int year,int term,string CourseID, string student_id)
 	if (id == student_id) return true;
 	return false;
 }
-// 3. 
+// 3. Lấy điểm của học sinh trước khi update
 Mark getInitialMarkOfStudent(int year,int term, string CourseID,string studentID){
 	Mark score;
 	Course courseList;
@@ -42,10 +42,12 @@ Mark getInitialMarkOfStudent(int year,int term, string CourseID,string studentID
 	fin.close();
 	return score;
 }
+// 4. Sau khi update finalMark, midtermMark, otherMark thì tính totalMark cho học sinh đó
 Mark markAfterUpdate(Mark& score){
 	score.totalMark = score.finalMark / 10 * 5 + score.midtermMark / 10 * 3 + score.otherMark / 10 * 2;
 	return score;
 }
+// 5. Thay đổi data điểm ở vài file txt sau khi update
 void ChangeMarkFileAfterUpdate(int year,int term,Mark& changeMark,string CourseID,string studentID){
 	// change in year/semester/students/studentID/marks.txt
 	Mark* first_mark = new Mark; Mark* mark_cur = first_mark;
