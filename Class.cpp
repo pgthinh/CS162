@@ -1,18 +1,17 @@
 #include "Class.h"
-#include "Console.h"
 
-// 1. tạo lớp mới
+// 1. tạo lớp mới 
  void createClass(string className){
     string path = "CLASS/" + className;
     _mkdir(path.c_str());
-
+    
     path="CLASS/classList.txt";
     ofstream fout;
 	fout.open(path, std::fstream::app);
-    fout << className << endl;
+    fout << className;
     fout.close();
 }
-// 2. lấy list các class trong classList.txt
+// 2. lấy list các class trong classList.txt 
 void getClasses(Class*& first_class){
     string path = "CLASS/classList.txt";
     ifstream fin(path);
@@ -29,7 +28,7 @@ void getClasses(Class*& first_class){
 	delete temp;
     fin.close();
 }
-// 3. chọn lớp để truy cập
+// 3. chọn lớp để truy cập 
 void setCurrentClass(string className){
     string path = "DATA/cache/currentClass.txt";
     ofstream fout(path);
@@ -45,19 +44,20 @@ string getCurrentClass(){
     fin.close();
     return className;
 }
-// 5. thêm học sinh vào trong class từ csv file
-void addStudents(string className,Student*& students){
-    importStudents(className,students);
+// 5. thêm học sinh vào trong class từ csv file 
+void addStudents(string className){
+    Student* studentList;
+    importStudents(className, studentList);
     string path = "CLASS/" + className + "/studentList.txt";
-    ofstream fout(path);
-    Student* student_cur = students;
+    ofstream fout; fout.open(path);
+    Student* student_cur = studentList;
     while(student_cur){
         fout << student_cur->ID << endl;
         /*addAccount(User(student_cur->ID,student_cur->SocialID,"student",className));*/
-        student_cur = student_cur->next_Student;
+        student_cur = student_cur->next_Student; 
     }
     fout.close();
-    student_cur = students;
+    student_cur = studentList;
     while(student_cur){
         path = "CLASS/"+ className + "/" + student_cur->ID + ".txt";
         fout.open(path);
@@ -65,20 +65,20 @@ void addStudents(string className,Student*& students){
         fout << student_cur->ID << endl;
         fout << student_cur->Name << endl;
         fout << student_cur->Gender << endl;
-        fout << student_cur->Gender << endl;
-        fout << student_cur->Dob.day << student_cur->Dob.month << student_cur->Dob.year << endl;
-        fout << student_cur->socialID << endl;
+        fout << student_cur->Dob.day << ' ' << student_cur->Dob.month << ' ' << student_cur->Dob.year << endl;
+        fout << student_cur->socialID;
         fout.close();
         student_cur = student_cur->next_Student;
     }
+    DeleteStudentList(studentList);
 }
 // 6. lấy thông tin học sinh trong class từ csv file -> add students + view students cho staff và học sinh
 void importStudents(string className,Student*& students){
+    students = new Student;
     Student* student_cur = students;
-
     string path = "csvFile/classes/" + className + ".csv";
     ifstream fin; fin.open(path, ios::in);
-    string sub; getline(fin,sub);
+    string sub; getline(fin,sub,'\n');
     while( fin >> student_cur->No) {
          fin.ignore();
          getline(fin,student_cur->ID,',');
@@ -89,13 +89,11 @@ void importStudents(string className,Student*& students){
          fin >> student_cur->Dob.year; fin.ignore();
          getline(fin,student_cur->socialID,'\n');
 
-         if (students == NULL) students = student_cur;
-
          fstream fout("CLASS/" + className + "/" + student_cur->ID + ".txt");
          fout << student_cur->No << "\n" << student_cur->ID << "\n" << student_cur->Name << "\n" << student_cur->Gender << "\n";
          fout << student_cur->Dob.day << " " << student_cur->Dob.month << " " << student_cur->Dob.year << "\n" << student_cur->socialID;
          fout.close();
-
+         
          student_cur->next_Student = new Student;
          student_cur->next_Student->previous_Student = student_cur;
          student_cur = student_cur->next_Student;
@@ -106,7 +104,7 @@ void importStudents(string className,Student*& students){
     delete temp;
     fin.close();
 }
-// 7. Lấy list ID của các học sinh trong 1 class
+// 7. Lấy list ID của các học sinh trong 1 class 
 void getStudentList(string className, Student*& studentList) {
 	string path = "CLASS/" + className + "/studentList.txt";
 	ifstream fin(path);
@@ -157,9 +155,10 @@ void getStudents(string className,Student*& students){
     DeleteStudentList(studentList);
 }
 // VIEW SCOREBOARD
-// 9. Lấy list course và list điểm tương ứng với từng course, của 1 học sinh
-void getStudentScoreboard(int year, int term, string studentID, Course*& courseList, Mark*& mark) {
-    Mark* mark_cur = mark;
+// 9. Lấy list course và list điểm tương ứng với từng course, của 1 học sinh 
+void getStudentScoreboard(int year, int term, string studentID, Course*& courseList, Mark*& markList) {
+    courseList = new Course; markList = new Mark;
+    Mark* mark_cur = markList;
     Course* courseList_cur = courseList;
     string path = "DATA/" + to_string(year) + "/" + to_string(term) + "/students/" + studentID + "/marks.txt";
     ifstream fin(path);
@@ -182,9 +181,9 @@ void getStudentScoreboard(int year, int term, string studentID, Course*& courseL
     mark_cur->next_Mark = nullptr;
     delete temp2;
 }
-//11. Tính overall GPA của học sinh
-float getStudentGPA(string studentID, string className) {
-    string path = "DATA/" + to_string(getCurrentYear()) + "/" + to_string(getCurrentSemester().TheOrderOfSemester) + "/students/" + studentID + "/marks.txt";
+//11. Tính overall GPA của học sinh  
+float getStudentGPA(string studentID,int year,int term) {
+    string path = "DATA/" + to_string(year) + "/" + to_string(term) + "/students/" + studentID + "/marks.txt";
     ifstream fin(path);
     Mark mark; string course;
     float sum = 0;
@@ -197,6 +196,7 @@ float getStudentGPA(string studentID, string className) {
     float GPA = cnt > 0 ? sum / cnt : 0;
     return GPA / 10 * 4;
 }
+
 
 void ClassMenu(){
     clrscr(); //Heading();
