@@ -37,16 +37,33 @@ struct Time {
     int month;
     int year;
 };
+struct Mark {
+	float totalMark;
+	float finalMark;
+	float midtermMark;
+	float otherMark;
+    Mark* previous_Mark = nullptr;
+    Mark* next_Mark = nullptr;
+
+	Mark(float totalMark, float finalMark, float midtermMark, float otherMark) :
+		totalMark(totalMark), finalMark(finalMark), midtermMark(midtermMark), otherMark(otherMark) {};
+	Mark() {};
+};
 struct Student {
     int No;
     string ID; // Username when login to the system
-    //string Password;
+    string Password;
     string Name;
     string Gender;
     Time Dob;
     string socialID;
+    string className;
     Student* previous_Student = NULL;
     Student* next_Student = NULL;
+    Mark mark;
+    Student(int No, string ID, string Password, string Name, string Gender, Time Dob, string socialID, string className, Mark mark) :
+        No(No), ID(ID), Name(Name), Gender(Gender), Dob(Dob), socialID(socialID), className(className), mark(mark) {};
+    Student() {};
 };
 
 void InnitList(List& l);
