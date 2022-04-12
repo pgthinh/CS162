@@ -169,38 +169,28 @@ void AddCourse(List& l)
     }
 }
 // Đọc từ file xem đã chọn sẵn những hàm nào
-void Read_My_Course_From_TXT(List& l)
+void Read_My_Course_From_TXT(List& l, string& path)
 {
     ifstream FileIn;
-    FileIn.open("MyCourse.txt", ios_base::in);
-    int numbers_of_course;
+    int year, semester, student_ID;
+    cout << "Input year = "; cin >> year;
+    cout << "Input semester = "; cin >> semester;
+    cout << "Input student_ID = "; cin >> student_ID;
 
-    FileIn >> numbers_of_course;
-    if (numbers_of_course == 0)
-    {
-        return;
-    }
-    Course* course = new Course[numbers_of_course];
-    for (int i = 0; i < numbers_of_course; i++)
-    {
-        getline(FileIn, course[i].CourseID);
-        getline(FileIn, course[i].CourseName);
-        getline(FileIn, course[i].TeacherName);
-        FileIn >> course[i].NumberOfCredits;
-        FileIn >> course[i].MaxNumOfStudent;
-        FileIn.ignore(1);
-        getline(FileIn,course[i].FirstDayOfWeek,' ');
-        getline(FileIn,course[i].FirstSessionOfWeek,'\n');
-        getline(FileIn,course[i].SecondDayOfWeek,' ');
-        getline(FileIn,course[i].SecondSessionOfWeek,'\n');
-    }
-
+    path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/students/" + to_string(student_ID) + "/" + "courses.txt";
+    FileIn.open(path, ios_base::in);
     InnitList(l);
-    for (int i = 0; i < numbers_of_course; i++)
+    while (FileIn.eof() != true)
     {
-        Add_Course(l, course[i]);
+        Course* course = new Course[1];
+        getline(FileIn, course[0].CourseID, '-');
+        getline(FileIn, course[0].TeacherName, '-');
+        getline(FileIn, course[0].FirstSessionOfWeek, '-');
+        getline(FileIn, course[0].SecondSessionOfWeek);
+        Add_Course(l, course[0]);
     }
     FileIn.close();
+    system("pause");
 }
 // Show thông tin về những course đã chọn
 void Show_My_course(const List &l)
@@ -235,12 +225,12 @@ void Show_My_course(const List &l)
         {
             gotoxy(2, 15 + i * 2); cout << i+ 1 << ". ";
             gotoxy(6 + 1, 15 + i * 2); cout << node->course.CourseID ;
-            gotoxy(17 + 1, 15 + i * 2); cout << node->course.CourseName;
+            /*gotoxy(17 + 1, 15 + i * 2); cout << node->course.CourseName;*/
             gotoxy(54 + 1, 15 + i * 2); cout << node->course.TeacherName;
-            gotoxy(77 + 1, 15 + i * 2); cout << node->course.NumberOfCredits ;
-            gotoxy(89 + 1, 15 + i * 2); cout << node->course.MaxNumOfStudent ;
-            gotoxy(99 + 1, 15 + i * 2); cout << node->course.FirstDayOfWeek << " " << node->course.FirstSessionOfWeek;
-            gotoxy(109 + 1, 15 + i * 2); cout << node->course.SecondDayOfWeek << " " << node->course.SecondSessionOfWeek;
+            /*gotoxy(77 + 1, 15 + i * 2); cout << node->course.NumberOfCredits ;*/
+            /*gotoxy(89 + 1, 15 + i * 2); cout << node->course.MaxNumOfStudent ;*/
+            gotoxy(99 + 1, 15 + i * 2); cout /*<< node->course.FirstDayOfWeek << " "*/ << node->course.FirstSessionOfWeek;
+            gotoxy(109 + 1, 15 + i * 2); cout /*<< node->course.SecondDayOfWeek << " "*/ << node->course.SecondSessionOfWeek;
             i++;
             node = node->pNext;
         }

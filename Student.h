@@ -37,43 +37,26 @@ struct Time {
     int month;
     int year;
 };
-struct Mark {
-	float totalMark;
-	float finalMark;
-	float midtermMark;
-	float otherMark;
-    Mark* previous_Mark = nullptr;
-    Mark* next_Mark = nullptr;
-
-	Mark(float totalMark, float finalMark, float midtermMark, float otherMark) :
-		totalMark(totalMark), finalMark(finalMark), midtermMark(midtermMark), otherMark(otherMark) {};
-	Mark() {};
-};
 struct Student {
     int No;
     string ID; // Username when login to the system
-    string Password;
+    //string Password;
     string Name;
     string Gender;
     Time Dob;
     string socialID;
-    string className;
     Student* previous_Student = NULL;
     Student* next_Student = NULL;
-    Mark mark;
-    Student(int No, string ID, string Password, string Name, string Gender, Time Dob, string socialID, string className, Mark mark) :
-        No(No), ID(ID), Name(Name), Gender(Gender), Dob(Dob), socialID(socialID), className(className), mark(mark) {};
-    Student() {};
 };
 
 void InnitList(List& l);
 Node* CreatNode(Course course);
 void Add_Course(List& l, const Course& course);
 void AddCourse(List& l);
-void Read_My_Course_From_TXT(List& l);
-void Show_My_course(const List &l);
+void Read_My_Course_From_TXT(List& l, string& path);
+void Show_My_course(const List& l);
 void Remove_A_Course(List& l);
-void Menu(List& l);
-void My_Score(const List &l);
-void Write_To_My_Course(const List& l);
+void Menu(List& l, string path);
+void My_Score(const List& l);
+void Write_To_My_Course(const List& l, string path);
 void Show_Profile();
