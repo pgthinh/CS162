@@ -305,29 +305,20 @@ void Remove_A_Course(List& l)
     }
 }
 // Hàm ghi course ra file
-void Write_To_My_Course(const List &l)
+void Write_To_My_Course(const List& l, string path)
 {
     ofstream FileOut;
-    FileOut.open("MyCourse.txt", ios_base::out);
-    int count = 0;
+    FileOut.open(path, ios_base::out);
     Node* node = l.pHead;
-    while (node != NULL)
-    {
-        count ++;
-        node = node->pNext;
-    }
-  //  FileOut << count << endl;
-    node = l.pHead;
     while (node)
     {
-        FileOut << node->course.CourseID << endl;
-        FileOut << node->course.CourseName << endl;
-        FileOut << node->course.TeacherName << endl;
-        FileOut << node->course.NumberOfCredits << endl;
-        FileOut << node->course.MaxNumOfStudent << endl;
-        FileOut << node->course.FirstDayOfWeek << " " << node->course.FirstSessionOfWeek << endl;
-        if (node->pNext == NULL) FileOut << node->course.SecondDayOfWeek<<" "<<node->course.SecondSessionOfWeek;
-        else FileOut << node->course.SecondDayOfWeek<<" "<<node->course.SecondSessionOfWeek << endl;
+        FileOut << node->course.CourseID << "-";
+        //FileOut << node->course.CourseName << endl;
+        FileOut << node->course.TeacherName << "-";
+        //FileOut << node->course.NumberOfCredits << endl;
+        //FileOut << node->course.MaxNumOfStudent << endl;
+        FileOut /*<< node->course.FirstDayOfWeek << " "*/ << node->course.FirstSessionOfWeek << "-";
+        FileOut /*<< node->course.SecondDayOfWeek << " "*/ << node->course.SecondSessionOfWeek;
         node = node->pNext;
     }
     FileOut.close();
