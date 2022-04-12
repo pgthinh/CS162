@@ -1,5 +1,5 @@
 #include "Class.h"
-
+ 
 // 1. tạo lớp mới 
  void createClass(string className){
     string path = "CLASS/" + className;
@@ -45,15 +45,13 @@ string getCurrentClass(){
     return className;
 }
 // 5. thêm học sinh vào trong class từ csv file 
-void addStudents(string className){
-    Student* studentList;
+void addStudents(string className,Student* &studentList){
     importStudents(className, studentList);
     string path = "CLASS/" + className + "/studentList.txt";
     ofstream fout; fout.open(path);
     Student* student_cur = studentList;
     while(student_cur){
         fout << student_cur->ID << endl;
-        /*addAccount(User(student_cur->ID,student_cur->SocialID,"student",className));*/
         student_cur = student_cur->next_Student; 
     }
     fout.close();
@@ -70,7 +68,6 @@ void addStudents(string className){
         fout.close();
         student_cur = student_cur->next_Student;
     }
-    DeleteStudentList(studentList);
 }
 // 6. lấy thông tin học sinh trong class từ csv file -> add students + view students cho staff và học sinh
 void importStudents(string className,Student*& students){
@@ -195,67 +192,4 @@ float getStudentGPA(string studentID,int year,int term) {
     fin.close();
     float GPA = cnt > 0 ? sum / cnt : 0;
     return GPA / 10 * 4;
-}
-
-
-void ClassMenu(){
-    clrscr(); //Heading();
-    cout << "\n\n\t\t\t\t\t\t";
-    for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " CLASS MENU "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
-    cout << "\n\n";
-    cout << "\t\t\t\t\t      1. Create classes\n\n";
-    cout << "\t\t\t\t\t      2. Choose a class to manage\n\n";
-    cout << "\t\t\t\t\t      3. Go back\n\n";
-    for (int rep = 1; rep <= 120; rep++) cout << char(220); cout << endl;
-
-    fflush(stdin);
-    int choice; string className;
-    cout << "\n\t\t\t\t\t\t  Selection : "; cin >> choice;
-    switch (choice) {
-        case 1: {
-            clrscr(); //Heading();
-            cout << "\n\n\t\t\t\t\t      ";
-            for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " CREATE CLASS "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
-            cout << "\n\n";
-            cout << "\t\t\t\t\t\tClass name : ";
-            cin >> className;
-            createClass(className);
-            SetColor(10);
-            cout << "\n\t\t\t\t\t        Create successfully ";
-            SetColor(15);
-            delay(1500);
-            break;
-        }
-        case 2: {
-            clrscr(); //Heading();
-            cout << "\n\n\t\t\t\t\t\t   ";
-            for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " CLASS MANAGE "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
-            cout << "\n\n";
-            cout << "\t\t\t\t\t\t     1. Add students\n\n";
-            cout << "\t\t\t\t\t\t     2. View students\n\n";
-            cout << "\t\t\t\t\t\t     3. View scoreboard\n\n";
-            cout << "\t\t\t\t\t\t     4. Go back\n\n";
-            for (int rep = 1; rep <= 120; rep++) cout << char(220); cout << endl;
-            int select;
-            cout << "\n\t\t\t\t\t\t     Selection : "; cin >> select;
-            switch (select){
-                case 1:{
-                    clrscr();
-                    Student* students = NULL;
-                    cout << "\n\n\t\t\t\t\t\t   Class name : ";
-                    cin >> className;
-                  //  addStudents(className,students);
-                    SetColor(10);
-                    cout << "\n\n\t\t\t\t\t\t     Add successfully";
-                    SetColor(15);
-                    delay(1500);
-                    _getch();
-                    break;
-                }
-            }
-            break;
-        }
-    case 3: return;
-    default: cout << "\n\t\t\t\t\t\tInvalid choice"; delay(1500);
-    }
 }
