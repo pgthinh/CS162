@@ -31,7 +31,11 @@ void Add_Course(List& l, const Course& course)
 void AddCourse(List& l)
 {
     ifstream FileIn;
-    FileIn.open("DATA/2021/1/course_list/courseList.txt", ios_base::in);
+    int year, semester;
+    cout << "Input year = "; cin >> year;
+    cout << "Input semeter = "; cin >> semester;
+    string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/courseList.txt";
+    FileIn.open(path, ios_base::in);
     int numbers_of_course = 0;
     while (!FileIn.eof())
     {
@@ -40,7 +44,7 @@ void AddCourse(List& l)
         numbers_of_course++;
     }
     FileIn.close();
-    FileIn.open("DATA/2021/1/course_list/courseList.txt", ios_base::in);
+    FileIn.open(path, ios_base::in);
     Course* course = new Course[numbers_of_course];
     // đọc dữ liệu hàm từ file để in ra cho người dùng chọn
     for (int i = 0; i < numbers_of_course; i++)
@@ -50,7 +54,7 @@ void AddCourse(List& l)
     FileIn.close();
     for (int i = 0; i < numbers_of_course; i++)
     {
-        string strpath = "DATA/2021/1/course_list/" + course[i].CourseID+"/"+"info.txt";
+        string strpath = "DATA/"+to_string(year) + "/" + to_string(semester)+"/course_list/"  + course[i].CourseID+" / "+"info.txt";
         FileIn.open(strpath, ios_base::in);
         getline(FileIn, course[i].CourseID);
         getline(FileIn, course[i].CourseName);
