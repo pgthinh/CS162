@@ -320,11 +320,11 @@ void ClassMenu(){
                         for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " Scoreboard "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
                         cout << "\n\n";
                         int year, semester;
-                        cout << "\n\n\t\t\t\t\t\t   Year : ";
+                        cout << "\n\t\t\t\t\t\t   Year : ";
                         cin >> year;
-                        cout << "\n\n\t\t\t\t\t\t   Semester : ";
+                        cout << "\n\t\t\t\t\t\t   Semester : ";
                         cin >> semester;
-                        cout << "\n\n\t\t\t\t\t\t   Class name : "; cin.ignore();
+                        cout << "\n\t\t\t\t\t\t   Class name : "; cin.ignore();
                         cin >> className;
                         Student* students;
                         importStudents(className,students);
