@@ -189,8 +189,25 @@ void Read_My_Course_From_TXT(List& l, string& path)
         Course* course = new Course[1];
         getline(FileIn, course[0].CourseID, '-');
         getline(FileIn, course[0].TeacherName, '-');
-        getline(FileIn, course[0].FirstSessionOfWeek, '-');
-        getline(FileIn, course[0].SecondSessionOfWeek);
+        string str;
+        getline(FileIn, str, '-');
+        for (int i = 0; i < 3; i++)
+        {
+            course[0].FirstDayOfWeek += str[i];
+        }
+        for (int i = 3; i < str.length(); i++)
+        {
+            course[0].FirstSessionOfWeek += str[i];
+        }
+        getline(FileIn, str);
+        for (int i = 0; i < 3; i++)
+        {
+            course[0].SecondDayOfWeek += str[i];
+        }
+        for (int i = 3; i < str.length(); i++)
+        {
+            course[0].SecondSessionOfWeek += str[i];
+        }
         Add_Course(l, course[0]);
     }
     FileIn.close();
