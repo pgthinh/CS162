@@ -230,14 +230,14 @@ void Show_My_course(const List &l)
         gotoxy(2, 12); cout << "No";
         gotoxy(6, 12); cout << " Course ID";
         gotoxy(6, 13); cout << " ";
-        gotoxy(17, 12); cout << " Course name";
+        //gotoxy(17, 12); cout << " Course name";
         gotoxy(17, 13); cout << " ";
         gotoxy(54, 12); cout << " Instructor";
         gotoxy(54, 13); cout << " ";
-        gotoxy(77, 12); cout << " Number of";
-        gotoxy(77, 13); cout << " credits";
-        gotoxy(89, 12); cout << " Maximum";
-        gotoxy(89, 13); cout << " student";
+       // gotoxy(77, 12); cout << " Number of";
+        //gotoxy(77, 13); cout << " credits";
+        //gotoxy(89, 12); cout << " Maximum";
+        //gotoxy(89, 13); cout << " student";
         gotoxy(99, 12); cout << " First";
         gotoxy(99, 13); cout << " session";
         gotoxy(109, 12); cout << " Second";
@@ -328,8 +328,8 @@ void Write_To_My_Course(const List& l, string path)
         FileOut << node->course.TeacherName << "-";
         //FileOut << node->course.NumberOfCredits << endl;
         //FileOut << node->course.MaxNumOfStudent << endl;
-        FileOut /*<< node->course.FirstDayOfWeek << " "*/ << node->course.FirstSessionOfWeek << "-";
-        FileOut /*<< node->course.SecondDayOfWeek << " "*/ << node->course.SecondSessionOfWeek;
+        FileOut << node->course.FirstDayOfWeek << node->course.FirstSessionOfWeek << "-";
+        FileOut << node->course.SecondDayOfWeek << node->course.SecondSessionOfWeek;
         node = node->pNext;
     }
     FileOut.close();
