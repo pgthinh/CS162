@@ -45,8 +45,8 @@ Mark* getInitialMarkOfStudent(string& CourseID,string& studentID){
 	fin.close();
 	return mark;
 }
-Mark* markAfterUpdate(Mark*& mark){
-	mark->totalMark = mark->finalMark / 10 * 5 + mark->midtermMark / 10 * 3 + mark->otherMark / 10 * 2;
+Mark markAfterUpdate(Mark& mark){
+	mark.totalMark = mark.finalMark / 10 * 5 + mark.midtermMark / 10 * 3 + mark.otherMark / 10 * 2;
 	return mark;
 }
 void ChangeMarkFileAfterUpdate(Mark& changeMark,string& CourseID,string& studentID){
@@ -71,6 +71,7 @@ void ChangeMarkFileAfterUpdate(Mark& changeMark,string& CourseID,string& student
 		course_cur = course_cur->next_Course;
 	}
 	fin.close();
+
     Mark* temp1 = mark_cur;
 	mark_cur = mark_cur->previous_Mark;
 	mark_cur->next_Mark = nullptr;
@@ -90,10 +91,11 @@ void ChangeMarkFileAfterUpdate(Mark& changeMark,string& CourseID,string& student
 	}
 	DeleteCourseList(first_course);  DeleteMarkList(first_mark);
 	fout.close();
+
 	// change in year/semester/course_list/CourseID/marks.txt
 	Student* first_student = new Student;  Student* student_cur = first_student;
 	first_mark = new Mark;  mark_cur = first_mark;
-	path = "DATA / " + to_string(getCurrentYear()) + '/' + to_string(getCurrentSemester().TheOrderOfSemester) + "/ course_list /" + CourseID + "/ marks.txt";
+	path = "DATA/" + to_string(getCurrentYear()) + '/' + to_string(getCurrentSemester().TheOrderOfSemester) + "/course_list/" + CourseID + "/marks.txt";
     fin.open(path);
 	while(fin >> student_cur->ID >> mark_cur->totalMark >> mark_cur->finalMark >> mark_cur->midtermMark >> mark_cur->otherMark >> student_cur->Name){
 		if(student_cur->ID == studentID){
@@ -111,6 +113,7 @@ void ChangeMarkFileAfterUpdate(Mark& changeMark,string& CourseID,string& student
 		student_cur = student_cur->next_Student;
 	}
 	fin.close();
+
 	Mark* temp3 = mark_cur;
 	mark_cur = mark_cur->previous_Mark;
 	mark_cur->next_Mark = nullptr;
@@ -209,7 +212,28 @@ void StudentManagement(){
                     gotoxy(57 + based, 12); cout << "Other";
                     gotoxy(57 + based, 14); cout << mark->otherMark;
                 }
+                else {
+                    SetColor(12);
+                    cout << "\n\t\t\t\t\t\t    Can not find";
+                    SetColor(15);
+                }
                 _getch();
+                Mark changeMark;
+
+                cout << "\n\n\n\t\t\t\t\t\t Final mark: ";
+                cin >> changeMark.finalMark;
+                cout << "\n\t\t\t\t\t\t Midterm mark: ";
+                cin >> changeMark.midtermMark;
+                cout << "\n\t\t\t\t\t\t Other mark: ";
+                cin >> changeMark.otherMark;
+
+                changeMark = markAfterUpdate(changeMark);
+                ChangeMarkFileAfterUpdate(changeMark,CourseID,StudentID);
+
+                SetColor(10);
+                cout << "\n\t\t\t\t\t      Changed successfully";
+                SetColor(15);
+                delay(1500);
                 break;
             }
             case 2: return;
@@ -217,3 +241,5 @@ void StudentManagement(){
         }
     }
 }
+
+
