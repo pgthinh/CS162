@@ -31,11 +31,7 @@ void Add_Course(List& l, const Course& course)
 void AddCourse(List& l)
 {
     ifstream FileIn;
-    int year, semester;
-    cout << "Input year = "; cin >> year;
-    cout << "Input semeter = "; cin >> semester;
-    string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/courseList.txt";
-    FileIn.open(path, ios_base::in);
+    FileIn.open("DATA/2021/1/course_list/courseList.txt", ios_base::in);
     int numbers_of_course = 0;
     while (!FileIn.eof())
     {
@@ -44,7 +40,7 @@ void AddCourse(List& l)
         numbers_of_course++;
     }
     FileIn.close();
-    FileIn.open(path, ios_base::in);
+    FileIn.open("DATA/2021/1/course_list/courseList.txt", ios_base::in);
     Course* course = new Course[numbers_of_course];
     // đọc dữ liệu hàm từ file để in ra cho người dùng chọn
     for (int i = 0; i < numbers_of_course; i++)
@@ -54,7 +50,7 @@ void AddCourse(List& l)
     FileIn.close();
     for (int i = 0; i < numbers_of_course; i++)
     {
-        string strpath = "DATA/"+to_string(year) + "/" + to_string(semester)+"/course_list/"  + course[i].CourseID+" / "+"info.txt";
+        string strpath = "DATA/2021/1/course_list/" + course[i].CourseID+"/"+"info.txt";
         FileIn.open(strpath, ios_base::in);
         getline(FileIn, course[i].CourseID);
         getline(FileIn, course[i].CourseName);
@@ -173,45 +169,38 @@ void AddCourse(List& l)
     }
 }
 // Đọc từ file xem đã chọn sẵn những hàm nào
-void Read_My_Course_From_TXT(List& l, string& path)
+void Read_My_Course_From_TXT(List& l)
 {
     ifstream FileIn;
-    int year, semester, student_ID;
-    cout << "Input year = "; cin >> year;
-    cout << "Input semester = "; cin >> semester;
-    cout << "Input student_ID = "; cin >> student_ID;
+    FileIn.open("MyCourse.txt", ios_base::in);
+    int numbers_of_course;
 
-    path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/students/" + to_string(student_ID) + "/" + "courses.txt";
-    FileIn.open(path, ios_base::in);
-    InnitList(l);
-    while (FileIn.eof() != true)
+    FileIn >> numbers_of_course;
+    if (numbers_of_course == 0)
     {
-        Course* course = new Course[1];
-        getline(FileIn, course[0].CourseID, '-');
-        getline(FileIn, course[0].TeacherName, '-');
-        string str;
-        getline(FileIn, str, '-');
-        for (int i = 0; i < 3; i++)
-        {
-            course[0].FirstDayOfWeek += str[i];
-        }
-        for (int i = 3; i < str.length(); i++)
-        {
-            course[0].FirstSessionOfWeek += str[i];
-        }
-        getline(FileIn, str);
-        for (int i = 0; i < 3; i++)
-        {
-            course[0].SecondDayOfWeek += str[i];
-        }
-        for (int i = 3; i < str.length(); i++)
-        {
-            course[0].SecondSessionOfWeek += str[i];
-        }
-        Add_Course(l, course[0]);
+        return;
+    }
+    Course* course = new Course[numbers_of_course];
+    for (int i = 0; i < numbers_of_course; i++)
+    {
+        getline(FileIn, course[i].CourseID);
+        getline(FileIn, course[i].CourseName);
+        getline(FileIn, course[i].TeacherName);
+        FileIn >> course[i].NumberOfCredits;
+        FileIn >> course[i].MaxNumOfStudent;
+        FileIn.ignore(1);
+        getline(FileIn,course[i].FirstDayOfWeek,' ');
+        getline(FileIn,course[i].FirstSessionOfWeek,'\n');
+        getline(FileIn,course[i].SecondDayOfWeek,' ');
+        getline(FileIn,course[i].SecondSessionOfWeek,'\n');
+    }
+
+    InnitList(l);
+    for (int i = 0; i < numbers_of_course; i++)
+    {
+        Add_Course(l, course[i]);
     }
     FileIn.close();
-    system("pause");
 }
 // Show thông tin về những course đã chọn
 void Show_My_course(const List &l)
@@ -230,14 +219,14 @@ void Show_My_course(const List &l)
         gotoxy(2, 12); cout << "No";
         gotoxy(6, 12); cout << " Course ID";
         gotoxy(6, 13); cout << " ";
-        //gotoxy(17, 12); cout << " Course name";
+        gotoxy(17, 12); cout << " Course name";
         gotoxy(17, 13); cout << " ";
         gotoxy(54, 12); cout << " Instructor";
         gotoxy(54, 13); cout << " ";
-       // gotoxy(77, 12); cout << " Number of";
-        //gotoxy(77, 13); cout << " credits";
-        //gotoxy(89, 12); cout << " Maximum";
-        //gotoxy(89, 13); cout << " student";
+        gotoxy(77, 12); cout << " Number of";
+        gotoxy(77, 13); cout << " credits";
+        gotoxy(89, 12); cout << " Maximum";
+        gotoxy(89, 13); cout << " student";
         gotoxy(99, 12); cout << " First";
         gotoxy(99, 13); cout << " session";
         gotoxy(109, 12); cout << " Second";
@@ -246,12 +235,12 @@ void Show_My_course(const List &l)
         {
             gotoxy(2, 15 + i * 2); cout << i+ 1 << ". ";
             gotoxy(6 + 1, 15 + i * 2); cout << node->course.CourseID ;
-            /*gotoxy(17 + 1, 15 + i * 2); cout << node->course.CourseName;*/
+            gotoxy(17 + 1, 15 + i * 2); cout << node->course.CourseName;
             gotoxy(54 + 1, 15 + i * 2); cout << node->course.TeacherName;
-            /*gotoxy(77 + 1, 15 + i * 2); cout << node->course.NumberOfCredits ;*/
-            /*gotoxy(89 + 1, 15 + i * 2); cout << node->course.MaxNumOfStudent ;*/
-            gotoxy(99 + 1, 15 + i * 2); cout /*<< node->course.FirstDayOfWeek << " "*/ << node->course.FirstSessionOfWeek;
-            gotoxy(109 + 1, 15 + i * 2); cout /*<< node->course.SecondDayOfWeek << " "*/ << node->course.SecondSessionOfWeek;
+            gotoxy(77 + 1, 15 + i * 2); cout << node->course.NumberOfCredits ;
+            gotoxy(89 + 1, 15 + i * 2); cout << node->course.MaxNumOfStudent ;
+            gotoxy(99 + 1, 15 + i * 2); cout << node->course.FirstDayOfWeek << " " << node->course.FirstSessionOfWeek;
+            gotoxy(109 + 1, 15 + i * 2); cout << node->course.SecondDayOfWeek << " " << node->course.SecondSessionOfWeek;
             i++;
             node = node->pNext;
         }
@@ -316,28 +305,37 @@ void Remove_A_Course(List& l)
     }
 }
 // Hàm ghi course ra file
-void Write_To_My_Course(const List& l, string path)
+void Write_To_My_Course(const List &l)
 {
     ofstream FileOut;
-    FileOut.open(path, ios_base::out);
+    FileOut.open("MyCourse.txt", ios_base::out);
+    int count = 0;
     Node* node = l.pHead;
+    while (node != NULL)
+    {
+        count ++;
+        node = node->pNext;
+    }
+  //  FileOut << count << endl;
+    node = l.pHead;
     while (node)
     {
-        FileOut << node->course.CourseID << "-";
-        //FileOut << node->course.CourseName << endl;
-        FileOut << node->course.TeacherName << "-";
-        //FileOut << node->course.NumberOfCredits << endl;
-        //FileOut << node->course.MaxNumOfStudent << endl;
-        FileOut << node->course.FirstDayOfWeek << node->course.FirstSessionOfWeek << "-";
-        FileOut << node->course.SecondDayOfWeek << node->course.SecondSessionOfWeek;
+        FileOut << node->course.CourseID << endl;
+        FileOut << node->course.CourseName << endl;
+        FileOut << node->course.TeacherName << endl;
+        FileOut << node->course.NumberOfCredits << endl;
+        FileOut << node->course.MaxNumOfStudent << endl;
+        FileOut << node->course.FirstDayOfWeek << " " << node->course.FirstSessionOfWeek << endl;
+        if (node->pNext == NULL) FileOut << node->course.SecondDayOfWeek<<" "<<node->course.SecondSessionOfWeek;
+        else FileOut << node->course.SecondDayOfWeek<<" "<<node->course.SecondSessionOfWeek << endl;
         node = node->pNext;
     }
     FileOut.close();
 }
 void Menu(List& l)
 {
-    int choice;
-    while (true)
+    int choice = 0;
+    while (choice != 7)
     {
         clrscr(); //Heading();
         cout << "\n\n\t\t\t\t\t\t";
@@ -352,14 +350,10 @@ void Menu(List& l)
         cout << "\t\t\t\t\t\t   7. Logout\n\n";
         for (int rep = 1; rep <= 120; rep++) cout << char(220); cout << endl;
 
-        cout << "\t\t\t\t\t\t Selection: "; cin >> choice;
+        cout << "\n\t\t\t\t\t\t Selection: "; cin >> choice;
         switch (choice){
             case 7:{
-                SetColor(10);
-                cout << "See you next time" << endl;
                 //goij ham login
-                delay(1500);
-                SetColor(15);
                 break;
             }
             case 1:{
