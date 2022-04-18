@@ -60,3 +60,4 @@ void Menu(List& l, string path);
 void My_Score(const List& l);
 void Write_To_My_Course(const List& l, string path);
 void Show_Profile();
+void Menu(List &l);
