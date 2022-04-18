@@ -6,7 +6,8 @@ int main()
 {
     List l;
     InnitList(l);
-    //Read_My_Course_From_TXT(l, path);
-    Menu(l);
+    string path;
+    Read_My_Course_From_TXT(l, path);
+    Menu(l,path);
     return 0;
 }
