@@ -16,30 +16,21 @@ void createSchoolYear(){
     cout << "\n\n\t\t\t\t\t     ";
     for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " CREATE SCHOOL YEAR "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
     cout << "\n\n";
-    cout << "\t\t\t\t\t      Year(yyyy)         : \n\n";
-    cout << "\t\t\t\t\t      Action(commit/back): \n\n\n\n";
+    cout << "\t\t\t\t\t      Year(yyyy)         : \n\n\n\n";
     for (int rep = 1; rep <= 120; rep++) cout << char(220); cout << endl;
 
     int year; gotoxy(67, 12); if (!readInt(year) || year<1000 || 9999<year){
+        SetColor(12);
         cout << "\n\n\n\t\t\t\t\t\t      Invalid input";
+        SetColor(15);
         delay(1500);
         createSchoolYear();
     }
-    do {
-        string confirm; gotoxy(67, 14);
-        fflush(stdin);
-        cin >> confirm;
-        if (confirm == "back") return; else
-            if (confirm == "commit") {
-                ofstream f;
-                f.open("CurrentYear.txt");
-                f << year;
-                f.close();
-                cout << "\n\t\t\t\t\t    Year has been created successfully";
-                delay(1500); return;
-            }
-        gotoxy(67, 14); for (char c : confirm) cout << ' ';
-    } while (true);
+    createAndSetCurrentYear(year);
+    SetColor(10);
+    cout << "\n\t\t\t\t\t    Year has been created successfully";
+    SetColor(15);
+    delay(1500); return;
 }
 bool readDate(Time& date) {
 	// dd/mm/yyyy
@@ -68,51 +59,38 @@ void createSemester() {
     cout << "\n\n";
     cout << "\t\t\t\t\t      Semester(1/2/3)       : \n\n";
     cout << "\t\t\t\t\t      Start date(dd/mm/yyyy): \n\n";
-    cout << "\t\t\t\t\t      End date(dd/mm/yyyy)  : \n\n";
-    cout << "\t\t\t\t\t      Action(commit/back)   : \n\n\n\n";
+    cout << "\t\t\t\t\t      End date(dd/mm/yyyy)  : \n\n\n\n";
     for (int rep = 1; rep <= 120; rep++) cout << char(220); cout << endl;
 
     int semester; Time start, end;
     gotoxy(70, 12); if (!readInt(semester) || semester<1 || 3<semester) {
+        SetColor(12);
         gotoxy(53, 20); cout << "Invalid input";
+        SetColor(15);
         delay(1500);
         createSemester();
         return;
     }
     gotoxy(70, 14); if (!readDate(start)) {
+        SetColor(12);
         gotoxy(53, 20); cout << "Invalid input";
+        SetColor(15);
         delay(1500);
         createSemester();
         return;
     }
     gotoxy(70, 16); if (!readDate(end)){
+        SetColor(12);
         gotoxy(53, 20); cout << "Invalid input";
+        SetColor(15);
         delay(1500);
         createSemester();
         return;
     }
 
-    do {
-        string confirm; gotoxy(70, 18);
-        fflush(stdin);
-        cin >> confirm;
-        if (confirm == "back") return; else
-            if (confirm == "commit") {
-                ifstream fin;
-                fin.open("CurrentYear.txt");
-                int year; fin >> year;
-                fin.close();
-                ofstream fout;
-		fout.open("CurrentYear.txt");
-                fout << year << '\n' << semester << '\n' << start.day << " " << start.month << " " << start.year <<'\n';
-                fout << end.day << " " << end.month << " " << end.year;
-                cout << "\n\t\t\t\t\t   Semester has been created successfully";
-                fout.close();
-                delay(1500); return;
-            }
-        gotoxy(70, 18); for (char c : confirm) cout << ' ';
-    } while (true);
-
+    createAndSetCurrentSemester(semester, start, end);
+    SetColor(10);
+    cout << "\n\t\t\t\t\t   Semester has been created successfully";
+    SetColor(15);
+    delay(1500); return;
 }
-
-
