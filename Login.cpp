@@ -25,30 +25,31 @@ void readPassword(string& password, int x, int y) {
 }
 
 void getAccounts(User* &accounts){
+    accounts = new User;
     User* pCur = accounts;
-	ifstream f;
+	ifstream f("ACCOUNT/Account_Data.txt");
 	string s;
-
-	f.open("Account_Data.txt");
-
-	while (true){
-	    User *temp = new User;
-	    f >> s;
-	    if (s == "0") break;
-	    temp->id = s;
-        f >> s; temp->username = s;
-        f >> s; temp->password = s;
-        f >> s; temp->role = s;
-        if (pCur) pCur->Next = temp;
-        else accounts = temp;
-        pCur = temp;
-        //cout << temp->id << " " << temp->username << " " << temp->role << endl;
+	while (getline(f,pCur->id,'\n')) {
+        getline(f, pCur->username, '\n');
+        getline(f, pCur->password, '\n');
+        getline(f, pCur->role, '\n');
+        pCur->Next = new User;
+        pCur = pCur->Next;
     }
     f.close();
+    User* temp = accounts;
+    while (temp->Next != pCur) {
+        temp = temp->Next;
+    }
+    temp->Next = nullptr;
+    delete pCur;
+
+
 }
 
-User login(string username, string password, User* accounts){
+User login(string& username, string& password, User*& accounts){
     User* pCur = accounts;
+
     while (pCur){
         if (username == pCur->username && password == pCur->password){
             User temp;
@@ -65,14 +66,14 @@ User login(string username, string password, User* accounts){
     return temp;
 }
 
-void setCurrentAccount(User account){
+void setCurrentAccount(User &account){
     ofstream f;
-    f.open("CurrentAccount.txt");
+    f.open("DATA/cache/currentAccount.txt");
     f << account.id <<' ' << account.username << ' ' << account.password << ' ' << account.role;
     f.close();
 }
 
-void getCurrentAccount(User account){
+void getCurrentAccount(User &account){
     ifstream f;
     f.open("CurrentAccount.txt");
     f >> account.id >> account.username >> account.password >> account.role;
@@ -84,14 +85,9 @@ void Login(){
     cout << "\n\n\n\n\n\n\n";
     for (int rep = 1; rep <= 120; rep++) cout << char(219); cout << endl;
     cout << "\n";
-    cout << "\n\t"; for (int i = 1; i <= 3; i++)cout << " "; cout << " " << char(220); for (int i = 1; i <= 8; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << " "; for (int i = 1; i <= 4; i++)cout << char(220); for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 4; i++)cout << char(220); for (int i = 1; i <= 6; i++)cout << " "; cout << char(220); for (int i = 1; i <= 8; i++)cout << char(219); cout << "\t\t\t             COURSE MANAGEMENT SYSTEM";
-    cout << "\n\t"; for (int i = 1; i <= 3; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 4; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << char(219); cout << " "; cout << char(220); for (int i = 1; i <= 2; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << char(223); for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << char(223); for (int i = 1; i <= 2; i++)cout << char(219); cout << char(220); for (int i = 1; i <= 3; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 4; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << char(219);
-    cout << "\n\t"; for (int i = 1; i <= 3; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 4; i++)cout << " "; cout << char(219) << char(223) << " " << " "; for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << " ";/**/for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << " ";/**/for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << " ";/**/for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 4; i++)cout << " ";/**/cout << char(219) << char(223) << " ";
-    cout << "\n\t"; for (int i = 1; i <= 3; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 4; i++)cout << " "; for (int i = 1; i <= 4; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << char(219); cout << "\t\t\t\t          VIETNAM NATIONAL UNIVERSITY";
-    cout << "\n\t"; for (int i = 1; i <= 3; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 4; i++)cout << " "; for (int i = 1; i <= 4; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << char(219); cout << " " << char(223); for (int i = 1; i <= 11; i++)cout << char(219);
-    cout << "\n\t"; for (int i = 1; i <= 3; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 4; i++)cout << " "; cout << char(219) << char(220) << " " << " "; for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << " ";/**/for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << " ";/**/for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << " ";/**/for (int i = 1; i <= 3; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << " ";/**/for (int i = 1; i <= 3; i++)cout << char(219); cout << "\t\t\t\t\t     HO CHI MINH CITY";
-    cout << "\n\t"; for (int i = 1; i <= 3; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 4; i++)cout << " "; cout << char(219) << char(219) << char(219) << " "; for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << " ";/**/for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << " ";/**/for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << " "; cout << " " << char(220) << char(219); for (int i = 1; i <= 3; i++)cout << " ";/**/cout << char(219) << char(219) << char(219);
-    cout << "\n\t"; for (int i = 1; i <= 3; i++)cout << " "; for (int i = 1; i <= 8; i++)cout << char(219); cout << char(223); for (int i = 1; i <= 3; i++)cout << " "; cout << char(223) << char(219); for (int i = 1; i <= 3; i++)cout << " "; for (int i = 1; i <= 3; i++)cout << char(219); for (int i = 1; i <= 3; i++)cout << " "; cout << char(219) << char(223); for (int i = 1; i <= 3; i++)cout << " "; cout << char(220); for (int i = 1; i <= 8; i++)cout << char(219); cout << char(223); cout << "\t\t\t\t\tUNIVERSITY OF SCIENCE";
+
+    cout << "\t\t\t\t                   COURSE MANAGEMENT SYSTEM                  ";
+    cout << "\n\n\t\t\t\t      VIETNAM NATIONAL UNIVERSITY - UNIVERSITY OF SCIENCE    ";
     cout << "\n\n\n"; for (int rep = 1; rep <= 120; rep++) cout << char(219); cout << endl;
     cout << "\n\n\t\t\t\t\t\t";
     for (int rep = 1; rep <= 9; rep++) cout << char(219); cout << " LOGIN "; for (int rep = 1; rep <= 9; rep++) cout << char(219);
@@ -108,27 +104,37 @@ void Login(){
     getAccounts(accounts);
 
     User account = login(username, password, accounts);
+
     if (account.role == "NONE") {
+        SetColor(12);
         cout << "\n\n\t\t\t\t\t\tUnsuccessful login attempt";
+        SetColor(15);
         delay(1500);
         clrscr();
         Login();
     }else {
         setCurrentAccount(account);
-        if (account.role == "Staff") staffMenu(); else studentMenu();
+        if (account.role == "Staff") staffMenu();
+        else {
+            List l;
+            InnitList(l); string path;
+            int year, term;
+            Read_My_Course_From_TXT(l, path,year,term,account.id);
+            Menu(l,path,year,term,account.id);
+        }
     }
+    DeleteUserList(accounts);
 }
 
 void updateAccounts(User* &accounts){
     ofstream f;
-    f.open("Account_Data.txt");
-    accounts = accounts->Next;
-    while (accounts != NULL){
-        f << accounts->id << '\n' << accounts->username << '\n' << accounts->password << '\n' << accounts->role << '\n';
+    f.open("ACCOUNT/Account_Data.txt");
+    User* pCur = accounts;
+    while (pCur != NULL){
+        f << pCur->id << '\n' << pCur->username << '\n' << pCur->password << '\n' << pCur->role << '\n';
        // cout << accounts->id << '\n' << accounts->username << '\n' << accounts->password << '\n' << accounts->role << '\n';
-        accounts = accounts->Next;
+        pCur = pCur->Next;
     }
-    f << "0";
     f.close();
 }
 void changePassword(){
@@ -150,7 +156,7 @@ void changePassword(){
 
     User account;
     ifstream f;
-    f.open("CurrentAccount.txt");
+    f.open("DATA/cache/currentAccount.txt");
     f >> account.id >> account.username >> account.password >> account.role;
     f.close();
 
@@ -160,13 +166,17 @@ void changePassword(){
         if (confirm == "back") return; else
             if (confirm == "commit") {
                 if (account.password != currentPassword){
+                    SetColor(12);
                     gotoxy(46, 20); cout << "Current password is incorrect";
+                    SetColor(15);
                     delay(1500); changePassword();
                     return;
                 }
 
                 if (newPassword != confirmPassword) {
+                    SetColor(12);
                     gotoxy(46, 20); cout << "New password is incorrect";
+                    SetColor(15);
                     delay(1500); changePassword();
                     return;
                 }
@@ -174,7 +184,7 @@ void changePassword(){
                 account.password = newPassword;
                 setCurrentAccount(account);
 
-                User* accounts = new User;
+                User* accounts;
                 getAccounts(accounts);
                 User* pCur = accounts;
 
@@ -187,8 +197,10 @@ void changePassword(){
                 //    cout << pCur->id << '\n' << pCur->username << '\n' << pCur->password << '\n' << pCur->role << '\n';
                     pCur = pCur->Next;
                 }
-
+                DeleteUserList(accounts);
+                SetColor(10);
                 cout << "\n\t\t\t\t\t   Password has been changed successfully";
+                SetColor(15);
                 delay(1500); return;
             }
         gotoxy(69, 18); for (char c : confirm) cout << ' ';
