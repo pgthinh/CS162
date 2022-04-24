@@ -319,7 +319,7 @@ void ClassMenu() {
             }
         }
         case 3: return;
-        default: cout << "\n\t\t\t\t\t\tInvalid choice"; delay(1500);
+        default: SetColor(12); cout << "\n\t\t\t\t\t\tInvalid choice"; SetColor(15); delay(1500);
         }
     }
 }
