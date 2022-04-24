@@ -252,7 +252,7 @@ void updateCourse(int year, int semester, string CourseID) {
         clrscr(); SetColor(10);
         cout << "\n\t\t\t\t\t\t   The course has been updated successfully:  " << endl;
         SetColor(15);
-        printCourseInformation(courseCur); 
+        printCourseInformation(courseCur);
         //printCourseList(courseList);
         delay(3000);
         WriteFileCourseInfoList(year, semester, courseList);
@@ -490,6 +490,8 @@ void manageCourse(int year, int semester, string CourseID) {
     }
     if (!check) { SetColor(12); cout << "\n\n\t\t\t\t\t       The course does not exist"; SetColor(15); delay(1500); return; }
     else {
+     while(true){
+        clrscr(); Heading();
         viewCourseMangementMenu();
         int select;
         cout << "\n\t\t\t\t\t\t   Selection: ";
@@ -538,9 +540,9 @@ void manageCourse(int year, int semester, string CourseID) {
         }
               break;
         case 5:
-            courseMenu();
-            break;
+            return;
         }
+     }
     }
     DeleteCourseList(courseList);
 }
@@ -624,4 +626,3 @@ void courseMenu() {
           break;
     }
 }
-
