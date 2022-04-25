@@ -8,6 +8,7 @@ Course getCurrentCourse() {
     string day1, ses1, day2, ses2;
 
     string path = "DATA/cache/currentCourse.txt";
+    
     // string path = "currentCourse.txt";
     ifstream fin(path);
     getline(fin, id);
