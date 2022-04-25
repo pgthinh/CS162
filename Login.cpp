@@ -96,9 +96,9 @@ void Login(){
 
     fflush(stdin);
     string username;
-    gotoxy(59, 25); cin >> username;
+    gotoxy(59, 19); cin >> username;
     string password;
-    readPassword(password, 59, 27);
+    readPassword(password, 59, 21);
 
     User* accounts = NULL;
     getAccounts(accounts);
