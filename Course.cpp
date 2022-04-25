@@ -32,6 +32,7 @@ void WriteFileCurrentCourse(Course* course) {
     fout << course->TeacherName << '\n';
     fout << course->NumberOfCredits << '\n';
     fout << course->MaxNumOfStudent << '\n';
+    
     fout << course->FirstDayOfWeek << ' ' << course->FirstSessionOfWeek << '\n';
     fout << course->SecondDayOfWeek << ' ' << course->SecondSessionOfWeek;
     fout.close();
