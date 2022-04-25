@@ -623,6 +623,7 @@ void courseMenu() {
         courseMenu();
     }
           break;
+       
     case 6: {
         return;
     }
