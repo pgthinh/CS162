@@ -99,6 +99,7 @@ void getCourseList(int year, int semester, Course*& courseList) {
         }
     }
     fin.close();
+    
 }
 void WriteFileCourseList(int year, int semester, Course* courseList) {
     string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/courseList.txt";
