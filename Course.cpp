@@ -140,7 +140,6 @@ void printCourseList(Course* courseList) {
 void writeFileCourseRegistration(Time start, Time end) {
     Semester semester = getCurrentSemester();
     string path = "DATA/" + to_string(semester.Year) + '/' + to_string(semester.TheOrderOfSemester) + '/' + "registration.txt";
-
     ofstream fout;
     fout.open(path);
     fout << start.day << ' ' << start.month << ' ' << start.year << '\n';
