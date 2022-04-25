@@ -209,7 +209,6 @@ void addCourse() {
 // 3. Update course
 void updateCourse(int year, int semester, string CourseID) {
     for (int rep = 1; rep <= 120; rep++) cout << char(220); cout << endl;
-
     cout << '\n';
     Course* courseList = NULL;
     getCourseList(year, semester, courseList);
