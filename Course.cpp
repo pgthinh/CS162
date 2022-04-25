@@ -90,6 +90,7 @@ void getCourseList(int year, int semester, Course*& courseList) {
         getline(fileinToInfo, new_Course->SecondDayOfWeek, ' ');
         getline(fileinToInfo, new_Course->SecondSessionOfWeek);
         fileinToInfo.close();
+        
         if (!courseCur) { courseCur = new_Course; courseList = new_Course; }
         else {
             courseCur->next_Course = new_Course;
