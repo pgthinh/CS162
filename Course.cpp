@@ -12,6 +12,7 @@ Course getCurrentCourse() {
     getline(fin, id);
     getline(fin, name);
     getline(fin, teacher);
+    
     fin >> nCredits;
     fin >> maxCapacity;
     fin >> day1 >> ses1;
