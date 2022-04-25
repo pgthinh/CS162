@@ -1,6 +1,7 @@
 #include "Class.h"
 #include "Console.h"
 #include <iostream>
+#include <vector>
 using namespace std;
 //1.Tạo lớp
 void createClass(string className) {
@@ -124,20 +125,38 @@ void getstudentlist(string classname, Student*& studentlist) {
 // VIEW SCOREBOARD
 // 9. Lấy list course và list điểm tương ứng với từng course, của 1 học sinh
 void getStudentScoreboard(int year, int term, string studentID, Course*& courseList, Mark*& markList) {
+    vector<Course> t;
+    string path = "DATA/" + to_string(year) + "/" + to_string(term) + "/students/" + studentID + "/courses.txt";
+    ifstream fin(path);
+    Course temp;
+    while (!fin.eof()) {
+        getline(fin, temp.CourseID, '-');
+        getline(fin, temp.TeacherName, '-');
+        getline(fin, temp.FirstDayOfWeek, '-');
+        getline(fin, temp.SecondDayOfWeek, '\n');
+        t.push_back(temp);
+    }
+    fin.close();
+
     courseList = new Course; markList = new Mark;
     Mark* mark_cur = markList;
     Course* courseList_cur = courseList;
-    string path = "DATA/" + to_string(year) + "/" + to_string(term) + "/students/" + studentID + "/marks.txt";
-    ifstream fin(path);
+    path = "DATA/" + to_string(year) + "/" + to_string(term) + "/students/" + studentID + "/marks.txt";
+    fin.open(path);
     while (fin >> courseList_cur->CourseID >> mark_cur->totalMark >> mark_cur->finalMark >> mark_cur->midtermMark >> mark_cur->otherMark) {
-        courseList_cur->next_Course = new Course;
-        courseList_cur->next_Course->previous_Course = courseList_cur;
-        courseList_cur = courseList_cur->next_Course;
+        for (int i = 0; i < t.size(); i++) {
+            if (courseList_cur->CourseID == t[i].CourseID){
+               courseList_cur->next_Course = new Course;
+               courseList_cur->next_Course->previous_Course = courseList_cur;
+               courseList_cur = courseList_cur->next_Course;
 
-        mark_cur->next_Mark = new Mark;
-        mark_cur->next_Mark->previous_Mark = mark_cur;
-        mark_cur = mark_cur->next_Mark;
+               mark_cur->next_Mark = new Mark;
+               mark_cur->next_Mark->previous_Mark = mark_cur;
+               mark_cur = mark_cur->next_Mark;
+            }
+        }
     }
+    fin.close();
     Course* temp1 = courseList_cur;
     courseList_cur = courseList_cur->previous_Course;
     courseList_cur->next_Course = nullptr;
@@ -150,16 +169,18 @@ void getStudentScoreboard(int year, int term, string studentID, Course*& courseL
 }
 //11. Tính overall GPA của học sinh
 float getStudentGPA(string studentID, int year, int term) {
-    string path = "DATA/" + to_string(year) + "/" + to_string(term) + "/students/" + studentID + "/marks.txt";
-    ifstream fin(path);
-    Mark mark; string course;
+    Course* courseList; Mark* markList;
+    getStudentScoreboard(year, term, studentID, courseList, markList);
+    Course* courseCur = courseList; Mark* markCur = markList;
     float sum = 0;
     int cnt = 0;
-    while (fin >> course >> mark.totalMark >> mark.finalMark >> mark.midtermMark >> mark.otherMark) {
-        sum += mark.totalMark;
-        cnt += 1;
+    while (courseCur) {
+        sum += markCur->totalMark;
+        cnt++;
+        courseCur = courseCur->next_Course;
+        markCur = markCur->next_Mark;
     }
-    fin.close();
+    DeleteCourseList(courseList); DeleteMarkList(markList);
     float GPA = cnt > 0 ? sum / cnt : 0;
     return GPA / 10 * 4;
 }
