@@ -2,6 +2,7 @@
 #include "Console.h"
 
 Course getCurrentCourse() {
+    
     string id, name, teacher;
     int nCredits, maxCapacity;
     string day1, ses1, day2, ses2;
