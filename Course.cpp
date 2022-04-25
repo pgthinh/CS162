@@ -2,6 +2,7 @@
 #include "Console.h"
 
 Course getCurrentCourse() {
+    
     string id, name, teacher;
     int nCredits, maxCapacity;
     string day1, ses1, day2, ses2;
@@ -614,6 +615,7 @@ void courseMenu() {
         int year;
         int semester;
         string CourseID;
+        
         clrscr(); Heading();
         cout << "\n\n\t\t\t\t\t       ";
         for (int rep = 1; rep <= 5; rep++) cout << char(219); cout << " MANAGE COURSE "; for (int rep = 1; rep <= 5; rep++) cout << char(219);
