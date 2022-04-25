@@ -380,6 +380,7 @@ void viewCourseStudentList(Student* studentList) {
     Student* studentCur = studentList;
     int i = 0;
     while (studentCur) {
+        
         gotoxy(15, 14 + i * 2); cout << i + 1 << ". ";
         gotoxy(20, 14 + i * 2); cout << studentCur->ID;
         gotoxy(35, 14 + i * 2); cout << studentCur->Name;
