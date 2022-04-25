@@ -67,7 +67,6 @@ void WriteFileCourseInfoList(int year, int semester, Course* courseList) {
         fileoutToInfo << courseCur->SecondDayOfWeek << ' ';
         fileoutToInfo << courseCur->SecondSessionOfWeek;
         fileoutToInfo.close();
-        
         courseCur = courseCur->next_Course;
     }
 }
