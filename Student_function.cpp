@@ -31,12 +31,9 @@ void Add_Course(List& l, const Course& course)
 void AddCourse(List& l, int year, int semester)
 {
     ifstream FileIn;
-    //int year, semester;
-    //cout << "Input year = "; cin >> year;
-    //cout << "Input semeter = "; cin >> semester;
     string path = "DATA/" + to_string(year) + "/" + to_string(semester) + "/course_list/courseList.txt";
     FileIn.open(path, ios_base::in);
-    int numbers_of_course = 0;
+    int numbers_of_course = 0, number = 0;
     while (!FileIn.eof())
     {
         string str;
@@ -44,6 +41,12 @@ void AddCourse(List& l, int year, int semester)
         numbers_of_course++;
     }
     FileIn.close();
+    Node* node = l.pHead;
+    while (node != NULL)
+    {
+        number++;
+        node = node->pNext;
+    }
     FileIn.open(path, ios_base::in);
     Course* course = new Course[numbers_of_course];
     // đọc dữ liệu hàm từ file để in ra cho người dùng chọn
@@ -117,7 +120,7 @@ void AddCourse(List& l, int year, int semester)
             }
             node = node->pNext;
         }
-
+        bool Check2 = false;
         bool Check1 = false; // check xem môn chọn co bi trùng giờ các môn trước hay không ?
         if (!Check)
         {
@@ -125,25 +128,39 @@ void AddCourse(List& l, int year, int semester)
             {
                 if (course[i].CourseID == choice)
                 {
+                    Check2 = true;
                     Node* node = l.pHead;
                     while (node)
                     {
-                        if (course[i].FirstDayOfWeek == node->course.FirstDayOfWeek || course[i].SecondDayOfWeek == node->course.SecondDayOfWeek)
+                        if (course[i].FirstDayOfWeek == node->course.FirstDayOfWeek && course[i].FirstSessionOfWeek == node->course.FirstSessionOfWeek)
                         {
-                            if (course[i].FirstSessionOfWeek == node->course.FirstSessionOfWeek || course[i].SecondSessionOfWeek == node->course.SecondSessionOfWeek)
-                                Check1 = true;
+                            Check1 = true;
+                            break;
+                        }
+                        else if (course[i].SecondDayOfWeek == node->course.SecondDayOfWeek && course[i].SecondSessionOfWeek == node->course.SecondSessionOfWeek)
+                        {
+                            Check1 = true;
                             break;
                         }
                         node = node->pNext;
                     }
-                    if (!Check1)
+                    if (Check1 == false && number < 5)
                     {
                         SetColor(10);
                         cout << "\n\t\t\t\t\t\tAdd course successfully  " << endl;
                         SetColor(15);
                         delay(1500);
                         Add_Course(l, course[i]);
+                        number++;
                         Check1 = true;
+                        break;
+                    }
+                    else if (Check1 == false && number == 5)
+                    {
+                        SetColor(12);
+                        cout << "\t\t\t\t You reached the maximum course" << endl;
+                        SetColor(15);
+                        delay(1500);
                         break;
                     }
                     else
@@ -156,7 +173,7 @@ void AddCourse(List& l, int year, int semester)
                     }
                 }
             }
-            if (!Check1) {
+            if (Check2 == false) {
                 SetColor(12);
                 cout << "\n\t\t\t\t\t Can not find any course with ID: " << choice;
                 SetColor(15);
@@ -291,18 +308,21 @@ void Remove_A_Course(List& l)
             }
             for (int i = 0; i < name.length(); i++)
                 name[i] = toupper(name[i]);
-            Node* node = l.pHead;
+            bool Check = false;
             if (l.pHead->course.CourseID == name)
             {
+                Node* node = l.pHead;
                 l.pHead = l.pHead->pNext;
                 delete node;
                 SetColor(10);
                 cout << "\n\t\t\t\t\t     Removed Course Successfully" << endl;
+                Check = true;
                 SetColor(15);
                 delay(1500);
             }
             else if (l.pTail->course.CourseID == name)
             {
+                Node* node = l.pHead;
                 while (node->pNext != l.pTail)
                 {
                     node = node->pNext;
@@ -312,24 +332,31 @@ void Remove_A_Course(List& l)
                 l.pTail->pNext = NULL;
                 SetColor(10);
                 cout << "\n\t\t\t\t\t     Removed Course Successfully" << endl;
-                SetColor(15);
-                delay(1500);
-            }
-            else if (node->course.CourseID == name)
-            {
-                while (node->pNext->course.CourseID != name)
-                {
-                    node = node->pNext;
-                }
-                Node* node_del = node->pNext;
-                node->pNext = node->pNext->pNext;
-                delete node->pNext;
-                SetColor(10);
-                cout << "\n\t\t\t\t\t     Removed Course Successfully" << endl;
+                Check = true;
                 SetColor(15);
                 delay(1500);
             }
             else
+            {
+                Node* node = l.pHead;
+                while (node->pNext != NULL)
+                {
+                    if (node->pNext->course.CourseID == name)
+                    {
+                        /*Node* node_del = node->pNext;*/
+                        node->pNext = node->pNext->pNext;
+                        SetColor(10);
+                        cout << "\n\t\t\t\t\t     Removed Course Successfully" << endl;
+                        Check = true;
+                        //delete node_del;
+                        SetColor(15);
+                        delay(1500);
+                        break;
+                    }
+                    node = node->pNext;
+                }
+            }
+            if (Check == false)
             {
                 cout << "Can not find the course you want to remove " << endl;
                 delay(1500);
@@ -418,6 +445,12 @@ void Menu(List& l, string& path, int year, int semester, string ID)
         case 5: {
             changePassword();
             break;
+        }
+        default: {
+            SetColor(10);
+            cout << "\n\t\t\t\t\t\t Please input the right command" << endl;
+            delay(1500);
+            SetColor(15);
         }
         }
     }
