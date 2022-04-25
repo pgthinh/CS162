@@ -127,6 +127,7 @@ void printCourseInformation(Course* courseCurrent) {
 void printCourseList(Course* courseList) {
     Course* courseCurrent = courseList;
     while (courseCurrent) {
+        
         printCourseInformation(courseCurrent);
         courseCurrent = courseCurrent->next_Course;
     }
